@@ -54,6 +54,9 @@
     <Compile Include="AnimatedLineDrawer.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CheckerPatternDrawer.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="DialogProxy.cs" />
     <Compile Include="ExceptionMessageBox.cs" />
     <Compile Include="GlobalSuppressions.cs" />
