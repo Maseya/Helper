@@ -51,6 +51,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnimatedLineDrawer.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="DialogProxy.cs" />
     <Compile Include="ExceptionMessageBox.cs" />
     <Compile Include="GlobalSuppressions.cs" />
