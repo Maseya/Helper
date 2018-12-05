@@ -10,6 +10,7 @@ namespace Maseya.Controls
     using System;
     using System.ComponentModel;
     using System.Drawing;
+    using static System.Drawing.Imaging.PixelFormat;
     using static Helper.ThrowHelper;
 
     /// <summary>
@@ -70,14 +71,9 @@ namespace Maseya.Controls
 
             set
             {
-                if (value <= 0)
-                {
-                    throw ValueNotGreaterThan(
-                        nameof(value),
-                        value);
-                }
-
-                _width = value;
+                _width = value > 0
+                    ? value
+                    : throw ValueNotGreaterThan(nameof(value), value);
             }
         }
 
@@ -99,14 +95,9 @@ namespace Maseya.Controls
 
             set
             {
-                if (value <= 0)
-                {
-                    throw ValueNotGreaterThan(
-                        nameof(value),
-                        value);
-                }
-
-                _height = value;
+                _height = value > 0
+                    ? value
+                    : throw ValueNotGreaterThan(nameof(value), value);
             }
         }
 
@@ -128,6 +119,62 @@ namespace Maseya.Controls
             {
                 Width = value.Width;
                 Height = value.Height;
+            }
+        }
+
+        /// <summary>
+        /// Gets the width, in pixels, of the resulting <see cref="
+        /// Bitmap"/> created by <see cref="CreateCheckerImage"/>.
+        /// </summary>
+        private int ImageWidth
+        {
+            get
+            {
+                return Width * 2;
+            }
+        }
+
+        /// <summary>
+        /// Gets the height, in pixels, of the resulting <see cref="
+        /// Bitmap"/> created by <see cref="CreateCheckerImage"/>.
+        /// </summary>
+        private int ImageHeight
+        {
+            get
+            {
+                return Height * 2;
+            }
+        }
+
+        /// <summary>
+        /// Gets the checkerboard squares where <see cref="Color1"/> is
+        /// filled in <see cref="FillCheckerRectangles(Image)"/>.
+        /// </summary>
+        private Rectangle[] Rectangles1
+        {
+            get
+            {
+                return new Rectangle[]
+                {
+                    new Rectangle(0, 0, Width, Height),
+                    new Rectangle(Width, Height, Width, Height),
+                };
+            }
+        }
+
+        /// <summary>
+        /// Gets the checkerboard squares where <see cref="Color2"/> is
+        /// filled in <see cref="FillCheckerRectangles(Image)"/>.
+        /// </summary>
+        private Rectangle[] Rectangles2
+        {
+            get
+            {
+                return new Rectangle[]
+                {
+                    new Rectangle(Width, 0, Width, Height),
+                    new Rectangle(Height, 0, Width, Height),
+                };
             }
         }
 
@@ -186,24 +233,10 @@ namespace Maseya.Controls
             int height,
             IContainer container = null)
         {
-            if (width <= 0)
-            {
-                throw ValueNotGreaterThan(
-                    nameof(width),
-                    width);
-            }
-
-            if (height <= 0)
-            {
-                throw ValueNotLessThan(
-                    nameof(height),
-                    height);
-            }
-
-            Color1 = color1;
-            Color2 = color2;
             Width = width;
             Height = height;
+            Color1 = color1;
+            Color2 = color2;
 
             container?.Add(this);
         }
@@ -220,31 +253,77 @@ namespace Maseya.Controls
         /// </returns>
         public Bitmap CreateCheckerImage()
         {
-            var bitmap = new Bitmap(Width * 2, Height * 2);
-
-            // Squares for first color.
-            var rectangles1 = new Rectangle[]
+            // See MSDN rule "CA2000: Dispose objects before losing
+            // scope" for an explanation on using variables `temp` and
+            // `result`. Basically, we ensure the object is still
+            // Disposed even if an Exception occurs.
+            Bitmap temp = null;
+            Bitmap result = null;
+            try
             {
-                    new Rectangle(0, 0, Width, Height),
-                    new Rectangle(Width, Height, Width, Height),
-            };
+                // Try to open the new `IDisposable` Bitmap object.
+                temp = new Bitmap(
+                    ImageWidth,
+                    ImageHeight,
+                    Format32bppArgb);
 
-            // Squares for second color.
-            var rectangles2 = new Rectangle[]
-            {
-                    new Rectangle(Width, 0, Width, Height),
-                    new Rectangle(Height, 0, Width, Height),
-            };
+                // Try to add checkerboard squares to image.
+                FillCheckerRectangles(temp);
 
-            using (var graphics = Graphics.FromImage(bitmap))
-            using (var brush1 = new SolidBrush(Color1))
-            using (var brush2 = new SolidBrush(Color2))
-            {
-                graphics.FillRectangles(brush1, rectangles1);
-                graphics.FillRectangles(brush2, rectangles2);
+                // Return `result` and make sure Bitmap is not Disposed
+                // by `finally` statement if no Exceptions were raised.
+                result = temp;
+                temp = null;
+                return result;
             }
+            finally
+            {
+                // Ensure object is Disposed if an Exception was raised.
+                temp?.Dispose();
+            }
+        }
 
-            return bitmap;
+        /// <summary>
+        /// Fill the checkerboard rectangles onto an <see cref="
+        /// Image"/>.
+        /// </summary>
+        /// <param name="image">
+        /// The <see cref="Image"/> to fill the checkerboard rectangles
+        /// onto.
+        /// </param>
+        private void FillCheckerRectangles(Image image)
+        {
+            using (var graphics = Graphics.FromImage(image))
+            {
+                FillRectangles(graphics, Color1, Rectangles1);
+                FillRectangles(graphics, Color2, Rectangles2);
+            }
+        }
+
+        /// <summary>
+        /// Fills the interiors of a series of rectangles with a
+        /// specified <see cref="Color"/>.
+        /// </summary>
+        /// <param name="graphics">
+        /// The <see cref="Graphics"/> objects to fill the rectangles
+        /// in.
+        /// </param>
+        /// <param name="color">
+        /// The <see cref="Color"/> to use for the <see cref="
+        /// SolidBrush"/> to fill the rectangles with.
+        /// </param>
+        /// <param name="rectangles">
+        /// The rectangles to fill.
+        /// </param>
+        private static void FillRectangles(
+            Graphics graphics,
+            Color color,
+            Rectangle[] rectangles)
+        {
+            using (var brush = new SolidBrush(color))
+            {
+                graphics.FillRectangles(brush, rectangles);
+            }
         }
     }
 }
