@@ -61,6 +61,9 @@
     <Compile Include="CheckerPatternDrawer.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ColorValueControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="DesignControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
