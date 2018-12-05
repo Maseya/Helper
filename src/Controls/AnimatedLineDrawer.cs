@@ -66,14 +66,9 @@ namespace Maseya.Controls
 
             set
             {
-                if (value <= 0)
-                {
-                    throw ValueNotGreaterThan(
-                        nameof(value),
-                        value);
-                }
-
-                _length1 = value;
+                _length1 = value > 0
+                    ? value
+                    : throw ValueNotGreaterThan(nameof(value), value);
             }
         }
 
@@ -95,14 +90,9 @@ namespace Maseya.Controls
 
             set
             {
-                if (value <= 0)
-                {
-                    throw ValueNotGreaterThan(
-                        nameof(value),
-                        value);
-                }
-
-                _length2 = value;
+                _length2 = value > 0
+                    ? value
+                    : throw ValueNotGreaterThan(nameof(value), value);
             }
         }
 
@@ -184,6 +174,30 @@ namespace Maseya.Controls
         private object SyncRoot
         {
             get;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="Pen.DashPattern"/> that will be used
+        /// for the first <see cref="Pen"/>.
+        /// </summary>
+        private float[] DashPattern1
+        {
+            get
+            {
+                return new float[] { Length1, Length2 };
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="Pen.DashPattern"/> that will be used
+        /// for the second <see cref="Pen"/>.
+        /// </summary>
+        private float[] DashPattern2
+        {
+            get
+            {
+                return new float[] { Length2, Length1 };
+            }
         }
 
         /// <summary>
@@ -290,24 +304,19 @@ namespace Maseya.Controls
                 throw new ArgumentNullException(nameof(path));
             }
 
-            lock (SyncRoot)
-            {
-                using (var pen1 = new Pen(Color1))
-                using (var pen2 = new Pen(Color2))
-                {
-                    pen1.DashStyle = DashStyle.Custom;
-                    pen2.DashStyle = DashStyle.Custom;
+            DrawPathInternal(
+                graphics,
+                path,
+                Color1,
+                Offset,
+                DashPattern1);
 
-                    pen1.DashOffset = Offset;
-                    pen2.DashOffset = Offset + Length1;
-
-                    pen1.DashPattern = new float[] { Length1, Length2 };
-                    pen2.DashPattern = new float[] { Length2, Length1 };
-
-                    graphics.DrawPath(pen1, path);
-                    graphics.DrawPath(pen2, path);
-                }
-            }
+            DrawPathInternal(
+                graphics,
+                path,
+                Color2,
+                Offset + Length1,
+                DashPattern2);
         }
 
         /// <summary>
@@ -339,6 +348,26 @@ namespace Maseya.Controls
             }
 
             base.Dispose(disposing);
+        }
+
+        private void DrawPathInternal(
+            Graphics graphics,
+            GraphicsPath path,
+            Color color,
+            int dashOffset,
+            float[] dashPattern)
+        {
+            using (var pen = new Pen(color))
+            {
+                pen.DashStyle = DashStyle.Custom;
+                pen.DashOffset = dashOffset;
+                pen.DashPattern = dashPattern;
+
+                lock (SyncRoot)
+                {
+                    graphics.DrawPath(pen, path);
+                }
+            }
         }
     }
 }
