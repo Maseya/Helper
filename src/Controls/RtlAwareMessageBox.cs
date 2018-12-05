@@ -25,6 +25,15 @@ namespace Maseya.Controls
     public static class RtlAwareMessageBox
     {
         /// <summary>
+        /// Specifies a <see cref="MessageBoxOptions"/> value for a
+        /// message box whose text is right-aligned and displayed in
+        /// right-to-left reading order.
+        /// </summary>
+        public const MessageBoxOptions RightToLeftMessageBoxOptions =
+            MessageBoxOptions.RightAlign |
+            MessageBoxOptions.RtlReading;
+
+        /// <summary>
         /// Gets a value indicating whether the <see cref="TextInfo"/>
         /// of <see cref="CultureInfo.CurrentUICulture"/> represents a
         /// writing system where text flows from right to left.
@@ -331,13 +340,9 @@ namespace Maseya.Controls
             IWin32Window owner,
             MessageBoxOptions options)
         {
-            if (IsWindowRightToLeft(owner))
-            {
-                options |= MessageBoxOptions.RtlReading;
-                options |= MessageBoxOptions.RightAlign;
-            }
-
-            return options;
+            return IsWindowRightToLeft(owner)
+                ? options | RightToLeftMessageBoxOptions
+                : options;
         }
 
         /// <summary>
@@ -364,28 +369,9 @@ namespace Maseya.Controls
         /// </remarks>
         public static bool IsWindowRightToLeft(IWin32Window owner)
         {
-            if (owner is null)
-            {
-                return IsCurrentUICultureRightToLeft;
-            }
-
-            var control = Control.FromHandle(owner.Handle);
-            if (control is null)
-            {
-                return IsCurrentUICultureRightToLeft;
-            }
-
-            while (control.RightToLeft == RightToLeft.Inherit)
-            {
-                if (control.Parent is null)
-                {
-                    return IsCurrentUICultureRightToLeft;
-                }
-
-                control = control.Parent;
-            }
-
-            return control.RightToLeft == RightToLeft.Yes;
+            return owner is Control control
+                ? control.RightToLeft == RightToLeft.Yes
+                : IsCurrentUICultureRightToLeft;
         }
     }
 }
