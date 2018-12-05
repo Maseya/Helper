@@ -61,8 +61,12 @@
     <Compile Include="DesignControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="DesignForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="DialogProxy.cs" />
     <Compile Include="PreprocessMessageCallback.cs" />
+    <Compile Include="RectangleEventArgs.cs" />
     <Compile Include="SafeNativeMethods.cs" />
     <Compile Include="ExceptionMessageBox.cs" />
     <Compile Include="GlobalSuppressions.cs" />
