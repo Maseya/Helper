@@ -16,13 +16,17 @@ namespace Maseya.Controls
     /// to only be handled as dialog windows. This is an abstract class.
     /// </summary>
     /// <remarks>
-    /// Many windows <see cref="Form"/> classes are intended to be use
+    /// Many windows <see cref="Form"/> classes are intended to be used
     /// as modal dialog boxes. These classes usually do not intend to
     /// make public the many properties and methods that a form exposes.
     /// This class is therefore used to make public only the essential
     /// parameters than an application developer intends to make usable.
     /// The base <see cref="Form"/> is kept internal so inheritors can
     /// select which properties, methods, and events should be visible.
+    /// <para/>
+    /// This class was inspired by the design of <see cref="
+    /// OpenFileDialog"/>, <see cref="SaveFileDialog"/>, and <see cref="
+    /// FolderBrowserDialog"/>.
     /// </remarks>
     [ToolboxItem(true)]
     [DesignTimeVisible(true)]
@@ -166,6 +170,7 @@ namespace Maseya.Controls
         public void Dispose()
         {
             Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
