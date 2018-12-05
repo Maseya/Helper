@@ -58,7 +58,11 @@
     <Compile Include="CheckerPatternDrawer.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DesignControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="DialogProxy.cs" />
+    <Compile Include="PreprocessMessageCallback.cs" />
     <Compile Include="SafeNativeMethods.cs" />
     <Compile Include="ExceptionMessageBox.cs" />
     <Compile Include="GlobalSuppressions.cs" />
