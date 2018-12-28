@@ -1,8 +1,7 @@
 ﻿// <copyright file="AnimatedLineDrawer.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed
-//     under GNU Affero General Public License. See LICENSE in project
-//     root for full license information, or visit
-//     https://www.gnu.org/licenses/#AGPL
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed under
+//     GNU Affero General Public License. See LICENSE in project root for full
+//     license information, or visit https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 namespace Maseya.Controls
@@ -15,8 +14,8 @@ namespace Maseya.Controls
     using static Helper.ThrowHelper;
 
     /// <summary>
-    /// Implements methods and properties to draw an animated dashed
-    /// line across a <see cref="GraphicsPath"/>.
+    /// Implements methods and properties to draw an animated dashed line
+    /// across a <see cref="GraphicsPath"/>.
     /// </summary>
     public class AnimatedLineDrawer : Component
     {
@@ -31,8 +30,8 @@ namespace Maseya.Controls
         private int _length2;
 
         /// <summary>
-        /// Occurs every <see cref="Interval"/> milliseconds when this
-        /// <see cref="AnimatedLineDrawer"/> is constructed.
+        /// Occurs every <see cref="Interval"/> milliseconds when this <see
+        /// cref="AnimatedLineDrawer"/> is constructed.
         /// </summary>
         [Category("Animator")]
         [Description("Occurs when the specified timer interval has" +
@@ -130,8 +129,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets or sets the time, in milliseconds, before the next
-        /// update of the line animation.
+        /// Gets or sets the time, in milliseconds, before the next update of
+        /// the line animation.
         /// </summary>
         [Category("Animator")]
         [DefaultValue(1000)]
@@ -168,8 +167,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets an object that can be used to synchronize access to the
-        /// <see cref="AnimatedLineDrawer"/>.
+        /// Gets an object that can be used to synchronize access to the <see
+        /// cref="AnimatedLineDrawer"/>.
         /// </summary>
         private object SyncRoot
         {
@@ -177,8 +176,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the <see cref="Pen.DashPattern"/> that will be used
-        /// for the first <see cref="Pen"/>.
+        /// Gets the <see cref="Pen.DashPattern"/> that will be used for the
+        /// first <see cref="Pen"/>.
         /// </summary>
         private float[] DashPattern1
         {
@@ -189,8 +188,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the <see cref="Pen.DashPattern"/> that will be used
-        /// for the second <see cref="Pen"/>.
+        /// Gets the <see cref="Pen.DashPattern"/> that will be used for the
+        /// second <see cref="Pen"/>.
         /// </summary>
         private float[] DashPattern2
         {
@@ -201,8 +200,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="
-        /// AnimatedLineDrawer"/> class.
+        /// Initializes a new instance of the <see cref=" AnimatedLineDrawer"/>
+        /// class.
         /// </summary>
         public AnimatedLineDrawer()
             : this(null)
@@ -210,13 +209,12 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="
-        /// AnimatedLineDrawer"/> class with the specified <see cref="
-        /// IContainer"/>.
+        /// Initializes a new instance of the <see cref=" AnimatedLineDrawer"/>
+        /// class with the specified <see cref=" IContainer"/>.
         /// </summary>
         /// <param name="container">
-        /// An <see cref="IContainer"/> that represents the container
-        /// for this <see cref="AnimatedLineDrawer"/>.
+        /// An <see cref="IContainer"/> that represents the container for this
+        /// <see cref="AnimatedLineDrawer"/>.
         /// </param>
         public AnimatedLineDrawer(IContainer container)
             : this(1, 1, Color.Black, Color.White, 1000, container)
@@ -224,9 +222,9 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="
-        /// AnimatedLineDrawer"/> class with the specified lengths,
-        /// colors, interval, and <see cref="IContainer"/>.
+        /// Initializes a new instance of the <see cref=" AnimatedLineDrawer"/>
+        /// class with the specified lengths, colors, interval, and <see
+        /// cref="IContainer"/>.
         /// </summary>
         /// <param name="length1">
         /// The length of the first dashed line.
@@ -241,12 +239,12 @@ namespace Maseya.Controls
         /// The color of the second dashed line.
         /// </param>
         /// <param name="interval">
-        /// The time, in milliseconds, before the next update of the
-        /// line animation.
+        /// The time, in milliseconds, before the next update of the line
+        /// animation.
         /// </param>
         /// <param name="container">
-        /// An <see cref="IContainer"/> that represents the container
-        /// for this <see cref="AnimatedLineDrawer"/>.
+        /// An <see cref="IContainer"/> that represents the container for this
+        /// <see cref="AnimatedLineDrawer"/>.
         /// </param>
         public AnimatedLineDrawer(
             int length1,
@@ -277,9 +275,9 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Draws a <see cref="GraphicsPath"/> to a <see cref="
-        /// Graphics"/> using an animated dashed line described by this
-        /// <see cref="AnimatedLineDrawer"/>.
+        /// Draws a <see cref="GraphicsPath"/> to a <see cref=" Graphics"/>
+        /// using an animated dashed line described by this <see
+        /// cref="AnimatedLineDrawer"/>.
         /// </summary>
         /// <param name="graphics">
         /// The <see cref="Graphics"/> to draw to.
@@ -289,8 +287,8 @@ namespace Maseya.Controls
         /// graphics"/>.
         /// </param>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="graphics"/> or <paramref name="path"/> is
-        /// <see langword="null"/>.
+        /// <paramref name="graphics"/> or <paramref name="path"/> is <see
+        /// langword="null"/>.
         /// </exception>
         public void DrawPath(Graphics graphics, GraphicsPath path)
         {
@@ -336,9 +334,9 @@ namespace Maseya.Controls
         /// resources.
         /// </summary>
         /// <param name="disposing">
-        /// <see langword="true"/> to released both managed and
-        /// unmanaged resources; <see langword="false"/> to release only
-        /// unmanaged resources.
+        /// <see langword="true"/> to released both managed and unmanaged
+        /// resources; <see langword="false"/> to release only unmanaged
+        /// resources.
         /// </param>
         protected override void Dispose(bool disposing)
         {

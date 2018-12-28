@@ -1,8 +1,7 @@
 ﻿// <copyright file="WinApiRectangle.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed
-//     under GNU Affero General Public License. See LICENSE in project
-//     root for full license information, or visit
-//     https://www.gnu.org/licenses/#AGPL
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed under
+//     GNU Affero General Public License. See LICENSE in project root for full
+//     license information, or visit https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 namespace Maseya.Controls
@@ -18,21 +17,21 @@ namespace Maseya.Controls
     /// </summary>
     /// <remarks>
     /// This data structure can be passed to WinAPI methods because its
-    /// internal data storage is the same as the RECTANGLE struct that
-    /// Windows API uses for sizing procedures.
+    /// internal data storage is the same as the RECTANGLE struct that Windows
+    /// API uses for sizing procedures.
     /// </remarks>
     [StructLayout(LayoutKind.Sequential)]
     public struct WinApiRectangle : IEquatable<WinApiRectangle>
     {
         /// <summary>
-        /// Represents a <see cref="WinApiRectangle"/> at the origin
-        /// with no size.
+        /// Represents a <see cref="WinApiRectangle"/> at the origin with no
+        /// size.
         /// </summary>
         public static readonly WinApiRectangle Empty = default;
 
         /// <summary>
-        /// Gets or sets the X-coordinate of the left edge of this
-        /// <see cref="WinApiRectangle"/> structure.
+        /// Gets or sets the X-coordinate of the left edge of this <see
+        /// cref="WinApiRectangle"/> structure.
         /// </summary>
         public int Left
         {
@@ -41,8 +40,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets or sets the Y-coordinate of the top edge of this
-        /// <see cref="WinApiRectangle"/> structure.
+        /// Gets or sets the Y-coordinate of the top edge of this <see
+        /// cref="WinApiRectangle"/> structure.
         /// </summary>
         public int Top
         {
@@ -51,8 +50,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets or sets the X-coordinate of the right edge of this
-        /// <see cref="WinApiRectangle"/> structure.
+        /// Gets or sets the X-coordinate of the right edge of this <see
+        /// cref="WinApiRectangle"/> structure.
         /// </summary>
         public int Right
         {
@@ -61,8 +60,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets or sets the Y-coordinate of the bottom edge of this
-        /// <see cref="WinApiRectangle"/> structure.
+        /// Gets or sets the Y-coordinate of the bottom edge of this <see
+        /// cref="WinApiRectangle"/> structure.
         /// </summary>
         public int Bottom
         {
@@ -71,8 +70,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets or sets the X-coordinate of the upper-left corner of
-        /// this <see cref="WinApiRectangle"/> structure.
+        /// Gets or sets the X-coordinate of the upper-left corner of this <see
+        /// cref="WinApiRectangle"/> structure.
         /// </summary>
         public int X
         {
@@ -88,8 +87,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets or sets the Y-coordinate of the upper-left corner of
-        /// this <see cref="WinApiRectangle"/> structure.
+        /// Gets or sets the Y-coordinate of the upper-left corner of this <see
+        /// cref="WinApiRectangle"/> structure.
         /// </summary>
         public int Y
         {
@@ -105,8 +104,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets or sets the coordinates of the upper-left corner of
-        /// this <see cref="WinApiRectangle"/> structure.
+        /// Gets or sets the coordinates of the upper-left corner of this <see
+        /// cref="WinApiRectangle"/> structure.
         /// </summary>
         public Point Location
         {
@@ -140,8 +139,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets or sets the height of this <see cref="
-        /// WinApiRectangle"/> structure.
+        /// Gets or sets the height of this <see cref=" WinApiRectangle"/>
+        /// structure.
         /// </summary>
         public int Height
         {
@@ -175,9 +174,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="
-        /// WinApiRectangle"/> struct using the specified edge
-        /// locations.
+        /// Initializes a new instance of the <see cref=" WinApiRectangle"/>
+        /// struct using the specified edge locations.
         /// </summary>
         /// <param name="left">
         /// The X-coordinate of the left edge of this <see cref="
@@ -204,20 +202,19 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Creates a <see cref="WinApiRectangle"/> structure whose
-        /// <see cref="Left"/>, <see cref="Top"/>, <see cref="Right"/>,
-        /// and <see cref="Bottom"/> properties are equal to the
-        /// properties of the same name of a <see cref="Rectangle"/>
-        /// structure.
+        /// Creates a <see cref="WinApiRectangle"/> structure whose <see
+        /// cref="Left"/>, <see cref="Top"/>, <see cref="Right"/>, and <see
+        /// cref="Bottom"/> properties are equal to the properties of the same
+        /// name of a <see cref="Rectangle"/> structure.
         /// </summary>
         /// <param name="rectangle">
         /// The <see cref="Rectangle"/> to convert.
         /// </param>
         /// <returns>
-        /// A <see cref="WinApiRectangle"/> whose <see cref="Left"/>,
-        /// <see cref="Top"/>, <see cref="Right"/>, and <see cref="
-        /// Bottom"/> properties are the same as the properties of the
-        /// same name of <paramref name="rectangle"/>.
+        /// A <see cref="WinApiRectangle"/> whose <see cref="Left"/>, <see
+        /// cref="Top"/>, <see cref="Right"/>, and <see cref=" Bottom"/>
+        /// properties are the same as the properties of the same name of
+        /// <paramref name="rectangle"/>.
         /// </returns>
         public static implicit operator WinApiRectangle(
             Rectangle rectangle)
@@ -231,19 +228,18 @@ namespace Maseya.Controls
 
         /// <summary>
         /// Creates a <see cref="Rectangle"/> whose <see cref="
-        /// Rectangle.Location"/> and <see cref="Rectangle.Size"/>
-        /// properties are the same as the <see cref="Location"/> and
-        /// <see cref="Size"/> properties of a <see cref="
-        /// WinApiRectangle"/>.
+        /// Rectangle.Location"/> and <see cref="Rectangle.Size"/> properties
+        /// are the same as the <see cref="Location"/> and <see cref="Size"/>
+        /// properties of a <see cref=" WinApiRectangle"/>.
         /// </summary>
         /// <param name="rectangle">
         /// The <see cref="WinApiRectangle"/> to convert.
         /// </param>
         /// <returns>
-        /// A <see cref="Rectangle"/> whose <see cref="Rectangle.
-        /// Location"/> and <see cref="Rectangle.Size"/> properties are
-        /// the same as the <see cref="Location"/> and <see cref="
-        /// Size"/> properties of <paramref name="rectangle"/>.
+        /// A <see cref="Rectangle"/> whose <see cref="Rectangle. Location"/>
+        /// and <see cref="Rectangle.Size"/> properties are the same as the
+        /// <see cref="Location"/> and <see cref=" Size"/> properties of
+        /// <paramref name="rectangle"/>.
         /// </returns>
         public static implicit operator Rectangle(
             WinApiRectangle rectangle)
@@ -256,11 +252,10 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Compares two <see cref="WinApiRectangle"/> values. The
-        /// result specifies whether the values of the <see cref="
-        /// Left"/>, <see cref="Top"/>, <see cref="Right"/>, and
-        /// <see cref="Bottom"/> properties of the two <see cref="
-        /// WinApiRectangle"/> are equal.
+        /// Compares two <see cref="WinApiRectangle"/> values. The result
+        /// specifies whether the values of the <see cref=" Left"/>, <see
+        /// cref="Top"/>, <see cref="Right"/>, and <see cref="Bottom"/>
+        /// properties of the two <see cref=" WinApiRectangle"/> are equal.
         /// </summary>
         /// <param name="left">
         /// A <see cref="WinApiRectangle"/> to compare to <paramref
@@ -272,9 +267,9 @@ namespace Maseya.Controls
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the <see cref="Left"/>, <see
-        /// cref="Top"/>, <see cref="Right"/>, and <see cref="Bottom"/>
-        /// values of <paramref name="left"/> and <paramref name="
-        /// right"/> are equal; otherwise, <see langword="false"/>.
+        /// cref="Top"/>, <see cref="Right"/>, and <see cref="Bottom"/> values
+        /// of <paramref name="left"/> and <paramref name=" right"/> are equal;
+        /// otherwise, <see langword="false"/>.
         /// </returns>
         public static bool operator ==(
             WinApiRectangle left,
@@ -284,11 +279,10 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Compares two <see cref="WinApiRectangle"/> values. The
-        /// result specifies whether the values of the <see cref="
-        /// Left"/>, <see cref="Top"/>, <see cref="Right"/>, or
-        /// <see cref="Bottom"/> properties of the two <see cref="
-        /// WinApiRectangle"/> are unequal.
+        /// Compares two <see cref="WinApiRectangle"/> values. The result
+        /// specifies whether the values of the <see cref=" Left"/>, <see
+        /// cref="Top"/>, <see cref="Right"/>, or <see cref="Bottom"/>
+        /// properties of the two <see cref=" WinApiRectangle"/> are unequal.
         /// </summary>
         /// <param name="left">
         /// A <see cref="WinApiRectangle"/> to compare to <paramref
@@ -300,9 +294,9 @@ namespace Maseya.Controls
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the <see cref="Left"/>, <see
-        /// cref="Top"/>, <see cref="Right"/>, and <see cref="Bottom"/>
-        /// values of <paramref name="left"/> or <paramref name="
-        /// right"/> are unequal; otherwise, <see langword="false"/>.
+        /// cref="Top"/>, <see cref="Right"/>, and <see cref="Bottom"/> values
+        /// of <paramref name="left"/> or <paramref name=" right"/> are
+        /// unequal; otherwise, <see langword="false"/>.
         /// </returns>
         public static bool operator !=(
             WinApiRectangle left,
@@ -312,17 +306,15 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Returns a value indicating whether this instance is equal to
-        /// a specified <see cref="WinApiRectangle"/> value.
+        /// Returns a value indicating whether this instance is equal to a
+        /// specified <see cref="WinApiRectangle"/> value.
         /// </summary>
         /// <param name="other">
-        /// A <see cref="WinApiRectangle"/> value to compare to this
-        /// instance.
+        /// A <see cref="WinApiRectangle"/> value to compare to this instance.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if <paramref name="other"/> has the
-        /// same values as this instance; otherwise <see langword="
-        /// false"/>.
+        /// <see langword="true"/> if <paramref name="other"/> has the same
+        /// values as this instance; otherwise <see langword=" false"/>.
         /// </returns>
         public bool Equals(WinApiRectangle other)
         {
@@ -334,16 +326,16 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Returns a value indicating whether this instance is equal to
-        /// a specified object.
+        /// Returns a value indicating whether this instance is equal to a
+        /// specified object.
         /// </summary>
         /// <param name="obj">
         /// An object to compare with this instance.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if <paramref name="obj"/> is an
-        /// instance of <see cref="WinApiRectangle"/> and equals the
-        /// value of this instance; otherwise <see langword="false"/>.
+        /// <see langword="true"/> if <paramref name="obj"/> is an instance of
+        /// <see cref="WinApiRectangle"/> and equals the value of this
+        /// instance; otherwise <see langword="false"/>.
         /// </returns>
         public override bool Equals(object obj)
         {
@@ -353,17 +345,15 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Returns the hash code for this <see cref="
-        /// WinApiRectangle"/> structure.
+        /// Returns the hash code for this <see cref=" WinApiRectangle"/>
+        /// structure.
         /// </summary>
         /// <returns>
-        /// An integer that represents the hash code for this
-        /// rectangle.
+        /// An integer that represents the hash code for this rectangle.
         /// </returns>
         /// <remarks>
-        /// The hash code for this <see cref="WinApiRectangle"/> is the
-        /// same value as the hash code for its <see cref="Rectangle"/>
-        /// equivalent.
+        /// The hash code for this <see cref="WinApiRectangle"/> is the same
+        /// value as the hash code for its <see cref="Rectangle"/> equivalent.
         /// </remarks>
         public override int GetHashCode()
         {
@@ -371,10 +361,11 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Converts the attributes of this <see cref="
-        /// WinApiRectangle"/> to a human-readable string.
+        /// Converts the attributes of this <see cref=" WinApiRectangle"/> to a
+        /// human-readable string.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// </returns>
         public override string ToString()
         {
             return GetString(

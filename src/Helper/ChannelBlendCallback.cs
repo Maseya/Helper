@@ -1,15 +1,14 @@
 ﻿// <copyright file="ChannelBlendCallback.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed
-//     under GNU Affero General Public License. See LICENSE in project
-//     root for full license information, or visit
-//     https://www.gnu.org/licenses/#AGPL
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed under
+//     GNU Affero General Public License. See LICENSE in project root for full
+//     license information, or visit https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 namespace Maseya.Helper
 {
     /// <summary>
-    /// References a method to be called to perform a blend operation
-    /// between two color channels.
+    /// References a method to be called to perform a blend operation between
+    /// two color channels.
     /// </summary>
     /// <param name="top">
     /// A color channel of the top layer color.

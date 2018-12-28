@@ -1,8 +1,7 @@
 ﻿// <copyright file="Color32BppArgbTests.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed
-//     under GNU Affero General Public License. See LICENSE in project
-//     root for full license information, or visit
-//     https://www.gnu.org/licenses/#AGPL
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed under
+//     GNU Affero General Public License. See LICENSE in project root for full
+//     license information, or visit https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 namespace Maseya.Helper.PixelFormat.Tests
@@ -27,7 +26,8 @@ namespace Maseya.Helper.PixelFormat.Tests
         {
             var actualColor = new Color32BppArgb(red, green, blue);
             var actualValue = actualColor.Value;
-            unchecked { expectedValue |= (int)0xFF000000; }
+            unchecked
+            { expectedValue |= (int)0xFF000000; }
             var expectedColor = (Color32BppArgb)expectedValue;
             var expectedHashCode = expectedColor.GetHashCode();
             var actualHashCode = actualColor.GetHashCode();
@@ -128,8 +128,7 @@ namespace Maseya.Helper.PixelFormat.Tests
             Assert.Equal(expectedBlue, actualBlue);
         }
 
-        // This is pretty tedious to test with floating point
-        // arithmetic.
+        // This is pretty tedious to test with floating point arithmetic.
         [Theory]
         [InlineData(0, 0, 0, 0, 0, 0, 0, 0)]
         [InlineData(255, 255, 255, 255, 1, 1, 1, 1)]
@@ -157,9 +156,9 @@ namespace Maseya.Helper.PixelFormat.Tests
         }
 
         /// <summary>
-        /// Assert that conversion from <see cref="Color32BppArgb"/> to
-        /// <see cref="ColorF"/> back to <see cref="Color32BppArgb"/>
-        /// doesn't create any rounding errors.
+        /// Assert that conversion from <see cref="Color32BppArgb"/> to <see
+        /// cref="ColorF"/> back to <see cref="Color32BppArgb"/> doesn't create
+        /// any rounding errors.
         /// </summary>
         [Fact]
         public void ColorFConsistency()

@@ -1,8 +1,7 @@
 ﻿// <copyright file="DialogProxy.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed
-//     under GNU Affero General Public License. See LICENSE in project
-//     root for full license information, or visit
-//     https://www.gnu.org/licenses/#AGPL
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed under
+//     GNU Affero General Public License. See LICENSE in project root for full
+//     license information, or visit https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 namespace Maseya.Controls
@@ -12,21 +11,20 @@ namespace Maseya.Controls
     using System.Windows.Forms;
 
     /// <summary>
-    /// Provides a simplified representation of forms that are intended
-    /// to only be handled as dialog windows. This is an abstract class.
+    /// Provides a simplified representation of forms that are intended to only
+    /// be handled as dialog windows. This is an abstract class.
     /// </summary>
     /// <remarks>
-    /// Many windows <see cref="Form"/> classes are intended to be used
-    /// as modal dialog boxes. These classes usually do not intend to
-    /// make public the many properties and methods that a form exposes.
-    /// This class is therefore used to make public only the essential
-    /// parameters than an application developer intends to make usable.
-    /// The base <see cref="Form"/> is kept internal so inheritors can
-    /// select which properties, methods, and events should be visible.
+    /// Many windows <see cref="Form"/> classes are intended to be used as
+    /// modal dialog boxes. These classes usually do not intend to make public
+    /// the many properties and methods that a form exposes. This class is
+    /// therefore used to make public only the essential parameters than an
+    /// application developer intends to make usable. The base <see
+    /// cref="Form"/> is kept internal so inheritors can select which
+    /// properties, methods, and events should be visible.
     /// <para/>
-    /// This class was inspired by the design of <see cref="
-    /// OpenFileDialog"/>, <see cref="SaveFileDialog"/>, and <see cref="
-    /// FolderBrowserDialog"/>.
+    /// This class was inspired by the design of <see cref=" OpenFileDialog"/>,
+    /// <see cref="SaveFileDialog"/>, and <see cref=" FolderBrowserDialog"/>.
     /// </remarks>
     [ToolboxItem(true)]
     [DesignTimeVisible(true)]
@@ -36,8 +34,7 @@ namespace Maseya.Controls
         IDisposable
     {
         /// <summary>
-        /// Occurs when the user clicks  the Help button in the dialog
-        /// box.
+        /// Occurs when the user clicks the Help button in the dialog box.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage(
             "Microsoft.Design",
@@ -46,14 +43,13 @@ namespace Maseya.Controls
         public event HelpEventHandler HelpRequested;
 
         /// <summary>
-        /// Occurs when the component is disposed by a call to the
-        /// <see cref="Dispose()"/> method.
+        /// Occurs when the component is disposed by a call to the <see
+        /// cref="Dispose()"/> method.
         /// </summary>
         public event EventHandler Disposed;
 
         /// <summary>
-        /// Gets the <see cref="Form"/> to use for modal dialog
-        /// operations.
+        /// Gets the <see cref="Form"/> to use for modal dialog operations.
         /// </summary>
         protected Form BaseForm
         {
@@ -127,8 +123,7 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DialogProxy"/>
-        /// class.
+        /// Initializes a new instance of the <see cref="DialogProxy"/> class.
         /// </summary>
         /// <param name="baseForm">
         /// The <see cref="Form"/> to use for modal dialog operations.
@@ -146,18 +141,17 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Runs a common dialog box with a specified owner or default
-        /// if none is given.
+        /// Runs a common dialog box with a specified owner or default if none
+        /// is given.
         /// </summary>
         /// <param name="owner">
-        /// An <see cref="IWin32Window"/> that represents the top-level
-        /// windows the will own the modal dialog box, or <see
-        /// langword="null"/> to specify the currently active window of
-        /// your application.
+        /// An <see cref="IWin32Window"/> that represents the top-level windows
+        /// the will own the modal dialog box, or <see langword="null"/> to
+        /// specify the currently active window of your application.
         /// </param>
         /// <returns>
-        /// The <see cref="DialogResult"/> that this dialog box returns
-        /// when it closes.
+        /// The <see cref="DialogResult"/> that this dialog box returns when it
+        /// closes.
         /// </returns>
         public DialogResult ShowDialog(IWin32Window owner = null)
         {
@@ -197,13 +191,12 @@ namespace Maseya.Controls
 
         /// <summary>
         /// Releases the unmanaged resources used by the <see cref="
-        /// DialogProxy"/> and optionally releases the managed
-        /// resources.
+        /// DialogProxy"/> and optionally releases the managed resources.
         /// </summary>
         /// <param name="disposing">
-        /// <see langword="true"/> to released both managed and
-        /// unmanaged resources; <see langword="false"/> to release only
-        /// unmanaged resources.
+        /// <see langword="true"/> to released both managed and unmanaged
+        /// resources; <see langword="false"/> to release only unmanaged
+        /// resources.
         /// </param>
         protected virtual void Dispose(bool disposing)
         {

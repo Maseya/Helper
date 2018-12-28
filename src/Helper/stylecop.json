@@ -9,7 +9,7 @@
     "settings": {
         "documentationRules": {
             "companyName": "Public Domain",
-            "copyrightText": "    Copyright (c) {year} {name}. All rights reserved. Licensed\r\n    under {licenseName}. See {licenseFile} in project\r\n    root for full license information, or visit\r\n    {licenseSite}",
+            "copyrightText": "    Copyright (c) {year} {name}. All rights reserved. Licensed under\r\n    {licenseName}. See {licenseFile} in project root for full\r\n    license information, or visit {licenseSite}",
             "xmlHeader": true,
             "variables": {
                 "year": "2018",

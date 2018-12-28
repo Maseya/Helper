@@ -1,8 +1,7 @@
 ﻿// <copyright file="MathHelper.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed
-//     under GNU Affero General Public License. See LICENSE in project
-//     root for full license information, or visit
-//     https://www.gnu.org/licenses/#AGPL
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed under
+//     GNU Affero General Public License. See LICENSE in project root for full
+//     license information, or visit https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 namespace Maseya.Helper
@@ -10,8 +9,8 @@ namespace Maseya.Helper
     using System;
 
     /// <summary>
-    /// Provides static methods and constants for simple math functions
-    /// not provided in <see cref="Math"/> or extending them.
+    /// Provides static methods and constants for simple math functions not
+    /// provided in <see cref="Math"/> or extending them.
     /// </summary>
     public static class MathHelper
     {
@@ -33,13 +32,12 @@ namespace Maseya.Helper
         /// The second value to compare.
         /// </param>
         /// <param name="tolerance">
-        /// The threshold to consider when comparing <paramref name="
-        /// left"/> to <paramref name="right"/>.
+        /// The threshold to consider when comparing <paramref name=" left"/>
+        /// to <paramref name="right"/>.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if <paramref name="left"/> and
-        /// <paramref name="right"/> are equal within <paramref name="
-        /// tolerance"/>.
+        /// <see langword="true"/> if <paramref name="left"/> and <paramref
+        /// name="right"/> are equal within <paramref name=" tolerance"/>.
         /// </returns>
         public static bool NearlyEquals(
             float left,
@@ -50,8 +48,8 @@ namespace Maseya.Helper
         }
 
         /// <summary>
-        /// Returns a less than or equal to comparison of two variables
-        /// within some threshold.
+        /// Returns a less than or equal to comparison of two variables within
+        /// some threshold.
         /// </summary>
         /// <param name="left">
         /// The first value to compare.
@@ -60,13 +58,13 @@ namespace Maseya.Helper
         /// The second value to compare.
         /// </param>
         /// <param name="tolerance">
-        /// The threshold to consider when comparing <paramref name="
-        /// left"/> to <paramref name="right"/>.
+        /// The threshold to consider when comparing <paramref name=" left"/>
+        /// to <paramref name="right"/>.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if <paramref name="left"/> and
-        /// <paramref name="right"/> are less than or equal to within
-        /// <paramref name="tolerance"/>.
+        /// <see langword="true"/> if <paramref name="left"/> and <paramref
+        /// name="right"/> are less than or equal to within <paramref
+        /// name="tolerance"/>.
         /// </returns>
         public static bool LessThanOrNearlyEqualTo(
             float left,
@@ -77,8 +75,8 @@ namespace Maseya.Helper
         }
 
         /// <summary>
-        /// Returns a greater than or equal to comparison of two
-        /// variables within some threshold.
+        /// Returns a greater than or equal to comparison of two variables
+        /// within some threshold.
         /// </summary>
         /// <param name="left">
         /// The first value to compare.
@@ -87,13 +85,13 @@ namespace Maseya.Helper
         /// The second value to compare.
         /// </param>
         /// <param name="tolerance">
-        /// The threshold to consider when comparing <paramref name="
-        /// left"/> to <paramref name="right"/>.
+        /// The threshold to consider when comparing <paramref name=" left"/>
+        /// to <paramref name="right"/>.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if <paramref name="left"/> and
-        /// <paramref name="right"/> are greater than or equal to within
-        /// <paramref name="tolerance"/>.
+        /// <see langword="true"/> if <paramref name="left"/> and <paramref
+        /// name="right"/> are greater than or equal to within <paramref
+        /// name="tolerance"/>.
         /// </returns>
         public static bool GreaterThanOrNearlyEqualTo(
             float left,
@@ -104,8 +102,8 @@ namespace Maseya.Helper
         }
 
         /// <summary>
-        /// Snap a value to some limit if it is equal to that limit
-        /// within some threshold.
+        /// Snap a value to some limit if it is equal to that limit within some
+        /// threshold.
         /// </summary>
         /// <param name="value">
         /// The value to consider snapping to some limit.
@@ -114,14 +112,13 @@ namespace Maseya.Helper
         /// The limit to snap to.
         /// </param>
         /// <param name="tolerance">
-        /// The threshold to consider when comparing <paramref name="
-        /// value"/> to <paramref name="limit"/>.
+        /// The threshold to consider when comparing <paramref name=" value"/>
+        /// to <paramref name="limit"/>.
         /// </param>
         /// <returns>
-        /// <paramref name="limit"/> if <paramref name="value"/> is
-        /// equal to <paramref name="limit"/> within a threshold of
-        /// <paramref name="tolerance"/>. Otherwise, <paramref name="
-        /// value"/>.
+        /// <paramref name="limit"/> if <paramref name="value"/> is equal to
+        /// <paramref name="limit"/> within a threshold of <paramref
+        /// name="tolerance"/>. Otherwise, <paramref name=" value"/>.
         /// </returns>
         public static float SnapToLimit(
             float value,
@@ -144,19 +141,17 @@ namespace Maseya.Helper
         /// The maximum boundary to keep <paramref name="value"/> in.
         /// </param>
         /// <param name="tolerance">
-        /// The threshold to consider when comparing <paramref name="
-        /// value"/> to <paramref name="min"/> and <paramref name="
-        /// max"/>.
+        /// The threshold to consider when comparing <paramref name=" value"/>
+        /// to <paramref name="min"/> and <paramref name=" max"/>.
         /// </param>
         /// <returns>
-        /// <see cref="Single.NaN"/> <paramref name="max"/> is less than
+        /// <see cref="Single.NaN"/><paramref name="max"/> is less than
         /// <paramref name="min"/>. Otherwise <paramref name="min"/> if
         /// <paramref name="value"/> is less than or equal to <paramref
         /// name="min"/> within <paramref name="tolerance"/>. Otherwise
-        /// <paramref name="max"/> if <paramref name="value"/> is
-        /// greater than or equal to <paramref name="max"/> within
-        /// <paramref name="tolerance"/>. Otherwise <paramref name="
-        /// value"/>.
+        /// <paramref name="max"/> if <paramref name="value"/> is greater than
+        /// or equal to <paramref name="max"/> within <paramref
+        /// name="tolerance"/>. Otherwise <paramref name=" value"/>.
         /// </returns>
         public static float Clamp(
             float value,
@@ -187,8 +182,8 @@ namespace Maseya.Helper
         }
 
         /// <summary>
-        /// Returns the largest value among a collection of
-        /// single-precision floating-point values.
+        /// Returns the largest value among a collection of single-precision
+        /// floating-point values.
         /// </summary>
         /// <param name="value1">
         /// The first value to compare.
@@ -200,11 +195,10 @@ namespace Maseya.Helper
         /// An optional collection of extra values to compare.
         /// </param>
         /// <returns>
-        /// <paramref name="value1"/>, <paramref name="value2"/>, or one
-        /// of the optional <paramref name="values"/> parameters,
-        /// whichever is largest. If any of these values are equal to
-        /// <see cref="Single.NaN"/>, then <see cref="Single.NaN"/> is
-        /// returned.
+        /// <paramref name="value1"/>, <paramref name="value2"/>, or one of the
+        /// optional <paramref name="values"/> parameters, whichever is
+        /// largest. If any of these values are equal to <see
+        /// cref="Single.NaN"/>, then <see cref="Single.NaN"/> is returned.
         /// </returns>
         public static float Max(
             float value1,
@@ -224,8 +218,8 @@ namespace Maseya.Helper
         }
 
         /// <summary>
-        /// Returns the smallest value among a collection of
-        /// single-precision floating-point values.
+        /// Returns the smallest value among a collection of single-precision
+        /// floating-point values.
         /// </summary>
         /// <param name="value1">
         /// The first value to compare.
@@ -237,11 +231,10 @@ namespace Maseya.Helper
         /// An optional collection of extra values to compare.
         /// </param>
         /// <returns>
-        /// <paramref name="value1"/>, <paramref name="value2"/>, or one
-        /// of the optional <paramref name="values"/> parameters,
-        /// whichever is smallest. If any of these values are equal to
-        /// <see cref="Single.NaN"/>, then <see cref="Single.NaN"/> is
-        /// returned.
+        /// <paramref name="value1"/>, <paramref name="value2"/>, or one of the
+        /// optional <paramref name="values"/> parameters, whichever is
+        /// smallest. If any of these values are equal to <see
+        /// cref="Single.NaN"/>, then <see cref="Single.NaN"/> is returned.
         /// </returns>
         public static float Min(
             float value1,

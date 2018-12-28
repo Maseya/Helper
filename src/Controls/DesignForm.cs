@@ -1,8 +1,7 @@
 ﻿// <copyright file="DesignForm.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed
-//     under GNU Affero General Public License. See LICENSE in project
-//     root for full license information, or visit
-//     https://www.gnu.org/licenses/#AGPL
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed under
+//     GNU Affero General Public License. See LICENSE in project root for full
+//     license information, or visit https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 namespace Maseya.Controls
@@ -18,23 +17,23 @@ namespace Maseya.Controls
     using WM = WindowMessages;
 
     /// <summary>
-    /// Provides an empty <see cref="Form"/> with configurations
-    /// optimized for design and sizing.
+    /// Provides an empty <see cref="Form"/> with configurations optimized for
+    /// design and sizing.
     /// </summary>
     /// <remarks>
-    /// This class contains information about the window's border
-    /// padding as well as custom events to modifying the sizing
-    /// rectangle during resize events.
+    /// This class contains information about the window's border padding as
+    /// well as custom events to modifying the sizing rectangle during resize
+    /// events.
     /// </remarks>
     public class DesignForm : Form
     {
         /// <summary>
-        /// Represents the input control keys to override if no others
-        /// are specified.
+        /// Represents the input control keys to override if no others are
+        /// specified.
         /// </summary>
         /// <remarks>
-        /// These fallback keys are overridden because it is often
-        /// desired to use keyboard navigation
+        /// These fallback keys are overridden because it is often desired to
+        /// use keyboard navigation
         /// </remarks>
         internal static ICollection<Keys> FallbackOverrideInputKeys
         {
@@ -57,8 +56,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Preprocess the window rectangle before applying it during a
-        /// resize operation.
+        /// Preprocess the window rectangle before applying it during a resize
+        /// operation.
         /// </summary>
         [Browsable(true)]
         [Description(
@@ -67,8 +66,8 @@ namespace Maseya.Controls
         public event EventHandler<RectangleEventArgs> AdjustWindowBounds;
 
         /// <summary>
-        /// Preprocess the window size before applying it during a
-        /// resize operation.
+        /// Preprocess the window size before applying it during a resize
+        /// operation.
         /// </summary>
         [Browsable(true)]
         [Description(
@@ -77,8 +76,8 @@ namespace Maseya.Controls
         public event EventHandler<RectangleEventArgs> AdjustWindowSize;
 
         /// <summary>
-        /// Gets the vertical and horizontal thickness of the border
-        /// around this form.
+        /// Gets the vertical and horizontal thickness of the border around
+        /// this form.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(Hidden)]
@@ -105,8 +104,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the padding information of the border around this
-        /// <see cref="DesignForm"/>.
+        /// Gets the padding information of the border around this <see
+        /// cref="DesignForm"/>.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(Hidden)]
@@ -119,9 +118,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the padding information of the border and caption area
-        /// of this <see cref="DesignForm"/> that surrounds its client
-        /// area.
+        /// Gets the padding information of the border and caption area of this
+        /// <see cref="DesignForm"/> that surrounds its client area.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(Hidden)]
@@ -136,8 +134,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the dimensions of this <see cref="DesignForm"/> in
-        /// screen coordinates.
+        /// Gets the dimensions of this <see cref="DesignForm"/> in screen
+        /// coordinates.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(Hidden)]
@@ -150,8 +148,7 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DesignForm"/>
-        /// class.
+        /// Initializes a new instance of the <see cref="DesignForm"/> class.
         /// </summary>
         public DesignForm()
         {
@@ -167,20 +164,19 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Determines whether the specified key is a regular input key
-        /// or a special key that requires preprocessing.
+        /// Determines whether the specified key is a regular input key or a
+        /// special key that requires preprocessing.
         /// </summary>
         /// <param name="keyData">
         /// The key to inspect.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the key is regular input key;
-        /// otherwise <see langword="false"/>.
+        /// <see langword="true"/> if the key is regular input key; otherwise
+        /// <see langword="false"/>.
         /// </returns>
         /// <remarks>
-        /// Arrows keys and their combinations with the modifier keys
-        /// are now considered input keys in a <see cref="
-        /// DesignForm"/>.
+        /// Arrows keys and their combinations with the modifier keys are now
+        /// considered input keys in a <see cref=" DesignForm"/>.
         /// </remarks>
         protected override bool IsInputKey(Keys keyData)
         {
@@ -196,13 +192,12 @@ namespace Maseya.Controls
         /// The key to inspect.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the key is a dialog key;
-        /// otherwise <see langword="false"/>.
+        /// <see langword="true"/> if the key is a dialog key; otherwise <see
+        /// langword="false"/>.
         /// </returns>
         /// <remarks>
-        /// Arrows keys and their combinations with the modifier keys
-        /// are no longer considered dialog keys in a <see cref="
-        /// DesignForm"/>.
+        /// Arrows keys and their combinations with the modifier keys are no
+        /// longer considered dialog keys in a <see cref=" DesignForm"/>.
         /// </remarks>
         [SecuritySafeCritical]
         protected override bool ProcessDialogKey(Keys keyData)
@@ -213,8 +208,7 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Sends the specified message to the default window
-        /// procedure.
+        /// Sends the specified message to the default window procedure.
         /// </summary>
         /// <param name="m">
         /// The windows <see cref="Message"/> to process.
@@ -222,9 +216,8 @@ namespace Maseya.Controls
         [SecuritySafeCritical]
         protected override void DefWndProc(ref Message m)
         {
-            // Why have an ugly, large, O(n) switch tree to preprocess
-            // messages when you can do a pretty O(1) dictionary
-            // instead?
+            // Why have an ugly, large, O(n) switch tree to preprocess messages
+            // when you can do a pretty O(1) dictionary instead?
             if (TryGetPreprocessMessage(m, out var preprocessMessage))
             {
                 preprocessMessage(ref m);
@@ -234,8 +227,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the <see cref="PreprocessMessageCallback"/> that is
-        /// associated with the specified <see cref="Message"/>.
+        /// Gets the <see cref="PreprocessMessageCallback"/> that is associated
+        /// with the specified <see cref="Message"/>.
         /// </summary>
         /// <param name="message">
         /// The key to locate.
@@ -243,13 +236,13 @@ namespace Maseya.Controls
         /// <param name="preprocessMessage">
         /// When this method returns, the <see cref="
         /// PreprocessMessageCallback"/> associated with <paramref
-        /// name="message"/>, if the key is found; otherwise
-        /// <see langword="null"/>.
+        /// name="message"/>, if the key is found; otherwise <see
+        /// langword="null"/>.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if <paramref name="message"/> is
-        /// associated with a <see cref="PreprocessMessageCallback"/>;
-        /// otherwise <see langword="false"/>.
+        /// <see langword="true"/> if <paramref name="message"/> is associated
+        /// with a <see cref="PreprocessMessageCallback"/>; otherwise <see
+        /// langword="false"/>.
         /// </returns>
         protected virtual bool TryGetPreprocessMessage(
             Message message,
@@ -269,9 +262,9 @@ namespace Maseya.Controls
         /// </param>
         private void AdjustSizeFromSizing(ref Message m)
         {
-            // Valid sizing processes require the message WParam be
-            // zero. Nonzero values specify special circumstances like
-            // minimizing the window.
+            // Valid sizing processes require the message WParam be zero.
+            // Nonzero values specify special circumstances like minimizing the
+            // window.
             if (m.WParam != IntPtr.Zero)
             {
                 return;
@@ -296,8 +289,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Hook the WM_SIZING event and allow preprocessing of the
-        /// sizing rectangle before using it in the window message loop.
+        /// Hook the WM_SIZING event and allow preprocessing of the sizing
+        /// rectangle before using it in the window message loop.
         /// </summary>
         /// <param name="m">
         /// The <see cref="Message"/> to modify.
@@ -316,8 +309,7 @@ namespace Maseya.Controls
         /// Raises the <see cref="AdjustWindowBounds"/> event.
         /// </summary>
         /// <param name="e">
-        /// A <see cref="RectangleEventArgs"/> that contains the event
-        /// data.
+        /// A <see cref="RectangleEventArgs"/> that contains the event data.
         /// </param>
         protected virtual void OnAdjustWindowBounds(RectangleEventArgs e)
         {
@@ -328,8 +320,7 @@ namespace Maseya.Controls
         /// Raises the <see cref="AdjustWindowSize"/> event.
         /// </summary>
         /// <param name="e">
-        /// A <see cref="RectangleEventArgs"/> that contains the event
-        /// data.
+        /// A <see cref="RectangleEventArgs"/> that contains the event data.
         /// </param>
         protected virtual void OnAdjustWindowSize(RectangleEventArgs e)
         {
@@ -337,15 +328,15 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the vertical and horizontal thickness of the border of
-        /// a <see cref="Form"/>.
+        /// Gets the vertical and horizontal thickness of the border of a <see
+        /// cref="Form"/>.
         /// </summary>
         /// <param name="form">
         /// The <see cref="Form"/> to get the border size of.
         /// </param>
         /// <returns>
-        /// The vertical and horizontal thickness, represented in a
-        /// <see cref="Size"/> structure, of <paramref name="form"/>.
+        /// The vertical and horizontal thickness, represented in a <see
+        /// cref="Size"/> structure, of <paramref name="form"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="form"/> is <see langword="null"/>.
@@ -361,21 +352,21 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the vertical and horizontal thickness of the border of
-        /// a window given its <see cref="FormBorderStyle"/>.
+        /// Gets the vertical and horizontal thickness of the border of a
+        /// window given its <see cref="FormBorderStyle"/>.
         /// </summary>
         /// <param name="formBorderStyle">
-        /// A <see cref="Form.FormBorderStyle"/> value of the window to
-        /// get the border size from.
+        /// A <see cref="Form.FormBorderStyle"/> value of the window to get the
+        /// border size from.
         /// </param>
         /// <returns>
-        /// The vertical and horizontal thickness, represented in a
-        /// <see cref="Size"/> structure, of the form border padding of
-        /// a window described with <paramref name="formBorderStyle"/>.
+        /// The vertical and horizontal thickness, represented in a <see
+        /// cref="Size"/> structure, of the form border padding of a window
+        /// described with <paramref name="formBorderStyle"/>.
         /// </returns>
         /// <exception cref="InvalidEnumArgumentException">
-        /// <paramref name="formBorderStyle"/> is not one of the values
-        /// of <see cref="FormBorderStyle"/>.
+        /// <paramref name="formBorderStyle"/> is not one of the values of <see
+        /// cref="FormBorderStyle"/>.
         /// </exception>
         public static Size GetFormBorderSize(
             FormBorderStyle formBorderStyle)
@@ -410,15 +401,15 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the padding information of the border around a
-        /// <see cref="Form"/>.
+        /// Gets the padding information of the border around a <see
+        /// cref="Form"/>.
         /// </summary>
         /// <param name="form">
         /// The <see cref="Form"/> to get the border padding from.
         /// </param>
         /// <returns>
-        /// A <see cref="Padding"/> structure whose edges are the
-        /// thicknesses of each border edge of <paramref name="form"/>.
+        /// A <see cref="Padding"/> structure whose edges are the thicknesses
+        /// of each border edge of <paramref name="form"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="form"/> is <see langword="null"/>.
@@ -434,8 +425,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the height, in pixels, of the caption area of a
-        /// <see cref="Form"/>.
+        /// Gets the height, in pixels, of the caption area of a <see
+        /// cref="Form"/>.
         /// </summary>
         /// <param name="form">
         /// The <see cref="Form"/> to get the caption height of.
@@ -457,21 +448,21 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the height, in pixels, of the caption area of a window
-        /// given its <see cref="FormBorderStyle"/>
+        /// Gets the height, in pixels, of the caption area of a window given
+        /// its <see cref="FormBorderStyle"/>
         /// </summary>
         /// <param name="formBorderStyle">
-        /// The <see cref="FormBorderStyle"/> of the window to get the
-        /// caption height of.
+        /// The <see cref="FormBorderStyle"/> of the window to get the caption
+        /// height of.
         /// </param>
         /// <returns>
-        /// The height, in pixels, of the caption or title area of a
-        /// window corresponding to a <see cref="FormBorderStyle"/> of
-        /// <paramref name="formBorderStyle"/>.
+        /// The height, in pixels, of the caption or title area of a window
+        /// corresponding to a <see cref="FormBorderStyle"/> of <paramref
+        /// name="formBorderStyle"/>.
         /// </returns>
         /// <exception cref="InvalidEnumArgumentException">
-        /// <paramref name="formBorderStyle"/> is not one of the values
-        /// of <see cref="FormBorderStyle"/>.
+        /// <paramref name="formBorderStyle"/> is not one of the values of <see
+        /// cref="FormBorderStyle"/>.
         /// </exception>
         public static int GetCaptionHeight(
             FormBorderStyle formBorderStyle)
@@ -500,15 +491,15 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Converts an <see cref="IntPtr"/> to a <see cref="Size"/>
-        /// struct using the sequential data layout.
+        /// Converts an <see cref="IntPtr"/> to a <see cref="Size"/> struct
+        /// using the sequential data layout.
         /// </summary>
         /// <param name="value">
         /// The <see cref="IntPtr"/> to read.
         /// </param>
         /// <returns>
-        /// A <see cref="Size"/> whose data is sequentially identical
-        /// to <paramref name="value"/>.
+        /// A <see cref="Size"/> whose data is sequentially identical to
+        /// <paramref name="value"/>.
         /// </returns>
         private static Size IntPtrToSize(IntPtr value)
         {
@@ -516,15 +507,15 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Converts an <see cref="Size"/> to an <see cref="IntPtr"/>
-        /// struct using the sequential data layout.
+        /// Converts an <see cref="Size"/> to an <see cref="IntPtr"/> struct
+        /// using the sequential data layout.
         /// </summary>
         /// <param name="size">
         /// The <see cref="Size"/> to read.
         /// </param>
         /// <returns>
-        /// A <see cref="IntPtr"/> whose data is sequentially identical
-        /// to <paramref name="size"/>.
+        /// A <see cref="IntPtr"/> whose data is sequentially identical to
+        /// <paramref name="size"/>.
         /// </returns>
         private static IntPtr SizeToIntPtr(Size size)
         {

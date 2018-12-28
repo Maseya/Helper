@@ -1,8 +1,7 @@
 ﻿// <copyright file="CheckerPatternDrawer.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed
-//     under GNU Affero General Public License. See LICENSE in project
-//     root for full license information, or visit
-//     https://www.gnu.org/licenses/#AGPL
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed under
+//     GNU Affero General Public License. See LICENSE in project root for full
+//     license information, or visit https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 namespace Maseya.Controls
@@ -14,8 +13,8 @@ namespace Maseya.Controls
     using static Helper.ThrowHelper;
 
     /// <summary>
-    /// Implements methods and properties to draw a checkerboard pattern
-    /// on a <see cref="Bitmap"/>.
+    /// Implements methods and properties to draw a checkerboard pattern on a
+    /// <see cref="Bitmap"/>.
     /// </summary>
     public class CheckerPatternDrawer : Component
     {
@@ -123,8 +122,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the width, in pixels, of the resulting <see cref="
-        /// Bitmap"/> created by <see cref="CreateCheckerImage"/>.
+        /// Gets the width, in pixels, of the resulting <see cref=" Bitmap"/>
+        /// created by <see cref="CreateCheckerImage"/>.
         /// </summary>
         private int ImageWidth
         {
@@ -135,8 +134,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the height, in pixels, of the resulting <see cref="
-        /// Bitmap"/> created by <see cref="CreateCheckerImage"/>.
+        /// Gets the height, in pixels, of the resulting <see cref=" Bitmap"/>
+        /// created by <see cref="CreateCheckerImage"/>.
         /// </summary>
         private int ImageHeight
         {
@@ -147,8 +146,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the checkerboard squares where <see cref="Color1"/> is
-        /// filled in <see cref="FillCheckerRectangles(Image)"/>.
+        /// Gets the checkerboard squares where <see cref="Color1"/> is filled
+        /// in <see cref="FillCheckerRectangles(Image)"/>.
         /// </summary>
         private Rectangle[] Rectangles1
         {
@@ -163,8 +162,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the checkerboard squares where <see cref="Color2"/> is
-        /// filled in <see cref="FillCheckerRectangles(Image)"/>.
+        /// Gets the checkerboard squares where <see cref="Color2"/> is filled
+        /// in <see cref="FillCheckerRectangles(Image)"/>.
         /// </summary>
         private Rectangle[] Rectangles2
         {
@@ -193,8 +192,8 @@ namespace Maseya.Controls
         /// IContainer"/>.
         /// </summary>
         /// <param name="container">
-        /// An <see cref="IContainer"/> that represents the container
-        /// for this <see cref="CheckerPatternDrawer"/>.
+        /// An <see cref="IContainer"/> that represents the container for this
+        /// <see cref="CheckerPatternDrawer"/>.
         /// </param>
         public CheckerPatternDrawer(IContainer container)
             : this(Color.Black, Color.White, 4, 4, container)
@@ -203,8 +202,8 @@ namespace Maseya.Controls
 
         /// <summary>
         /// Initializes a new instances of the <see cref="
-        /// CheckerPatternDrawer"/> class with the specified colors,
-        /// size, and <see cref="IContainer"/>.
+        /// CheckerPatternDrawer"/> class with the specified colors, size, and
+        /// <see cref="IContainer"/>.
         /// </summary>
         /// <param name="color1">
         /// The color of the first checkerboard square.
@@ -219,12 +218,12 @@ namespace Maseya.Controls
         /// The height of the checkerboard squares.
         /// </param>
         /// <param name="container">
-        /// An <see cref="IContainer"/> that represents the container
-        /// for this <see cref="CheckerPatternDrawer"/>.
+        /// An <see cref="IContainer"/> that represents the container for this
+        /// <see cref="CheckerPatternDrawer"/>.
         /// </param>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <paramref name="width"/> or <paramref name="height"/> is
-        /// less than or equal to zero.
+        /// <paramref name="width"/> or <paramref name="height"/> is less than
+        /// or equal to zero.
         /// </exception>
         public CheckerPatternDrawer(
             Color color1,
@@ -245,18 +244,17 @@ namespace Maseya.Controls
         /// Create a <see cref="Bitmap"/> of a 2x2 checkerboard pattern.
         /// </summary>
         /// <returns>
-        /// A <see cref="Bitmap"/> of a 2x2 checkerboard where there
-        /// the top-left and bottom-right squares are <see cref="
-        /// Color1"/> and the top-right and bottom-left squares are
-        /// <see cref="Color2"/>. The size of each square is <see cref="
-        /// Size"/>.
+        /// A <see cref="Bitmap"/> of a 2x2 checkerboard where there the
+        /// top-left and bottom-right squares are <see cref=" Color1"/> and the
+        /// top-right and bottom-left squares are <see cref="Color2"/>. The
+        /// size of each square is <see cref=" Size"/>.
         /// </returns>
         public Bitmap CreateCheckerImage()
         {
-            // See MSDN rule "CA2000: Dispose objects before losing
-            // scope" for an explanation on using variables `temp` and
-            // `result`. Basically, we ensure the object is still
-            // Disposed even if an Exception occurs.
+            // See MSDN rule "CA2000: Dispose objects before losing scope" for
+            // an explanation on using variables `temp` and `result`.
+            // Basically, we ensure the object is still Disposed even if an
+            // Exception occurs.
             Bitmap temp = null;
             Bitmap result = null;
             try
@@ -270,8 +268,8 @@ namespace Maseya.Controls
                 // Try to add checkerboard squares to image.
                 FillCheckerRectangles(temp);
 
-                // Return `result` and make sure Bitmap is not Disposed
-                // by `finally` statement if no Exceptions were raised.
+                // Return `result` and make sure Bitmap is not Disposed by
+                // `finally` statement if no Exceptions were raised.
                 result = temp;
                 temp = null;
                 return result;
@@ -284,12 +282,10 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Fill the checkerboard rectangles onto an <see cref="
-        /// Image"/>.
+        /// Fill the checkerboard rectangles onto an <see cref=" Image"/>.
         /// </summary>
         /// <param name="image">
-        /// The <see cref="Image"/> to fill the checkerboard rectangles
-        /// onto.
+        /// The <see cref="Image"/> to fill the checkerboard rectangles onto.
         /// </param>
         private void FillCheckerRectangles(Image image)
         {
@@ -301,16 +297,15 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Fills the interiors of a series of rectangles with a
-        /// specified <see cref="Color"/>.
+        /// Fills the interiors of a series of rectangles with a specified <see
+        /// cref="Color"/>.
         /// </summary>
         /// <param name="graphics">
-        /// The <see cref="Graphics"/> objects to fill the rectangles
-        /// in.
+        /// The <see cref="Graphics"/> objects to fill the rectangles in.
         /// </param>
         /// <param name="color">
-        /// The <see cref="Color"/> to use for the <see cref="
-        /// SolidBrush"/> to fill the rectangles with.
+        /// The <see cref="Color"/> to use for the <see cref=" SolidBrush"/> to
+        /// fill the rectangles with.
         /// </param>
         /// <param name="rectangles">
         /// The rectangles to fill.

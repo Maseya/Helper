@@ -1,8 +1,7 @@
 ﻿// <copyright file="DesignControl.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed
-//     under GNU Affero General Public License. See LICENSE in project
-//     root for full license information, or visit
-//     https://www.gnu.org/licenses/#AGPL
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed under
+//     GNU Affero General Public License. See LICENSE in project root for full
+//     license information, or visit https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 namespace Maseya.Controls
@@ -27,8 +26,8 @@ namespace Maseya.Controls
     public class DesignControl : UserControl
     {
         /// <summary>
-        /// Represents a location for any mouse cursor that is not
-        /// inside of a <see cref="DesignControl"/> client area.
+        /// Represents a location for any mouse cursor that is not inside of a
+        /// <see cref="DesignControl"/> client area.
         /// </summary>
         public static readonly Point MouseOutOfRange = new Point(
             Int32.MinValue,
@@ -57,12 +56,12 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Represents the input control keys to override if no others
-        /// are specified.
+        /// Represents the input control keys to override if no others are
+        /// specified.
         /// </summary>
         /// <remarks>
-        /// These fallback keys are overridden because it is often
-        /// desired to use keyboard navigation
+        /// These fallback keys are overridden because it is often desired to
+        /// use keyboard navigation
         /// </remarks>
         internal static readonly ICollection<Keys>
             FallbackOverrideInputKeys = new HashSet<Keys>
@@ -179,8 +178,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the padding information of the border of this
-        /// <see cref="DesignControl"/>.
+        /// Gets the padding information of the border of this <see
+        /// cref="DesignControl"/>.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(Hidden)]
@@ -198,8 +197,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the current <see cref="Keys"/> being held down in any
-        /// <see cref="DesignControl"/>.
+        /// Gets the current <see cref="Keys"/> being held down in any <see
+        /// cref="DesignControl"/>.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(Hidden)]
@@ -210,9 +209,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the <see cref="Keys"/> that were held down in any
-        /// <see cref="DesignControl"/> the last time any Key events
-        /// were processed.
+        /// Gets the <see cref="Keys"/> that were held down in any <see
+        /// cref="DesignControl"/> the last time any Key events were processed.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(Hidden)]
@@ -223,8 +221,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the new <see cref="Keys"/> that were pressed in any
-        /// <see cref="DesignControl"/>.
+        /// Gets the new <see cref="Keys"/> that were pressed in any <see
+        /// cref="DesignControl"/>.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(Hidden)]
@@ -235,8 +233,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the old <see cref="Keys"/> that were released in any
-        /// <see cref="DesignControl"/>.
+        /// Gets the old <see cref="Keys"/> that were released in any <see
+        /// cref="DesignControl"/>.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(Hidden)]
@@ -247,8 +245,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets a value determining whether any keyboard Control is
-        /// currently being held.
+        /// Gets a value determining whether any keyboard Control is currently
+        /// being held.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(Hidden)]
@@ -261,8 +259,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets a value determining whether any keyboard Shift is
-        /// currently being held.
+        /// Gets a value determining whether any keyboard Shift is currently
+        /// being held.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(Hidden)]
@@ -275,8 +273,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets a value determining whether any keyboard Alt is
-        /// currently being held.
+        /// Gets a value determining whether any keyboard Alt is currently
+        /// being held.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(Hidden)]
@@ -289,8 +287,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets a value determining whether the mouse is currently
-        /// hovering over this <see cref="DesignControl"/>.
+        /// Gets a value determining whether the mouse is currently hovering
+        /// over this <see cref="DesignControl"/>.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(Hidden)]
@@ -303,9 +301,9 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the current client location of the mouse if it is in
-        /// the client area of this <see cref="DesignControl"/>, or
-        /// <see cref="MouseOutOfRange"/> if it is not.
+        /// Gets the current client location of the mouse if it is in the
+        /// client area of this <see cref="DesignControl"/>, or <see
+        /// cref="MouseOutOfRange"/> if it is not.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(Hidden)]
@@ -316,9 +314,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the previous value of <see cref="
-        /// CurrentMousePosition"/> before the last mouse move event
-        /// occurred.
+        /// Gets the previous value of <see cref=" CurrentMousePosition"/>
+        /// before the last mouse move event occurred.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(Hidden)]
@@ -329,8 +326,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the mouse buttons that are currently held down in any
-        /// <see cref="DesignControl"/>.
+        /// Gets the mouse buttons that are currently held down in any <see
+        /// cref="DesignControl"/>.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(Hidden)]
@@ -341,8 +338,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the last value of <see cref="CurrentMouseButtons"/>
-        /// before the last mouse up or down events occurred.
+        /// Gets the last value of <see cref="CurrentMouseButtons"/> before the
+        /// last mouse up or down events occurred.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(Hidden)]
@@ -381,21 +378,21 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="
-        /// DesignControl"/> class.
+        /// Initializes a new instance of the <see cref=" DesignControl"/>
+        /// class.
         /// </summary>
         public DesignControl()
         {
-            // These are basically required for any desired drawing to
-            // take place in a UserControl
+            // These are basically required for any desired drawing to take
+            // place in a UserControl
             DoubleBuffered = true;
             ResizeRedraw = true;
 
             // This is simply a style choice.
             BorderStyle = BorderStyle.FixedSingle;
 
-            // Create a dictionary here rather than making a giant
-            // switch table of DefWndProc overrides.
+            // Create a dictionary here rather than making a giant switch table
+            // of DefWndProc overrides.
             ProcedureOverrides =
                 new ReadOnlyDictionary<int, PreprocessMessageCallback>(
                     new Dictionary<int, PreprocessMessageCallback>()
@@ -410,8 +407,7 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Sends the specified message to the default window
-        /// procedure.
+        /// Sends the specified message to the default window procedure.
         /// </summary>
         /// <param name="m">
         /// The windows <see cref="Message"/> to process.
@@ -419,9 +415,8 @@ namespace Maseya.Controls
         [SecuritySafeCritical]
         protected override void DefWndProc(ref Message m)
         {
-            // Why have an ugly, large, O(n) switch tree to preprocess
-            // messages when you can do a pretty O(1) dictionary
-            // instead?
+            // Why have an ugly, large, O(n) switch tree to preprocess messages
+            // when you can do a pretty O(1) dictionary instead?
             if (TryGetPreprocessMessage(m, out var preprocessMessage))
             {
                 preprocessMessage(ref m);
@@ -431,8 +426,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the <see cref="PreprocessMessageCallback"/> that is
-        /// associated with the specified <see cref="Message"/>.
+        /// Gets the <see cref="PreprocessMessageCallback"/> that is associated
+        /// with the specified <see cref="Message"/>.
         /// </summary>
         /// <param name="message">
         /// The key to locate.
@@ -440,13 +435,13 @@ namespace Maseya.Controls
         /// <param name="preprocessMessage">
         /// When this method returns, the <see cref="
         /// PreprocessMessageCallback"/> associated with <paramref
-        /// name="message"/>, if the key is found; otherwise
-        /// <see langword="null"/>.
+        /// name="message"/>, if the key is found; otherwise <see
+        /// langword="null"/>.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if <paramref name="message"/> is
-        /// associated with a <see cref="PreprocessMessageCallback"/>;
-        /// otherwise <see langword="false"/>.
+        /// <see langword="true"/> if <paramref name="message"/> is associated
+        /// with a <see cref="PreprocessMessageCallback"/>; otherwise <see
+        /// langword="false"/>.
         /// </returns>
         protected virtual bool TryGetPreprocessMessage(
             Message message,
@@ -458,25 +453,24 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Determines whether the specified key is a regular input key
-        /// or a special key that requires preprocessing.
+        /// Determines whether the specified key is a regular input key or a
+        /// special key that requires preprocessing.
         /// </summary>
         /// <param name="keyData">
         /// The key to inspect.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the key is regular input key;
-        /// otherwise <see langword="false"/>.
+        /// <see langword="true"/> if the key is regular input key; otherwise
+        /// <see langword="false"/>.
         /// </returns>
         /// <remarks>
-        /// Arrows keys and their combinations with the modifier keys
-        /// are now considered input keys in a <see cref="
-        /// DesignControl"/>.
+        /// Arrows keys and their combinations with the modifier keys are now
+        /// considered input keys in a <see cref=" DesignControl"/>.
         /// </remarks>
         protected override bool IsInputKey(Keys keyData)
         {
-            // We return true for any overridden keys that we have
-            // determined should be input keys.
+            // We return true for any overridden keys that we have determined
+            // should be input keys.
             return FallbackOverrideInputKeys.Contains(keyData)
                 ? true
                 : base.IsInputKey(keyData);
@@ -489,13 +483,12 @@ namespace Maseya.Controls
         /// The key to inspect.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the key is a dialog key;
-        /// otherwise <see langword="false"/>.
+        /// <see langword="true"/> if the key is a dialog key; otherwise <see
+        /// langword="false"/>.
         /// </returns>
         /// <remarks>
-        /// Arrows keys and their combinations with the modifier keys
-        /// are no longer considered dialog keys in a <see cref="
-        /// DesignControl"/>.
+        /// Arrows keys and their combinations with the modifier keys are no
+        /// longer considered dialog keys in a <see cref=" DesignControl"/>.
         /// </remarks>
         [SecuritySafeCritical]
         protected override bool ProcessDialogKey(Keys keyData)
@@ -506,9 +499,9 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Updates <see cref="PreviousKeys"/>, <see cref="
-        /// CurrentKeys"/>, <see cref="PressedKeys"/> and <see cref="
-        /// ReleasedKeys"/> from the WM_KEYDOWN message.
+        /// Updates <see cref="PreviousKeys"/>, <see cref=" CurrentKeys"/>,
+        /// <see cref="PressedKeys"/> and <see cref=" ReleasedKeys"/> from the
+        /// WM_KEYDOWN message.
         /// </summary>
         /// <param name="m">
         /// The <see cref="Message"/> to preprocess.
@@ -522,9 +515,9 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Updates <see cref="PreviousKeys"/>, <see cref="
-        /// CurrentKeys"/>, <see cref="PressedKeys"/> and <see cref="
-        /// ReleasedKeys"/> from the WM_KEYUP message.
+        /// Updates <see cref="PreviousKeys"/>, <see cref=" CurrentKeys"/>,
+        /// <see cref="PressedKeys"/> and <see cref=" ReleasedKeys"/> from the
+        /// WM_KEYUP message.
         /// </summary>
         /// <param name="m">
         /// The <see cref="Message"/> to preprocess.
@@ -570,15 +563,15 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Converts an <see cref="IntPtr"/> to a <see cref="Point"/>
-        /// struct using the sequential data layout.
+        /// Converts an <see cref="IntPtr"/> to a <see cref="Point"/> struct
+        /// using the sequential data layout.
         /// </summary>
         /// <param name="value">
         /// The <see cref="IntPtr"/> to read.
         /// </param>
         /// <returns>
-        /// A <see cref="Point"/> whose data is sequentially identical
-        /// to <paramref name="value"/>.
+        /// A <see cref="Point"/> whose data is sequentially identical to
+        /// <paramref name="value"/>.
         /// </returns>
         private static Point IntPtrToPoint(IntPtr value)
         {

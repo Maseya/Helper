@@ -1,19 +1,18 @@
 ﻿// <copyright file="BlendMode.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed
-//     under GNU Affero General Public License. See LICENSE in project
-//     root for full license information, or visit
-//     https://www.gnu.org/licenses/#AGPL
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed under
+//     GNU Affero General Public License. See LICENSE in project root for full
+//     license information, or visit https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 namespace Maseya.Helper
 {
     /// <summary>
-    /// Specifies the color blending style for two <see cref="ColorF"/>
-    /// color values.
+    /// Specifies the color blending style for two <see cref="ColorF"/> color
+    /// values.
     /// </summary>
     /// <remarks>
-    /// Refer to https://en.wikipedia.org/wiki/Blend_modes for
-    /// information on all of the blend algorithms.
+    /// Refer to https://en.wikipedia.org/wiki/Blend_modes for information on
+    /// all of the blend algorithms.
     /// </remarks>
     public enum BlendMode
     {
@@ -28,17 +27,16 @@ namespace Maseya.Helper
         Grayscale,
 
         /// <summary>
-        /// Multiplies the numbers for each pixel of the top layer with
-        /// the corresponding pixel for the bottom layer. The result is
-        /// a darker picture.
+        /// Multiplies the numbers for each pixel of the top layer with the
+        /// corresponding pixel for the bottom layer. The result is a darker
+        /// picture.
         /// </summary>
         Multiply,
 
         /// <summary>
         /// The values of the pixels in the two layers are inverted,
-        /// multiplied, and then inverted again. This yields the
-        /// opposite effect to <see cref="Multiply"/>. The result is a
-        /// brighter picture.
+        /// multiplied, and then inverted again. This yields the opposite
+        /// effect to <see cref="Multiply"/>. The result is a brighter picture.
         /// </summary>
         Screen,
 
@@ -48,9 +46,9 @@ namespace Maseya.Helper
         Overlay,
 
         /// <summary>
-        /// Combines <see cref="Multiply"/> and <see cref="Screen"/>
-        /// blend modes. Equivalent to <see cref="Overlay"/>, but with
-        /// the bottom and top images swapped.
+        /// Combines <see cref="Multiply"/> and <see cref="Screen"/> blend
+        /// modes. Equivalent to <see cref="Overlay"/>, but with the bottom and
+        /// top images swapped.
         /// </summary>
         HardLight,
 
@@ -76,30 +74,27 @@ namespace Maseya.Helper
         ColorBurn,
 
         /// <summary>
-        /// Sums the value in the two layers and subtracts 1. This is
-        /// the same as inverting each layer, adding them together (as
-        /// in <see cref="LinearDodge"/>), and then inverting the
-        /// result.
+        /// Sums the value in the two layers and subtracts 1. This is the same
+        /// as inverting each layer, adding them together (as in <see
+        /// cref="LinearDodge"/>), and then inverting the result.
         /// </summary>
         LinearBurn,
 
         /// <summary>
-        /// Combines <see cref="ColorDodge"/> and <see cref="
-        /// ColorBurn"/> (rescaled so that neutral colors become middle
-        /// gray).
+        /// Combines <see cref="ColorDodge"/> and <see cref=" ColorBurn"/>
+        /// (rescaled so that neutral colors become middle gray).
         /// </summary>
         VividLight,
 
         /// <summary>
-        /// Combines <see cref="LinearDodge"/> and <see cref="
-        /// LinearBurn"/> (rescaled so that neutral colors become middle
-        /// gray).
+        /// Combines <see cref="LinearDodge"/> and <see cref=" LinearBurn"/>
+        /// (rescaled so that neutral colors become middle gray).
         /// </summary>
         LinearLight,
 
         /// <summary>
-        /// Subtracts the bottom layer from the top layer or the other
-        /// way round, to always get a positive value.
+        /// Subtracts the bottom layer from the top layer or the other way
+        /// round, to always get a positive value.
         /// </summary>
         Difference,
 
@@ -110,8 +105,8 @@ namespace Maseya.Helper
         Darken,
 
         /// <summary>
-        /// Selects the maximum of each component from the foreground
-        /// and background pixels.
+        /// Selects the maximum of each component from the foreground and
+        /// background pixels.
         /// </summary>
         Lighten,
 
@@ -126,20 +121,19 @@ namespace Maseya.Helper
         LighterColor,
 
         /// <summary>
-        /// Replaces the hue of the top layer with the hue of the bottom
-        /// layer.
+        /// Replaces the hue of the top layer with the hue of the bottom layer.
         /// </summary>
         Hue,
 
         /// <summary>
-        /// Replaces the saturation of the top layer with the saturation
-        /// of the bottom layer.
+        /// Replaces the saturation of the top layer with the saturation of the
+        /// bottom layer.
         /// </summary>
         Saturation,
 
         /// <summary>
-        /// Replaces the luminosity of the top layer with the luminosity
-        /// of the bottom layer.
+        /// Replaces the luminosity of the top layer with the luminosity of the
+        /// bottom layer.
         /// </summary>
         Luminosity,
 

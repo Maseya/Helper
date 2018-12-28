@@ -1,8 +1,7 @@
 ﻿// <copyright file="UndoFactory.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed
-//     under GNU Affero General Public License. See LICENSE in project
-//     root for full license information, or visit
-//     https://www.gnu.org/licenses/#AGPL
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed under
+//     GNU Affero General Public License. See LICENSE in project root for full
+//     license information, or visit https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 namespace Maseya.Helper
@@ -16,8 +15,7 @@ namespace Maseya.Helper
     public class UndoFactory : IUndoFactory
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="UndoFactory"/>
-        /// class.
+        /// Initializes a new instance of the <see cref="UndoFactory"/> class.
         /// </summary>
         public UndoFactory()
         {
@@ -37,13 +35,13 @@ namespace Maseya.Helper
         }
 
         /// <summary>
-        /// Gets the number of remaining undo operations that can still
-        /// be performed.
+        /// Gets the number of remaining undo operations that can still be
+        /// performed.
         /// </summary>
         /// <remarks>
-        /// Invoking <see cref="Undo"/> decreased this value by one until
-        /// it is zero. Invoking <see cref="Redo"/> increased this value
-        /// by one until it is equal to <see cref="Count"/>.
+        /// Invoking <see cref="Undo"/> decreased this value by one until it is
+        /// zero. Invoking <see cref="Redo"/> increased this value by one until
+        /// it is equal to <see cref="Count"/>.
         /// </remarks>
         public int Index
         {
@@ -76,9 +74,8 @@ namespace Maseya.Helper
         }
 
         /// <summary>
-        /// Gets a list of <see cref="State"/> values describing the
-        /// instance of this <see cref="UndoFactory"/>'s undo and redo
-        /// actions.
+        /// Gets a list of <see cref="State"/> values describing the instance
+        /// of this <see cref="UndoFactory"/>'s undo and redo actions.
         /// </summary>
         private List<State> History
         {
@@ -86,8 +83,7 @@ namespace Maseya.Helper
         }
 
         /// <summary>
-        /// Adds a new undo and its redo to the history at the current
-        /// state.
+        /// Adds a new undo and its redo to the history at the current state.
         /// </summary>
         /// <param name="undo">
         /// The <see cref="Action"/> to invoke when undoing an operation.
@@ -97,16 +93,15 @@ namespace Maseya.Helper
         /// </param>
         /// <remarks>
         /// <paramref name="redo"/> and <paramref name="undo"/> must be
-        /// invertible functions such that when one is applied after the
-        /// other, no change has been made. For example, if <paramref
-        /// name="undo"/> is <c>x++</c>, then <paramref name="redo"/>
-        /// must be <c>x--</c>.
+        /// invertible functions such that when one is applied after the other,
+        /// no change has been made. For example, if <paramref name="undo"/> is
+        /// <c>x++</c>, then <paramref name="redo"/> must be <c>x--</c>.
         /// <para/>
-        /// If the undo history is not up to date ( <see cref="Index"/>
-        /// is less than <see cref="Count"/>), all undo actions between
-        /// <see cref="Index"/> and <see cref="Count"/> are lost and the
-        /// tip of the undo list is set to <paramref name="undo"/> and
-        /// <paramref name="redo"/>.
+        /// If the undo history is not up to date ( <see cref="Index"/> is less
+        /// than <see cref="Count"/>), all undo actions between <see
+        /// cref="Index"/> and <see cref="Count"/> are lost and the tip of the
+        /// undo list is set to <paramref name="undo"/> and <paramref
+        /// name="redo"/>.
         /// </remarks>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="undo"/> -or- <paramref name="redo"/> is <see
@@ -148,9 +143,8 @@ namespace Maseya.Helper
         }
 
         /// <summary>
-        /// Redoes the last operation that was undone. If <see
-        /// cref="CanRedo"/> is <see langword="false"/>, no action is
-        /// taken.
+        /// Redoes the last operation that was undone. If <see cref="CanRedo"/>
+        /// is <see langword="false"/>, no action is taken.
         /// </summary>
         public void Redo()
         {
@@ -163,29 +157,26 @@ namespace Maseya.Helper
         }
 
         /// <summary>
-        /// Represents a container for an undo and redo <see cref="
-        /// Action"/>.
+        /// Represents a container for an undo and redo <see cref=" Action"/>.
         /// </summary>
         private struct State
         {
             /// <summary>
-            /// Initializes a new instance of the <see cref="State"/>
-            /// struct with given undo and redo <see cref="Action"/> s.
+            /// Initializes a new instance of the <see cref="State"/> struct
+            /// with given undo and redo <see cref="Action"/> s.
             /// </summary>
             /// <param name="undo">
-            /// The <see cref="Action"/> to invoke when undoing an
-            /// operation.
+            /// The <see cref="Action"/> to invoke when undoing an operation.
             /// </param>
             /// <param name="redo">
-            /// The <see cref="Action"/> to invoke when redoing an
-            /// operation.
+            /// The <see cref="Action"/> to invoke when redoing an operation.
             /// </param>
             /// <remarks>
-            /// <paramref name="redo"/> and <paramref name="undo"/> must
-            /// be invertible functions such that when one is applied
-            /// after the other, no change has been made. For example, if
-            /// <paramref name="undo"/> is <c>x++</c>, then <paramref
-            /// name="redo"/> must be <c>x--</c>.
+            /// <paramref name="redo"/> and <paramref name="undo"/> must be
+            /// invertible functions such that when one is applied after the
+            /// other, no change has been made. For example, if <paramref
+            /// name="undo"/> is <c>x++</c>, then <paramref name="redo"/> must
+            /// be <c>x--</c>.
             /// </remarks>
             public State(Action undo, Action redo)
             {

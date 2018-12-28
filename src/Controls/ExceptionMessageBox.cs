@@ -1,8 +1,7 @@
 ﻿// <copyright file="ExceptionMessageBox.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed
-//     under GNU Affero General Public License. See LICENSE in project
-//     root for full license information, or visit
-//     https://www.gnu.org/licenses/#AGPL
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed under
+//     GNU Affero General Public License. See LICENSE in project root for full
+//     license information, or visit https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 namespace Maseya.Controls
@@ -12,19 +11,19 @@ namespace Maseya.Controls
     using Helper;
 
     /// <summary>
-    /// Displays message boxes for showing and handling a caught
-    /// <see cref="Exception"/> to the user.
+    /// Displays message boxes for showing and handling a caught <see
+    /// cref="Exception"/> to the user.
     /// </summary>
     public class ExceptionMessageBox : IExceptionHandler
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="
-        /// ExceptionMessageBox"/> class with the specified window owner
-        /// and dialog caption.
+        /// ExceptionMessageBox"/> class with the specified window owner and
+        /// dialog caption.
         /// </summary>
         /// <param name="owner">
-        /// An implementation of <see cref="IWin32Window"/> that will
-        /// open the modal dialog box.
+        /// An implementation of <see cref="IWin32Window"/> that will open the
+        /// modal dialog box.
         /// </param>
         /// <param name="caption">
         /// The text to display in the title bar of the message box.
@@ -38,8 +37,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets or sets an implementation of <see cref="IWin32Window"/>
-        /// that will open the modal dialog box.
+        /// Gets or sets an implementation of <see cref="IWin32Window"/> that
+        /// will open the modal dialog box.
         /// </summary>
         public IWin32Window Owner
         {
@@ -48,8 +47,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets or sets the text to display in the title bar of the
-        /// message box.
+        /// Gets or sets the text to display in the title bar of the message
+        /// box.
         /// </summary>
         public string Caption
         {
@@ -58,15 +57,15 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Displays a message box that shows <see cref="Exception"/>
-        /// info to the user.
+        /// Displays a message box that shows <see cref="Exception"/> info to
+        /// the user.
         /// </summary>
         /// <param name="ex">
         /// The <see cref="Exception"/> to show.
         /// </param>
         /// <param name="owner">
-        /// An implementation of <see cref="IWin32Window"/> that will
-        /// open the modal dialog box.
+        /// An implementation of <see cref="IWin32Window"/> that will open the
+        /// modal dialog box.
         /// </param>
         /// <param name="caption">
         /// The text to display in the title bar of the message box.
@@ -93,24 +92,22 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Displays a message box that shows <see cref="Exception"/>
-        /// info to the user and prompts the user to retry the
-        /// exceptional action.
+        /// Displays a message box that shows <see cref="Exception"/> info to
+        /// the user and prompts the user to retry the exceptional action.
         /// </summary>
         /// <param name="ex">
         /// The <see cref="Exception"/> to show.
         /// </param>
         /// <param name="owner">
-        /// An implementation of <see cref="IWin32Window"/> that will
-        /// open the modal dialog box.
+        /// An implementation of <see cref="IWin32Window"/> that will open the
+        /// modal dialog box.
         /// </param>
         /// <param name="caption">
         /// The text to display in the title bar of the message box.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the user selects to retry the
-        /// process that threw the exception; otherwise <see
-        /// langword="false"/>.
+        /// <see langword="true"/> if the user selects to retry the process
+        /// that threw the exception; otherwise <see langword="false"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="ex"/> is <see langword="null"/>.
@@ -136,8 +133,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Displays a message box that shows <see cref="Exception"/>
-        /// info to the user.
+        /// Displays a message box that shows <see cref="Exception"/> info to
+        /// the user.
         /// </summary>
         /// <param name="ex">
         /// The <see cref="Exception"/> to show.
@@ -151,16 +148,16 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Displays a message box that shows <see cref="Exception"/>
-        /// info to the user and prompts the user to retry the
-        /// exceptional action again.
+        /// Displays a message box that shows <see cref="Exception"/> info to
+        /// the user and prompts the user to retry the exceptional action
+        /// again.
         /// </summary>
         /// <param name="ex">
         /// The <see cref="Exception"/> to show.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the user selects Retry, otherwise
-        /// <see langword="false"/>.
+        /// <see langword="true"/> if the user selects Retry, otherwise <see
+        /// langword="false"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="ex"/> is <see langword="null"/>.

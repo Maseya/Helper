@@ -1,8 +1,7 @@
 ﻿// <copyright file="BufferedDataGridView.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed
-//     under GNU Affero General Public License. See LICENSE in project
-//     root for full license information, or visit
-//     https://www.gnu.org/licenses/#AGPL
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed under
+//     GNU Affero General Public License. See LICENSE in project root for full
+//     license information, or visit https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 namespace Maseya.Controls
@@ -14,9 +13,9 @@ namespace Maseya.Controls
     /// double-buffered and user-drawn.
     /// </summary>
     /// <remarks>
-    /// Use <see cref="BufferedDataGridView"/> over <see cref="
-    /// DataGridView"/> in situations where you need to display images
-    /// in a grid, otherwise you can get flicker from drawing them.
+    /// Use <see cref="BufferedDataGridView"/> over <see cref=" DataGridView"/>
+    /// in situations where you need to display images in a grid, otherwise you
+    /// can get flicker from drawing them.
     /// </remarks>
     public class BufferedDataGridView : DataGridView
     {

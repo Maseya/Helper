@@ -1,8 +1,7 @@
 ﻿// <copyright file="ColorValueControl.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed
-//     under GNU Affero General Public License. See LICENSE in project
-//     root for full license information, or visit
-//     https://www.gnu.org/licenses/#AGPL
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed under
+//     GNU Affero General Public License. See LICENSE in project root for full
+//     license information, or visit https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 namespace Maseya.Controls
@@ -14,8 +13,7 @@ namespace Maseya.Controls
     using Helper;
 
     /// <summary>
-    /// Provides a control that draws a <see cref="Color"/> to its
-    /// surface.
+    /// Provides a control that draws a <see cref="Color"/> to its surface.
     /// </summary>
     public class ColorValueControl : DesignControl
     {
@@ -34,8 +32,8 @@ namespace Maseya.Controls
         public event EventHandler ColorValueChanged;
 
         /// <summary>
-        /// Gets or sets the represented <see cref="Color"/> of this
-        /// <see cref="ColorValueControl"/>.
+        /// Gets or sets the represented <see cref="Color"/> of this <see
+        /// cref="ColorValueControl"/>.
         /// </summary>
         [Category("Appearance")]
         [DefaultValue("Black")]
@@ -92,8 +90,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Redraws the control and raises the <see cref="
-        /// ColorValueChanged"/> event.
+        /// Redraws the control and raises the <see cref=" ColorValueChanged"/>
+        /// event.
         /// </summary>
         /// <param name="e">
         /// An <see cref="EventArgs"/> that contains the event data.
@@ -105,8 +103,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Calls <see cref="DrawColorValue(Graphics)"/> and
-        /// raises the <see cref="Control.Paint"/> event.
+        /// Calls <see cref="DrawColorValue(Graphics)"/> and raises the <see
+        /// cref="Control.Paint"/> event.
         /// </summary>
         /// <param name="e">
         /// A <see cref="PaintEventArgs"/> that contains the event data.
@@ -127,13 +125,11 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Fills this <see cref="ColorValueChanged"/> client area with
-        /// the <see cref="Color"/> determined by <see cref="
-        /// SelectedColor"/>.
+        /// Fills this <see cref="ColorValueChanged"/> client area with the
+        /// <see cref="Color"/> determined by <see cref=" SelectedColor"/>.
         /// </summary>
         /// <param name="graphics">
-        /// The drawing surface to fill <see cref="SelectedColor"/>
-        /// onto.
+        /// The drawing surface to fill <see cref="SelectedColor"/> onto.
         /// </param>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="graphics"/> is <see langword="null"/>.

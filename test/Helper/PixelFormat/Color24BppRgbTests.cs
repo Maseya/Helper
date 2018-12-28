@@ -1,8 +1,7 @@
 ﻿// <copyright file="Color24BppRgbTests.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed
-//     under GNU Affero General Public License. See LICENSE in project
-//     root for full license information, or visit
-//     https://www.gnu.org/licenses/#AGPL
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved. Licensed under
+//     GNU Affero General Public License. See LICENSE in project root for full
+//     license information, or visit https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 namespace Maseya.Helper.PixelFormat.Tests
@@ -144,8 +143,7 @@ namespace Maseya.Helper.PixelFormat.Tests
             Assert.Equal(expectedBlue, actualBlue);
         }
 
-        // This is pretty tedious to test with floating point
-        // arithmetic.
+        // This is pretty tedious to test with floating point arithmetic.
         [Theory]
         [InlineData(0, 0, 0, 0, 0, 0)]
         [InlineData(255, 255, 255, 1, 1, 1)]
@@ -169,9 +167,9 @@ namespace Maseya.Helper.PixelFormat.Tests
         }
 
         /// <summary>
-        /// Assert that conversion from <see cref="Color24BppRgb"/> to
-        /// <see cref="ColorF"/> back to <see cref="Color24BppRgb"/>
-        /// doesn't create any rounding errors.
+        /// Assert that conversion from <see cref="Color24BppRgb"/> to <see
+        /// cref="ColorF"/> back to <see cref="Color24BppRgb"/> doesn't create
+        /// any rounding errors.
         /// </summary>
         [Fact]
         public void ColorFConsistency()
