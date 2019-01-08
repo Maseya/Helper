@@ -66,6 +66,7 @@ namespace Maseya.Helper
         /// <exception cref="FormatException">
         /// <paramref name="format"/> is invalid.
         /// <para/>
+        /// <para/>
         /// -or-
         /// <para/>
         /// The index of a format item is less than zero, or greater than or
@@ -88,6 +89,7 @@ namespace Maseya.Helper
         /// </param>
         /// <param name="format">
         /// The format to use.
+        /// <para/>
         /// <para/>
         /// -or-
         /// <para/>
@@ -131,6 +133,7 @@ namespace Maseya.Helper
         /// <exception cref="FormatException">
         /// <paramref name="format"/> is invalid.
         /// <para/>
+        /// <para/>
         /// -or-
         /// <para/>
         /// The index of a format item is less than zero, or greater than or
@@ -153,6 +156,7 @@ namespace Maseya.Helper
         /// </param>
         /// <param name="format">
         /// The format to use.
+        /// <para/>
         /// <para/>
         /// -or-
         /// <para/>
