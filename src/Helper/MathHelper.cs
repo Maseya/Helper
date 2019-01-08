@@ -39,6 +39,16 @@ namespace Maseya.Helper
         /// <see langword="true"/> if <paramref name="left"/> and <paramref
         /// name="right"/> are equal within <paramref name=" tolerance"/>.
         /// </returns>
+        /// <example>
+        /// Floating point arithmetic can quickly lead to rounding errors where
+        /// the last few digits are not the precise value the user could have
+        /// been expecting. The example below demonstrates how simple, repeated
+        /// additions can lead results that are not exactly equal with the
+        /// expected value. However, using <see cref="NearlyEquals(Single,
+        /// Single, Single)"/>, it can be determined whether the values are
+        /// close to within a given range.
+        /// <code language="csharp" title="Floating point errors" source="../../examples/Helper.Examples/MathHelper/NearlyEqualsDefault.cs"/>
+        /// </example>
         public static bool NearlyEquals(
             float left,
             float right,
