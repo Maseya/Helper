@@ -28,27 +28,24 @@ namespace Maseya.Controls
     /// </remarks>
     [ToolboxItem(true)]
     [DesignTimeVisible(true)]
-    public abstract class DialogProxy :
-        MarshalByRefObject,
-        IComponent,
-        IDisposable
+    public abstract class DialogProxy : Component
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DialogProxy"/> class.
         /// </summary>
-        /// <param name="baseForm">
-        /// The <see cref="Form"/> to use for modal dialog operations.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="baseForm"/> is <see langword="null"/>.
-        /// </exception>
-        protected DialogProxy(Form baseForm)
+        protected DialogProxy()
         {
-            BaseForm = baseForm ??
-                throw new ArgumentNullException(nameof(baseForm));
+        }
 
-            BaseForm.HelpRequested += (sender, e) => OnHelpRequested(e);
-            BaseForm.Disposed += (sender, e) => OnDisposed(e);
+        protected DialogProxy(IContainer container)
+            : this()
+        {
+            if (container is null)
+            {
+                throw new ArgumentNullException(nameof(container));
+            }
+
+            container.Add(this);
         }
 
         /// <summary>
@@ -59,12 +56,6 @@ namespace Maseya.Controls
             "CA1009:DeclareEventHandlersCorrectly",
             Justification = "Legacy name choice by Microsoft.")]
         public event HelpEventHandler HelpRequested;
-
-        /// <summary>
-        /// Occurs when the component is disposed by a call to the <see
-        /// cref="Dispose()"/> method.
-        /// </summary>
-        public event EventHandler Disposed;
 
         /// <summary>
         /// Gets or sets a value indicating whether the Help button is
@@ -102,6 +93,10 @@ namespace Maseya.Controls
         /// <summary>
         /// Gets or sets an object that contains data about the control.
         /// </summary>
+        [Localizable(false)]
+        [Bindable(true)]
+        [DefaultValue(null)]
+        [TypeConverter(typeof(StringConverter))]
         public object Tag
         {
             get
@@ -116,26 +111,9 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="ISite"/> of the <see cref="
-        /// Component"/>.
-        /// </summary>
-        public ISite Site
-        {
-            get
-            {
-                return BaseForm.Site;
-            }
-
-            set
-            {
-                BaseForm.Site = value;
-            }
-        }
-
-        /// <summary>
         /// Gets the <see cref="Form"/> to use for modal dialog operations.
         /// </summary>
-        protected Form BaseForm
+        protected virtual Form BaseForm
         {
             get;
         }
@@ -159,15 +137,6 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Releases all resources used by the <see cref="Component"/>.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
         /// Raises the <see cref="HelpRequested"/> event.
         /// </summary>
         /// <param name="e">
@@ -179,17 +148,6 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Raises the <see cref="Disposed"/> event.
-        /// </summary>
-        /// <param name="e">
-        /// An <see cref="EventArgs"/> that contains the event data.
-        /// </param>
-        protected virtual void OnDisposed(EventArgs e)
-        {
-            Disposed?.Invoke(this, e);
-        }
-
-        /// <summary>
         /// Releases the unmanaged resources used by the <see cref="
         /// DialogProxy"/> and optionally releases the managed resources.
         /// </summary>
@@ -198,12 +156,14 @@ namespace Maseya.Controls
         /// resources; <see langword="false"/> to release only unmanaged
         /// resources.
         /// </param>
-        protected virtual void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                BaseForm.Dispose();
+                BaseForm?.Dispose();
             }
+
+            base.Dispose(disposing);
         }
     }
 }
