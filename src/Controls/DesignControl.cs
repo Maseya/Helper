@@ -39,27 +39,27 @@ namespace Maseya.Controls
         /// </summary>
         /// <remarks>
         /// These fallback keys are overridden because it is often desired to
-        /// use keyboard navigation
+        /// use keyboard navigation.
         /// </remarks>
         internal static readonly ICollection<Keys>
             FallbackOverrideInputKeys = new HashSet<Keys>
         {
             Keys.Up,
-            Keys.Up    | Keys.Shift,
-            Keys.Up                 | Keys.Control,
-            Keys.Up    | Keys.Shift | Keys.Control,
+            Keys.Up | Keys.Shift,
+            Keys.Up | Keys.Control,
+            Keys.Up | Keys.Shift | Keys.Control,
             Keys.Left,
-            Keys.Left  | Keys.Shift,
-            Keys.Left               | Keys.Control,
-            Keys.Left  | Keys.Shift | Keys.Control,
+            Keys.Left | Keys.Shift,
+            Keys.Left | Keys.Control,
+            Keys.Left | Keys.Shift | Keys.Control,
             Keys.Down,
-            Keys.Down  | Keys.Shift,
-            Keys.Down               | Keys.Control,
-            Keys.Down  | Keys.Shift | Keys.Control,
+            Keys.Down | Keys.Shift,
+            Keys.Down | Keys.Control,
+            Keys.Down | Keys.Shift | Keys.Control,
             Keys.Right,
             Keys.Right | Keys.Shift,
-            Keys.Right              | Keys.Control,
-            Keys.Right | Keys.Shift | Keys.Control
+            Keys.Right | Keys.Control,
+            Keys.Right | Keys.Shift | Keys.Control,
         };
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets a value determining whether any keyboard Control is currently
+        /// Gets a value indicating whether any keyboard Control is currently
         /// being held.
         /// </summary>
         [Browsable(false)]
@@ -176,7 +176,7 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets a value determining whether any keyboard Shift is currently
+        /// Gets a value indicating whether any keyboard Shift is currently
         /// being held.
         /// </summary>
         [Browsable(false)]
@@ -190,8 +190,8 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets a value determining whether any keyboard Alt is currently
-        /// being held.
+        /// Gets a value indicating whether any keyboard Alt is currently being
+        /// held.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(Hidden)]
@@ -356,7 +356,7 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets a value determining whether the mouse is currently hovering
+        /// Gets a value indicating whether the mouse is currently hovering
         /// over this <see cref="DesignControl"/>.
         /// </summary>
         [Browsable(false)]
@@ -548,7 +548,7 @@ namespace Maseya.Controls
 
         /// <summary>
         /// Updates the <see cref="DesignControl"/> mouse states from
-        /// WM_MOUSELEAVE
+        /// WM_MOUSELEAVE.
         /// </summary>
         /// <param name="m">
         /// The <see cref="Message"/> to preprocess.
@@ -564,7 +564,7 @@ namespace Maseya.Controls
 
         /// <summary>
         /// Updates the <see cref="DesignControl"/> mouse states from
-        /// WM_MOUSEMOVE
+        /// WM_MOUSEMOVE.
         /// </summary>
         /// <param name="m">
         /// The <see cref="Message"/> to preprocess.

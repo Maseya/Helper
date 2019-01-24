@@ -52,7 +52,7 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Initializes a new instances of the <see cref="
+        /// Initializes a new instance of the <see cref="
         /// CheckerPatternDrawer"/> class with the specified colors, size, and
         /// <see cref="IContainer"/>.
         /// </summary>

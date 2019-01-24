@@ -8,7 +8,7 @@ namespace Maseya.Controls
 {
     using System;
     using System.Windows.Forms;
-    using Helper;
+    using Maseya.Helper;
 
     /// <summary>
     /// Displays message boxes for showing and handling a caught <see

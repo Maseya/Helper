@@ -30,6 +30,34 @@ namespace Maseya.Controls
         public static readonly WinApiRectangle Empty = default;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref=" WinApiRectangle"/>
+        /// struct using the specified edge locations.
+        /// </summary>
+        /// <param name="left">
+        /// The X-coordinate of the left edge of this <see cref="
+        /// WinApiRectangle"/> structure.
+        /// </param>
+        /// <param name="top">
+        /// The Y-coordinate of the top edge of this <see cref="
+        /// WinApiRectangle"/> structure.
+        /// </param>
+        /// <param name="right">
+        /// The X-coordinate of the right edge of this <see cref="
+        /// WinApiRectangle"/> structure.
+        /// </param>
+        /// <param name="bottom">
+        /// The Y-coordinate of the bottom edge of this <see cref="
+        /// WinApiRectangle"/> structure.
+        /// </param>
+        public WinApiRectangle(int left, int top, int right, int bottom)
+        {
+            Left = left;
+            Top = top;
+            Right = right;
+            Bottom = bottom;
+        }
+
+        /// <summary>
         /// Gets or sets the X-coordinate of the left edge of this <see
         /// cref="WinApiRectangle"/> structure.
         /// </summary>
@@ -171,34 +199,6 @@ namespace Maseya.Controls
                 Width = value.Width;
                 Height = value.Height;
             }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref=" WinApiRectangle"/>
-        /// struct using the specified edge locations.
-        /// </summary>
-        /// <param name="left">
-        /// The X-coordinate of the left edge of this <see cref="
-        /// WinApiRectangle"/> structure.
-        /// </param>
-        /// <param name="top">
-        /// The Y-coordinate of the top edge of this <see cref="
-        /// WinApiRectangle"/> structure.
-        /// </param>
-        /// <param name="right">
-        /// The X-coordinate of the right edge of this <see cref="
-        /// WinApiRectangle"/> structure.
-        /// </param>
-        /// <param name="bottom">
-        /// The Y-coordinate of the bottom edge of this <see cref="
-        /// WinApiRectangle"/> structure.
-        /// </param>
-        public WinApiRectangle(int left, int top, int right, int bottom)
-        {
-            Left = left;
-            Top = top;
-            Right = right;
-            Bottom = bottom;
         }
 
         /// <summary>
@@ -365,6 +365,7 @@ namespace Maseya.Controls
         /// human-readable string.
         /// </summary>
         /// <returns>
+        /// The string representation of the <see cref="WinApiRectangle"/>.
         /// </returns>
         public override string ToString()
         {

@@ -312,6 +312,10 @@ namespace Maseya.Controls
         /// The window to inspect whether right-to-left is enabled.
         /// </param>
         /// <param name="options">
+        /// One of the <see cref="MessageBoxOptions"/> values that specifies
+        /// which display and association options will be used for the message
+        /// box. Right-to-left options will automatically be added if <paramref
+        /// name="owner"/> is right-to-left enabled.
         /// </param>
         /// <returns>
         /// <paramref name="options"/> is <paramref name="owner"/> is not

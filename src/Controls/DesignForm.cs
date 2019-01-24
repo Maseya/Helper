@@ -39,7 +39,7 @@ namespace Maseya.Controls
                     new Dictionary<int, PreprocessMessageCallback>()
                     {
                         { WM.Size, AdjustSizeFromSizing },
-                        { WM.Sizing, AdjustRectangleFromSizing }
+                        { WM.Sizing, AdjustRectangleFromSizing },
                     });
         }
 
@@ -136,12 +136,11 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Represents the input control keys to override if no others are
-        /// specified.
+        /// Gets the input control keys to override if no others are specified.
         /// </summary>
         /// <remarks>
         /// These fallback keys are overridden because it is often desired to
-        /// use keyboard navigation
+        /// use keyboard navigation.
         /// </remarks>
         internal static ICollection<Keys> FallbackOverrideInputKeys
         {
@@ -285,7 +284,7 @@ namespace Maseya.Controls
 
         /// <summary>
         /// Gets the height, in pixels, of the caption area of a window given
-        /// its <see cref="FormBorderStyle"/>
+        /// its <see cref="FormBorderStyle"/>.
         /// </summary>
         /// <param name="formBorderStyle">
         /// The <see cref="FormBorderStyle"/> of the window to get the caption

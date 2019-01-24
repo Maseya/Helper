@@ -10,7 +10,7 @@ namespace Maseya.Controls
     using System.ComponentModel;
     using System.Drawing;
     using System.Windows.Forms;
-    using Helper;
+    using Maseya.Helper;
 
     /// <summary>
     /// Provides a control that draws a <see cref="Color"/> to its surface.

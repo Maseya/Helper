@@ -4,11 +4,11 @@
 //     license information, or visit https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Drawing;
-
 namespace Maseya.Controls
 {
+    using System;
+    using System.Drawing;
+
     /// <summary>
     /// Provides data for sizing events in <see cref="DesignControl"/> and <see
     /// cref="DesignForm"/>.

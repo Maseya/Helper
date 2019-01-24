@@ -239,7 +239,7 @@ namespace Maseya.Controls
         /// If the function succeeds, the return value is nonzero.
         /// <para/>
         /// If the function fails, the return value is zero. To get extended
-        /// error information, call <see cref="Marshal. GetLastWin32Error()"/>
+        /// error information, call <see cref="Marshal. GetLastWin32Error()"/>.
         /// </returns>
         [SecurityCritical]
         [DllImport("user32.dll", SetLastError = true)]
