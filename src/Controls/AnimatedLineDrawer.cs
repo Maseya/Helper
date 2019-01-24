@@ -34,8 +34,13 @@ namespace Maseya.Controls
         /// class.
         /// </summary>
         public AnimatedLineDrawer()
-            : this(null)
         {
+            Length1 = 1;
+            Length2 = 1;
+            Color1 = Color.Black;
+            Color2 = Color.White;
+            Interval = 1000;
+            Timer = new Timer();
         }
 
         /// <summary>
@@ -47,61 +52,14 @@ namespace Maseya.Controls
         /// <see cref="AnimatedLineDrawer"/>.
         /// </param>
         public AnimatedLineDrawer(IContainer container)
-            : this(1, 1, Color.Black, Color.White, 1000, container)
+            : this()
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref=" AnimatedLineDrawer"/>
-        /// class with the specified lengths, colors, interval, and <see
-        /// cref="IContainer"/>.
-        /// </summary>
-        /// <param name="length1">
-        /// The length of the first dashed line.
-        /// </param>
-        /// <param name="length2">
-        /// The length of the second dashed line.
-        /// </param>
-        /// <param name="color1">
-        /// The color of the first dashed line.
-        /// </param>
-        /// <param name="color2">
-        /// The color of the second dashed line.
-        /// </param>
-        /// <param name="interval">
-        /// The time, in milliseconds, before the next update of the line
-        /// animation.
-        /// </param>
-        /// <param name="container">
-        /// An <see cref="IContainer"/> that represents the container for this
-        /// <see cref="AnimatedLineDrawer"/>.
-        /// </param>
-        public AnimatedLineDrawer(
-            int length1,
-            int length2,
-            Color color1,
-            Color color2,
-            int interval,
-            IContainer container = null)
-        {
-            Length1 = length1;
-            Length2 = length2;
-            Color1 = color1;
-            Color2 = color2;
-            SyncRoot = new object();
-
-            Timer = container is null
-                ? new Timer()
-                : new Timer(container);
-
-            Timer.Interval = interval;
-            Timer.Tick += (sender, e) =>
+            if (container is null)
             {
-                OnTick(e);
-                Offset++;
-            };
+                throw new ArgumentNullException(nameof(container));
+            }
 
-            Timer.Start();
+            container.Add(this);
         }
 
         /// <summary>
@@ -109,8 +67,7 @@ namespace Maseya.Controls
         /// cref="AnimatedLineDrawer"/> is constructed.
         /// </summary>
         [Category("Animator")]
-        [Description("Occurs when the specified timer interval has" +
-            "elapsed.")]
+        [Description("Occurs when the specified timer interval has elapsed.")]
         public event EventHandler Tick;
 
         /// <summary>
@@ -207,23 +164,6 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="ISite"/> of the <see cref="
-        /// Component"/>.
-        /// </summary>
-        public override ISite Site
-        {
-            get
-            {
-                return Timer.Site;
-            }
-
-            set
-            {
-                Timer.Site = value;
-            }
-        }
-
-        /// <summary>
         /// Gets or sets the initial offset of the first dashed line.
         /// </summary>
         private int Offset
@@ -237,15 +177,6 @@ namespace Maseya.Controls
         /// frequency of the dashed lines.
         /// </summary>
         private Timer Timer
-        {
-            get;
-        }
-
-        /// <summary>
-        /// Gets an object that can be used to synchronize access to the <see
-        /// cref="AnimatedLineDrawer"/>.
-        /// </summary>
-        private object SyncRoot
         {
             get;
         }
@@ -360,11 +291,7 @@ namespace Maseya.Controls
                 pen.DashStyle = DashStyle.Custom;
                 pen.DashOffset = dashOffset;
                 pen.DashPattern = dashPattern;
-
-                lock (SyncRoot)
-                {
-                    graphics.DrawPath(pen, path);
-                }
+                graphics.DrawPath(pen, path);
             }
         }
     }
