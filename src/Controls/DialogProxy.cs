@@ -113,7 +113,7 @@ namespace Maseya.Controls
         /// <summary>
         /// Gets the <see cref="Form"/> to use for modal dialog operations.
         /// </summary>
-        protected virtual Form BaseForm
+        protected abstract Form BaseForm
         {
             get;
         }
