@@ -27,7 +27,10 @@ namespace Maseya.Helper.PixelFormat.Tests
             var actualColor = new Color32BppArgb(red, green, blue);
             var actualValue = actualColor.Value;
             unchecked
-            { expectedValue |= (int)0xFF000000; }
+            {
+                expectedValue |= (int)0xFF000000;
+            }
+
             var expectedColor = (Color32BppArgb)expectedValue;
             var expectedHashCode = expectedColor.GetHashCode();
             var actualHashCode = actualColor.GetHashCode();

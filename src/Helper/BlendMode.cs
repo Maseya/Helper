@@ -140,6 +140,6 @@ namespace Maseya.Helper
         /// <summary>
         /// Divides the top layer by the bottom layer.
         /// </summary>
-        Divide
+        Divide,
     }
 }

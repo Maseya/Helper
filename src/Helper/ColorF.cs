@@ -11,7 +11,7 @@ namespace Maseya.Helper
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Drawing;
-    using PixelFormat;
+    using Maseya.Helper.PixelFormat;
     using static System.Diagnostics.Debug;
     using static System.Math;
     using static MathHelper;
@@ -110,7 +110,7 @@ namespace Maseya.Helper
                     { BlendMode.Hue, HueBlend },
                     { BlendMode.Saturation, SaturationBlend },
                     { BlendMode.Luminosity, LuminosityBlend },
-                    { BlendMode.Divide, Divide }
+                    { BlendMode.Divide, Divide },
                 });
 
         /// <summary>
@@ -1544,7 +1544,7 @@ namespace Maseya.Helper
         /// but with its chroma offset by a given amount.
         /// </summary>
         /// <param name="bottom">
-        /// The bottom layer
+        /// The bottom layer.
         /// </param>
         /// <returns>
         /// An instance of <see cref="ColorF"/> whose <see cref=" Chroma"/> and

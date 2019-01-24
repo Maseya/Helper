@@ -7,7 +7,7 @@
 namespace Maseya.Helper
 {
     using System;
-    using Properties;
+    using Maseya.Helper.Properties;
     using static StringHelper;
 
     /// <summary>
