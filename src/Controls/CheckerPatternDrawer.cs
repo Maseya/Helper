@@ -29,6 +29,69 @@ namespace Maseya.Controls
         private int _height;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="
+        /// CheckerPatternDrawer"/> class.
+        /// </summary>
+        public CheckerPatternDrawer()
+            : this(null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="
+        /// CheckerPatternDrawer"/> class with the specified <see cref="
+        /// IContainer"/>.
+        /// </summary>
+        /// <param name="container">
+        /// An <see cref="IContainer"/> that represents the container for this
+        /// <see cref="CheckerPatternDrawer"/>.
+        /// </param>
+        public CheckerPatternDrawer(IContainer container)
+            : this(Color.Black, Color.White, 4, 4, container)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instances of the <see cref="
+        /// CheckerPatternDrawer"/> class with the specified colors, size, and
+        /// <see cref="IContainer"/>.
+        /// </summary>
+        /// <param name="color1">
+        /// The color of the first checkerboard square.
+        /// </param>
+        /// <param name="color2">
+        /// The color of the second checkerboard square.
+        /// </param>
+        /// <param name="width">
+        /// The width of the checkerboard squares.
+        /// </param>
+        /// <param name="height">
+        /// The height of the checkerboard squares.
+        /// </param>
+        /// <param name="container">
+        /// An <see cref="IContainer"/> that represents the container for this
+        /// <see cref="CheckerPatternDrawer"/>.
+        /// </param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="width"/> or <paramref name="height"/> is less than
+        /// or equal to zero.
+        /// </exception>
+        public CheckerPatternDrawer(
+            Color color1,
+            Color color2,
+            int width,
+            int height,
+            IContainer container = null)
+        {
+            Width = width;
+            Height = height;
+            Color1 = color1;
+            Color2 = color2;
+
+            container?.Add(this);
+        }
+
+        /// <summary>
         /// Gets or sets the color of the first checkerboard square.
         /// </summary>
         [Category("Drawer")]
@@ -178,69 +241,6 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="
-        /// CheckerPatternDrawer"/> class.
-        /// </summary>
-        public CheckerPatternDrawer()
-            : this(null)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="
-        /// CheckerPatternDrawer"/> class with the specified <see cref="
-        /// IContainer"/>.
-        /// </summary>
-        /// <param name="container">
-        /// An <see cref="IContainer"/> that represents the container for this
-        /// <see cref="CheckerPatternDrawer"/>.
-        /// </param>
-        public CheckerPatternDrawer(IContainer container)
-            : this(Color.Black, Color.White, 4, 4, container)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instances of the <see cref="
-        /// CheckerPatternDrawer"/> class with the specified colors, size, and
-        /// <see cref="IContainer"/>.
-        /// </summary>
-        /// <param name="color1">
-        /// The color of the first checkerboard square.
-        /// </param>
-        /// <param name="color2">
-        /// The color of the second checkerboard square.
-        /// </param>
-        /// <param name="width">
-        /// The width of the checkerboard squares.
-        /// </param>
-        /// <param name="height">
-        /// The height of the checkerboard squares.
-        /// </param>
-        /// <param name="container">
-        /// An <see cref="IContainer"/> that represents the container for this
-        /// <see cref="CheckerPatternDrawer"/>.
-        /// </param>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// <paramref name="width"/> or <paramref name="height"/> is less than
-        /// or equal to zero.
-        /// </exception>
-        public CheckerPatternDrawer(
-            Color color1,
-            Color color2,
-            int width,
-            int height,
-            IContainer container = null)
-        {
-            Width = width;
-            Height = height;
-            Color1 = color1;
-            Color2 = color2;
-
-            container?.Add(this);
-        }
-
-        /// <summary>
         /// Create a <see cref="Bitmap"/> of a 2x2 checkerboard pattern.
         /// </summary>
         /// <returns>
@@ -282,21 +282,6 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Fill the checkerboard rectangles onto an <see cref=" Image"/>.
-        /// </summary>
-        /// <param name="image">
-        /// The <see cref="Image"/> to fill the checkerboard rectangles onto.
-        /// </param>
-        private void FillCheckerRectangles(Image image)
-        {
-            using (var graphics = Graphics.FromImage(image))
-            {
-                FillRectangles(graphics, Color1, Rectangles1);
-                FillRectangles(graphics, Color2, Rectangles2);
-            }
-        }
-
-        /// <summary>
         /// Fills the interiors of a series of rectangles with a specified <see
         /// cref="Color"/>.
         /// </summary>
@@ -318,6 +303,21 @@ namespace Maseya.Controls
             using (var brush = new SolidBrush(color))
             {
                 graphics.FillRectangles(brush, rectangles);
+            }
+        }
+
+        /// <summary>
+        /// Fill the checkerboard rectangles onto an <see cref=" Image"/>.
+        /// </summary>
+        /// <param name="image">
+        /// The <see cref="Image"/> to fill the checkerboard rectangles onto.
+        /// </param>
+        private void FillCheckerRectangles(Image image)
+        {
+            using (var graphics = Graphics.FromImage(image))
+            {
+                FillRectangles(graphics, Color1, Rectangles1);
+                FillRectangles(graphics, Color2, Rectangles2);
             }
         }
     }

@@ -34,28 +34,6 @@ namespace Maseya.Controls
             Int32.MinValue);
 
         /// <summary>
-        /// Occurs when the mouse wheel moves while the <see cref="
-        /// DesignControl"/> has focus.
-        /// </summary>
-        [Browsable(true)]
-        [Category("Mouse")]
-        [Description(
-            "Occurs when the mouse wheel moves while the control " +
-            "has focus.")]
-        public new event MouseEventHandler MouseWheel
-        {
-            add
-            {
-                base.MouseWheel += value;
-            }
-
-            remove
-            {
-                base.MouseWheel -= value;
-            }
-        }
-
-        /// <summary>
         /// Represents the input control keys to override if no others are
         /// specified.
         /// </summary>
@@ -85,15 +63,196 @@ namespace Maseya.Controls
         };
 
         /// <summary>
-        /// Gets a dictionary of <see cref="PreprocessMessageCallback"/>
-        /// delegates to call for given <see cref="Message.Msg"/> keys.
+        /// Initializes a new instance of the <see cref=" DesignControl"/>
+        /// class.
+        /// </summary>
+        public DesignControl()
+        {
+            // These are basically required for any desired drawing to take
+            // place in a UserControl
+            DoubleBuffered = true;
+            ResizeRedraw = true;
+
+            // This is simply a style choice.
+            BorderStyle = BorderStyle.FixedSingle;
+
+            // Create a dictionary here rather than making a giant switch table
+            // of DefWndProc overrides.
+            ProcedureOverrides =
+                new ReadOnlyDictionary<int, PreprocessMessageCallback>(
+                    new Dictionary<int, PreprocessMessageCallback>()
+                    {
+                        { WM.KeyDown, UpdateKeyStateFromKeyDown },
+                        { WM.SystemKeyDown, UpdateKeyStateFromKeyDown },
+                        { WM.KeyUp, UpdateKeyStateFromKeyUp },
+                        { WM.SystemKeyUp, UpdateKeyStateFromKeyUp },
+                        { WM.MouseMove, UpdateMouseStateFromMouseMove },
+                        { WM.MouseLeave, UpdateMouseStateFromMouseLeave },
+                    });
+        }
+
+        /// <summary>
+        /// Occurs when the mouse wheel moves while the <see cref="
+        /// DesignControl"/> has focus.
+        /// </summary>
+        [Browsable(true)]
+        [Category("Mouse")]
+        [Description(
+            "Occurs when the mouse wheel moves while the control " +
+            "has focus.")]
+        public new event MouseEventHandler MouseWheel
+        {
+            add
+            {
+                base.MouseWheel += value;
+            }
+
+            remove
+            {
+                base.MouseWheel -= value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the current <see cref="Keys"/> being held down in any <see
+        /// cref="DesignControl"/>.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(Hidden)]
-        private IReadOnlyDictionary<int, PreprocessMessageCallback>
-            ProcedureOverrides
+        public static Keys CurrentKeys
         {
             get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="Keys"/> that were held down in any <see
+        /// cref="DesignControl"/> the last time any Key events were processed.
+        /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(Hidden)]
+        public static Keys PreviousKeys
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the new <see cref="Keys"/> that were pressed in any <see
+        /// cref="DesignControl"/>.
+        /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(Hidden)]
+        public static Keys PressedKeys
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the old <see cref="Keys"/> that were released in any <see
+        /// cref="DesignControl"/>.
+        /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(Hidden)]
+        public static Keys ReleasedKeys
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets a value determining whether any keyboard Control is currently
+        /// being held.
+        /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(Hidden)]
+        public static bool ControlKeyHeld
+        {
+            get
+            {
+                return (ModifierKeys & Keys.Control) != Keys.None;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value determining whether any keyboard Shift is currently
+        /// being held.
+        /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(Hidden)]
+        public static bool ShiftKeyHeld
+        {
+            get
+            {
+                return (ModifierKeys & Keys.Shift) != Keys.None;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value determining whether any keyboard Alt is currently
+        /// being held.
+        /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(Hidden)]
+        public static bool AltKeyHeld
+        {
+            get
+            {
+                return (ModifierKeys & Keys.Alt) != Keys.None;
+            }
+        }
+
+        /// <summary>
+        /// Gets the mouse buttons that are currently held down in any <see
+        /// cref="DesignControl"/>.
+        /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(Hidden)]
+        public static MouseButtons CurrentMouseButtons
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the last value of <see cref="CurrentMouseButtons"/> before the
+        /// last mouse up or down events occurred.
+        /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(Hidden)]
+        public static MouseButtons PreviousMouseButtons
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the newly pressed mouse buttons in any <see cref="
+        /// DesignControl"/>.
+        /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(Hidden)]
+        public static MouseButtons ActiveMouseButtons
+        {
+            get
+            {
+                return CurrentMouseButtons & ~PreviousMouseButtons;
+            }
+        }
+
+        /// <summary>
+        /// Gets the newly released mouse buttons in any <see cref="
+        /// DesignControl"/>.
+        /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(Hidden)]
+        public static MouseButtons ReleasedMouseButtons
+        {
+            get
+            {
+                return PreviousMouseButtons & ~CurrentMouseButtons;
+            }
         }
 
         /// <summary>
@@ -197,96 +356,6 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the current <see cref="Keys"/> being held down in any <see
-        /// cref="DesignControl"/>.
-        /// </summary>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(Hidden)]
-        public static Keys CurrentKeys
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// Gets the <see cref="Keys"/> that were held down in any <see
-        /// cref="DesignControl"/> the last time any Key events were processed.
-        /// </summary>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(Hidden)]
-        public static Keys PreviousKeys
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// Gets the new <see cref="Keys"/> that were pressed in any <see
-        /// cref="DesignControl"/>.
-        /// </summary>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(Hidden)]
-        public static Keys PressedKeys
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// Gets the old <see cref="Keys"/> that were released in any <see
-        /// cref="DesignControl"/>.
-        /// </summary>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(Hidden)]
-        public static Keys ReleasedKeys
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// Gets a value determining whether any keyboard Control is currently
-        /// being held.
-        /// </summary>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(Hidden)]
-        public static bool ControlKeyHeld
-        {
-            get
-            {
-                return (ModifierKeys & Keys.Control) != Keys.None;
-            }
-        }
-
-        /// <summary>
-        /// Gets a value determining whether any keyboard Shift is currently
-        /// being held.
-        /// </summary>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(Hidden)]
-        public static bool ShiftKeyHeld
-        {
-            get
-            {
-                return (ModifierKeys & Keys.Shift) != Keys.None;
-            }
-        }
-
-        /// <summary>
-        /// Gets a value determining whether any keyboard Alt is currently
-        /// being held.
-        /// </summary>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(Hidden)]
-        public static bool AltKeyHeld
-        {
-            get
-            {
-                return (ModifierKeys & Keys.Alt) != Keys.None;
-            }
-        }
-
-        /// <summary>
         /// Gets a value determining whether the mouse is currently hovering
         /// over this <see cref="DesignControl"/>.
         /// </summary>
@@ -326,84 +395,15 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the mouse buttons that are currently held down in any <see
-        /// cref="DesignControl"/>.
+        /// Gets a dictionary of <see cref="PreprocessMessageCallback"/>
+        /// delegates to call for given <see cref="Message.Msg"/> keys.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(Hidden)]
-        public static MouseButtons CurrentMouseButtons
+        private IReadOnlyDictionary<int, PreprocessMessageCallback>
+            ProcedureOverrides
         {
             get;
-            private set;
-        }
-
-        /// <summary>
-        /// Gets the last value of <see cref="CurrentMouseButtons"/> before the
-        /// last mouse up or down events occurred.
-        /// </summary>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(Hidden)]
-        public static MouseButtons PreviousMouseButtons
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// Gets the newly pressed mouse buttons in any <see cref="
-        /// DesignControl"/>.
-        /// </summary>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(Hidden)]
-        public static MouseButtons ActiveMouseButtons
-        {
-            get
-            {
-                return CurrentMouseButtons & ~PreviousMouseButtons;
-            }
-        }
-
-        /// <summary>
-        /// Gets the newly released mouse buttons in any <see cref="
-        /// DesignControl"/>.
-        /// </summary>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(Hidden)]
-        public static MouseButtons ReleasedMouseButtons
-        {
-            get
-            {
-                return PreviousMouseButtons & ~CurrentMouseButtons;
-            }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref=" DesignControl"/>
-        /// class.
-        /// </summary>
-        public DesignControl()
-        {
-            // These are basically required for any desired drawing to take
-            // place in a UserControl
-            DoubleBuffered = true;
-            ResizeRedraw = true;
-
-            // This is simply a style choice.
-            BorderStyle = BorderStyle.FixedSingle;
-
-            // Create a dictionary here rather than making a giant switch table
-            // of DefWndProc overrides.
-            ProcedureOverrides =
-                new ReadOnlyDictionary<int, PreprocessMessageCallback>(
-                    new Dictionary<int, PreprocessMessageCallback>()
-                    {
-                        { WM.KeyDown, UpdateKeyStateFromKeyDown },
-                        { WM.SystemKeyDown, UpdateKeyStateFromKeyDown },
-                        { WM.KeyUp, UpdateKeyStateFromKeyUp },
-                        { WM.SystemKeyUp, UpdateKeyStateFromKeyUp },
-                        { WM.MouseMove, UpdateMouseStateFromMouseMove },
-                        { WM.MouseLeave, UpdateMouseStateFromMouseLeave },
-                    });
         }
 
         /// <summary>
@@ -531,6 +531,22 @@ namespace Maseya.Controls
         }
 
         /// <summary>
+        /// Converts an <see cref="IntPtr"/> to a <see cref="Point"/> struct
+        /// using the sequential data layout.
+        /// </summary>
+        /// <param name="value">
+        /// The <see cref="IntPtr"/> to read.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Point"/> whose data is sequentially identical to
+        /// <paramref name="value"/>.
+        /// </returns>
+        private static Point IntPtrToPoint(IntPtr value)
+        {
+            return new Point((int)value & 0xFFFF, (int)value >> 0x10);
+        }
+
+        /// <summary>
         /// Updates the <see cref="DesignControl"/> mouse states from
         /// WM_MOUSELEAVE
         /// </summary>
@@ -560,22 +576,6 @@ namespace Maseya.Controls
 
             PreviousMouseButtons = CurrentMouseButtons;
             CurrentMouseButtons = MouseButtons;
-        }
-
-        /// <summary>
-        /// Converts an <see cref="IntPtr"/> to a <see cref="Point"/> struct
-        /// using the sequential data layout.
-        /// </summary>
-        /// <param name="value">
-        /// The <see cref="IntPtr"/> to read.
-        /// </param>
-        /// <returns>
-        /// A <see cref="Point"/> whose data is sequentially identical to
-        /// <paramref name="value"/>.
-        /// </returns>
-        private static Point IntPtrToPoint(IntPtr value)
-        {
-            return new Point((int)value & 0xFFFF, (int)value >> 0x10);
         }
     }
 }

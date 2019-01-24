@@ -20,6 +20,37 @@ namespace Maseya.Controls
     public class RectangleEventArgs : EventArgs
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref=" RectangleEventArgs"/>
+        /// class from the given location and size.
+        /// </summary>
+        /// <param name="location">
+        /// The locations of the design item.
+        /// </param>
+        /// <param name="size">
+        /// The size of the design item.
+        /// </param>
+        public RectangleEventArgs(
+            Point location = default,
+            Size size = default)
+        {
+            Location = location;
+            Size = size;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref=" RectangleEventArgs"/>
+        /// class from the given sizing rectangle.
+        /// </summary>
+        /// <param name="rectangle">
+        /// The sizing rectangle of the design item.
+        /// </param>
+        public RectangleEventArgs(Rectangle rectangle)
+        {
+            Location = rectangle.Location;
+            Size = rectangle.Size;
+        }
+
+        /// <summary>
         /// Gets or sets the sizing rectangle of the design item.
         /// </summary>
         public Rectangle Rectangle
@@ -52,37 +83,6 @@ namespace Maseya.Controls
         {
             get;
             set;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref=" RectangleEventArgs"/>
-        /// class from the given location and size.
-        /// </summary>
-        /// <param name="location">
-        /// The locations of the design item.
-        /// </param>
-        /// <param name="size">
-        /// The size of the design item.
-        /// </param>
-        public RectangleEventArgs(
-            Point location = default,
-            Size size = default)
-        {
-            Location = location;
-            Size = size;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref=" RectangleEventArgs"/>
-        /// class from the given sizing rectangle.
-        /// </summary>
-        /// <param name="rectangle">
-        /// The sizing rectangle of the design item.
-        /// </param>
-        public RectangleEventArgs(Rectangle rectangle)
-        {
-            Location = rectangle.Location;
-            Size = rectangle.Size;
         }
     }
 }

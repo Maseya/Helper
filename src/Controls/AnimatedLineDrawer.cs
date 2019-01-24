@@ -30,6 +30,81 @@ namespace Maseya.Controls
         private int _length2;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref=" AnimatedLineDrawer"/>
+        /// class.
+        /// </summary>
+        public AnimatedLineDrawer()
+            : this(null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref=" AnimatedLineDrawer"/>
+        /// class with the specified <see cref=" IContainer"/>.
+        /// </summary>
+        /// <param name="container">
+        /// An <see cref="IContainer"/> that represents the container for this
+        /// <see cref="AnimatedLineDrawer"/>.
+        /// </param>
+        public AnimatedLineDrawer(IContainer container)
+            : this(1, 1, Color.Black, Color.White, 1000, container)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref=" AnimatedLineDrawer"/>
+        /// class with the specified lengths, colors, interval, and <see
+        /// cref="IContainer"/>.
+        /// </summary>
+        /// <param name="length1">
+        /// The length of the first dashed line.
+        /// </param>
+        /// <param name="length2">
+        /// The length of the second dashed line.
+        /// </param>
+        /// <param name="color1">
+        /// The color of the first dashed line.
+        /// </param>
+        /// <param name="color2">
+        /// The color of the second dashed line.
+        /// </param>
+        /// <param name="interval">
+        /// The time, in milliseconds, before the next update of the line
+        /// animation.
+        /// </param>
+        /// <param name="container">
+        /// An <see cref="IContainer"/> that represents the container for this
+        /// <see cref="AnimatedLineDrawer"/>.
+        /// </param>
+        public AnimatedLineDrawer(
+            int length1,
+            int length2,
+            Color color1,
+            Color color2,
+            int interval,
+            IContainer container = null)
+        {
+            Length1 = length1;
+            Length2 = length2;
+            Color1 = color1;
+            Color2 = color2;
+            SyncRoot = new object();
+
+            Timer = container is null
+                ? new Timer()
+                : new Timer(container);
+
+            Timer.Interval = interval;
+            Timer.Tick += (sender, e) =>
+            {
+                OnTick(e);
+                Offset++;
+            };
+
+            Timer.Start();
+        }
+
+        /// <summary>
         /// Occurs every <see cref="Interval"/> milliseconds when this <see
         /// cref="AnimatedLineDrawer"/> is constructed.
         /// </summary>
@@ -37,15 +112,6 @@ namespace Maseya.Controls
         [Description("Occurs when the specified timer interval has" +
             "elapsed.")]
         public event EventHandler Tick;
-
-        /// <summary>
-        /// Gets or sets the initial offset of the first dashed line.
-        /// </summary>
-        private int Offset
-        {
-            get;
-            set;
-        }
 
         /// <summary>
         /// Gets or sets the length of the first dashed line.
@@ -120,15 +186,6 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets the timer that determines that determines the animation
-        /// frequency of the dashed lines.
-        /// </summary>
-        private Timer Timer
-        {
-            get;
-        }
-
-        /// <summary>
         /// Gets or sets the time, in milliseconds, before the next update of
         /// the line animation.
         /// </summary>
@@ -167,6 +224,24 @@ namespace Maseya.Controls
         }
 
         /// <summary>
+        /// Gets or sets the initial offset of the first dashed line.
+        /// </summary>
+        private int Offset
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets the timer that determines that determines the animation
+        /// frequency of the dashed lines.
+        /// </summary>
+        private Timer Timer
+        {
+            get;
+        }
+
+        /// <summary>
         /// Gets an object that can be used to synchronize access to the <see
         /// cref="AnimatedLineDrawer"/>.
         /// </summary>
@@ -197,81 +272,6 @@ namespace Maseya.Controls
             {
                 return new float[] { Length2, Length1 };
             }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref=" AnimatedLineDrawer"/>
-        /// class.
-        /// </summary>
-        public AnimatedLineDrawer()
-            : this(null)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref=" AnimatedLineDrawer"/>
-        /// class with the specified <see cref=" IContainer"/>.
-        /// </summary>
-        /// <param name="container">
-        /// An <see cref="IContainer"/> that represents the container for this
-        /// <see cref="AnimatedLineDrawer"/>.
-        /// </param>
-        public AnimatedLineDrawer(IContainer container)
-            : this(1, 1, Color.Black, Color.White, 1000, container)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref=" AnimatedLineDrawer"/>
-        /// class with the specified lengths, colors, interval, and <see
-        /// cref="IContainer"/>.
-        /// </summary>
-        /// <param name="length1">
-        /// The length of the first dashed line.
-        /// </param>
-        /// <param name="length2">
-        /// The length of the second dashed line.
-        /// </param>
-        /// <param name="color1">
-        /// The color of the first dashed line.
-        /// </param>
-        /// <param name="color2">
-        /// The color of the second dashed line.
-        /// </param>
-        /// <param name="interval">
-        /// The time, in milliseconds, before the next update of the line
-        /// animation.
-        /// </param>
-        /// <param name="container">
-        /// An <see cref="IContainer"/> that represents the container for this
-        /// <see cref="AnimatedLineDrawer"/>.
-        /// </param>
-        public AnimatedLineDrawer(
-            int length1,
-            int length2,
-            Color color1,
-            Color color2,
-            int interval,
-            IContainer container = null)
-        {
-            Length1 = length1;
-            Length2 = length2;
-            Color1 = color1;
-            Color2 = color2;
-            SyncRoot = new object();
-
-            Timer = container is null
-                ? new Timer()
-                : new Timer(container);
-
-            Timer.Interval = interval;
-            Timer.Tick += (sender, e) =>
-            {
-                OnTick(e);
-                Offset++;
-            };
-
-            Timer.Start();
         }
 
         /// <summary>

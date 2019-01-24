@@ -28,31 +28,19 @@ namespace Maseya.Controls
     public class DesignForm : Form
     {
         /// <summary>
-        /// Represents the input control keys to override if no others are
-        /// specified.
+        /// Initializes a new instance of the <see cref="DesignForm"/> class.
         /// </summary>
-        /// <remarks>
-        /// These fallback keys are overridden because it is often desired to
-        /// use keyboard navigation
-        /// </remarks>
-        internal static ICollection<Keys> FallbackOverrideInputKeys
+        public DesignForm()
         {
-            get
-            {
-                return DesignControl.FallbackOverrideInputKeys;
-            }
-        }
+            KeyPreview = true;
 
-        /// <summary>
-        /// Gets a dictionary of <see cref="PreprocessMessageCallback"/>
-        /// delegates to call for given <see cref="Message.Msg"/> keys.
-        /// </summary>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(Hidden)]
-        private IReadOnlyDictionary<int, PreprocessMessageCallback>
-            ProcedureOverrides
-        {
-            get;
+            ProcedureOverrides =
+                new ReadOnlyDictionary<int, PreprocessMessageCallback>(
+                    new Dictionary<int, PreprocessMessageCallback>()
+                    {
+                        { WM.Size, AdjustSizeFromSizing },
+                        { WM.Sizing, AdjustRectangleFromSizing }
+                    });
         }
 
         /// <summary>
@@ -148,183 +136,31 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DesignForm"/> class.
+        /// Represents the input control keys to override if no others are
+        /// specified.
         /// </summary>
-        public DesignForm()
-        {
-            KeyPreview = true;
-
-            ProcedureOverrides =
-                new ReadOnlyDictionary<int, PreprocessMessageCallback>(
-                    new Dictionary<int, PreprocessMessageCallback>()
-                    {
-                        { WM.Size, AdjustSizeFromSizing },
-                        { WM.Sizing, AdjustRectangleFromSizing }
-                    });
-        }
-
-        /// <summary>
-        /// Determines whether the specified key is a regular input key or a
-        /// special key that requires preprocessing.
-        /// </summary>
-        /// <param name="keyData">
-        /// The key to inspect.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the key is regular input key; otherwise
-        /// <see langword="false"/>.
-        /// </returns>
         /// <remarks>
-        /// Arrows keys and their combinations with the modifier keys are now
-        /// considered input keys in a <see cref=" DesignForm"/>.
+        /// These fallback keys are overridden because it is often desired to
+        /// use keyboard navigation
         /// </remarks>
-        protected override bool IsInputKey(Keys keyData)
+        internal static ICollection<Keys> FallbackOverrideInputKeys
         {
-            return FallbackOverrideInputKeys.Contains(keyData)
-                ? true
-                : base.IsInputKey(keyData);
-        }
-
-        /// <summary>
-        /// Processes a dialog key.
-        /// </summary>
-        /// <param name="keyData">
-        /// The key to inspect.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the key is a dialog key; otherwise <see
-        /// langword="false"/>.
-        /// </returns>
-        /// <remarks>
-        /// Arrows keys and their combinations with the modifier keys are no
-        /// longer considered dialog keys in a <see cref=" DesignForm"/>.
-        /// </remarks>
-        [SecuritySafeCritical]
-        protected override bool ProcessDialogKey(Keys keyData)
-        {
-            return FallbackOverrideInputKeys.Contains(keyData)
-                ? false
-                : base.ProcessDialogKey(keyData);
-        }
-
-        /// <summary>
-        /// Sends the specified message to the default window procedure.
-        /// </summary>
-        /// <param name="m">
-        /// The windows <see cref="Message"/> to process.
-        /// </param>
-        [SecuritySafeCritical]
-        protected override void DefWndProc(ref Message m)
-        {
-            // Why have an ugly, large, O(n) switch tree to preprocess messages
-            // when you can do a pretty O(1) dictionary instead?
-            if (TryGetPreprocessMessage(m, out var preprocessMessage))
+            get
             {
-                preprocessMessage(ref m);
+                return DesignControl.FallbackOverrideInputKeys;
             }
-
-            base.DefWndProc(ref m);
         }
 
         /// <summary>
-        /// Gets the <see cref="PreprocessMessageCallback"/> that is associated
-        /// with the specified <see cref="Message"/>.
+        /// Gets a dictionary of <see cref="PreprocessMessageCallback"/>
+        /// delegates to call for given <see cref="Message.Msg"/> keys.
         /// </summary>
-        /// <param name="message">
-        /// The key to locate.
-        /// </param>
-        /// <param name="preprocessMessage">
-        /// When this method returns, the <see cref="
-        /// PreprocessMessageCallback"/> associated with <paramref
-        /// name="message"/>, if the key is found; otherwise <see
-        /// langword="null"/>.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if <paramref name="message"/> is associated
-        /// with a <see cref="PreprocessMessageCallback"/>; otherwise <see
-        /// langword="false"/>.
-        /// </returns>
-        protected virtual bool TryGetPreprocessMessage(
-            Message message,
-            out PreprocessMessageCallback preprocessMessage)
+        [Browsable(false)]
+        [DesignerSerializationVisibility(Hidden)]
+        private IReadOnlyDictionary<int, PreprocessMessageCallback>
+            ProcedureOverrides
         {
-            return ProcedureOverrides.TryGetValue(
-                message.Msg,
-                out preprocessMessage);
-        }
-
-        /// <summary>
-        /// Hook the WM_SIZE event and allow preprocessing of the size
-        /// structure before using it in the window message loop.
-        /// </summary>
-        /// <param name="m">
-        /// The <see cref="Message"/> to modify.
-        /// </param>
-        private void AdjustSizeFromSizing(ref Message m)
-        {
-            // Valid sizing processes require the message WParam be zero.
-            // Nonzero values specify special circumstances like minimizing the
-            // window.
-            if (m.WParam != IntPtr.Zero)
-            {
-                return;
-            }
-
-            // Get the window size from the client size.
-            var windowSize = WinApiMethods.InflateSize(
-                IntPtrToSize(m.LParam),
-                WindowPadding);
-
-            // Let the user modify the size in any ways they like.
-            var e = new RectangleEventArgs(size: windowSize);
-            OnAdjustWindowSize(e);
-
-            // Get the client size from the window size.
-            var adjustedClientSize = WinApiMethods.DeflateSize(
-                e.Size,
-                WindowPadding);
-
-            // Set the message LParam to the new client size.
-            m.LParam = SizeToIntPtr(adjustedClientSize);
-        }
-
-        /// <summary>
-        /// Hook the WM_SIZING event and allow preprocessing of the sizing
-        /// rectangle before using it in the window message loop.
-        /// </summary>
-        /// <param name="m">
-        /// The <see cref="Message"/> to modify.
-        /// </param>
-        private unsafe void AdjustRectangleFromSizing(ref Message m)
-        {
-            var windowBounds = (WinApiRectangle*)m.LParam;
-
-            var e = new RectangleEventArgs(*windowBounds);
-            OnAdjustWindowBounds(e);
-
-            *windowBounds = e.Rectangle;
-        }
-
-        /// <summary>
-        /// Raises the <see cref="AdjustWindowBounds"/> event.
-        /// </summary>
-        /// <param name="e">
-        /// A <see cref="RectangleEventArgs"/> that contains the event data.
-        /// </param>
-        protected virtual void OnAdjustWindowBounds(RectangleEventArgs e)
-        {
-            AdjustWindowBounds?.Invoke(this, e);
-        }
-
-        /// <summary>
-        /// Raises the <see cref="AdjustWindowSize"/> event.
-        /// </summary>
-        /// <param name="e">
-        /// A <see cref="RectangleEventArgs"/> that contains the event data.
-        /// </param>
-        protected virtual void OnAdjustWindowSize(RectangleEventArgs e)
-        {
-            AdjustWindowSize?.Invoke(this, e);
+            get;
         }
 
         /// <summary>
@@ -491,6 +327,118 @@ namespace Maseya.Controls
         }
 
         /// <summary>
+        /// Determines whether the specified key is a regular input key or a
+        /// special key that requires preprocessing.
+        /// </summary>
+        /// <param name="keyData">
+        /// The key to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the key is regular input key; otherwise
+        /// <see langword="false"/>.
+        /// </returns>
+        /// <remarks>
+        /// Arrows keys and their combinations with the modifier keys are now
+        /// considered input keys in a <see cref=" DesignForm"/>.
+        /// </remarks>
+        protected override bool IsInputKey(Keys keyData)
+        {
+            return FallbackOverrideInputKeys.Contains(keyData)
+                ? true
+                : base.IsInputKey(keyData);
+        }
+
+        /// <summary>
+        /// Processes a dialog key.
+        /// </summary>
+        /// <param name="keyData">
+        /// The key to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the key is a dialog key; otherwise <see
+        /// langword="false"/>.
+        /// </returns>
+        /// <remarks>
+        /// Arrows keys and their combinations with the modifier keys are no
+        /// longer considered dialog keys in a <see cref=" DesignForm"/>.
+        /// </remarks>
+        [SecuritySafeCritical]
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
+            return FallbackOverrideInputKeys.Contains(keyData)
+                ? false
+                : base.ProcessDialogKey(keyData);
+        }
+
+        /// <summary>
+        /// Sends the specified message to the default window procedure.
+        /// </summary>
+        /// <param name="m">
+        /// The windows <see cref="Message"/> to process.
+        /// </param>
+        [SecuritySafeCritical]
+        protected override void DefWndProc(ref Message m)
+        {
+            // Why have an ugly, large, O(n) switch tree to preprocess messages
+            // when you can do a pretty O(1) dictionary instead?
+            if (TryGetPreprocessMessage(m, out var preprocessMessage))
+            {
+                preprocessMessage(ref m);
+            }
+
+            base.DefWndProc(ref m);
+        }
+
+        /// <summary>
+        /// Gets the <see cref="PreprocessMessageCallback"/> that is associated
+        /// with the specified <see cref="Message"/>.
+        /// </summary>
+        /// <param name="message">
+        /// The key to locate.
+        /// </param>
+        /// <param name="preprocessMessage">
+        /// When this method returns, the <see cref="
+        /// PreprocessMessageCallback"/> associated with <paramref
+        /// name="message"/>, if the key is found; otherwise <see
+        /// langword="null"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if <paramref name="message"/> is associated
+        /// with a <see cref="PreprocessMessageCallback"/>; otherwise <see
+        /// langword="false"/>.
+        /// </returns>
+        protected virtual bool TryGetPreprocessMessage(
+            Message message,
+            out PreprocessMessageCallback preprocessMessage)
+        {
+            return ProcedureOverrides.TryGetValue(
+                message.Msg,
+                out preprocessMessage);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="AdjustWindowBounds"/> event.
+        /// </summary>
+        /// <param name="e">
+        /// A <see cref="RectangleEventArgs"/> that contains the event data.
+        /// </param>
+        protected virtual void OnAdjustWindowBounds(RectangleEventArgs e)
+        {
+            AdjustWindowBounds?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="AdjustWindowSize"/> event.
+        /// </summary>
+        /// <param name="e">
+        /// A <see cref="RectangleEventArgs"/> that contains the event data.
+        /// </param>
+        protected virtual void OnAdjustWindowSize(RectangleEventArgs e)
+        {
+            AdjustWindowSize?.Invoke(this, e);
+        }
+
+        /// <summary>
         /// Converts an <see cref="IntPtr"/> to a <see cref="Size"/> struct
         /// using the sequential data layout.
         /// </summary>
@@ -522,6 +470,58 @@ namespace Maseya.Controls
             return (IntPtr)(
                 (size.Width * 0xFFFF) |
                 ((size.Height & 0xFFFF) << 0x10));
+        }
+
+        /// <summary>
+        /// Hook the WM_SIZE event and allow preprocessing of the size
+        /// structure before using it in the window message loop.
+        /// </summary>
+        /// <param name="m">
+        /// The <see cref="Message"/> to modify.
+        /// </param>
+        private void AdjustSizeFromSizing(ref Message m)
+        {
+            // Valid sizing processes require the message WParam be zero.
+            // Nonzero values specify special circumstances like minimizing the
+            // window.
+            if (m.WParam != IntPtr.Zero)
+            {
+                return;
+            }
+
+            // Get the window size from the client size.
+            var windowSize = WinApiMethods.InflateSize(
+                IntPtrToSize(m.LParam),
+                WindowPadding);
+
+            // Let the user modify the size in any ways they like.
+            var e = new RectangleEventArgs(size: windowSize);
+            OnAdjustWindowSize(e);
+
+            // Get the client size from the window size.
+            var adjustedClientSize = WinApiMethods.DeflateSize(
+                e.Size,
+                WindowPadding);
+
+            // Set the message LParam to the new client size.
+            m.LParam = SizeToIntPtr(adjustedClientSize);
+        }
+
+        /// <summary>
+        /// Hook the WM_SIZING event and allow preprocessing of the sizing
+        /// rectangle before using it in the window message loop.
+        /// </summary>
+        /// <param name="m">
+        /// The <see cref="Message"/> to modify.
+        /// </param>
+        private unsafe void AdjustRectangleFromSizing(ref Message m)
+        {
+            var windowBounds = (WinApiRectangle*)m.LParam;
+
+            var e = new RectangleEventArgs(*windowBounds);
+            OnAdjustWindowBounds(e);
+
+            *windowBounds = e.Rectangle;
         }
     }
 }

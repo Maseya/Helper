@@ -34,6 +34,24 @@ namespace Maseya.Controls
         IDisposable
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="DialogProxy"/> class.
+        /// </summary>
+        /// <param name="baseForm">
+        /// The <see cref="Form"/> to use for modal dialog operations.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="baseForm"/> is <see langword="null"/>.
+        /// </exception>
+        protected DialogProxy(Form baseForm)
+        {
+            BaseForm = baseForm ??
+                throw new ArgumentNullException(nameof(baseForm));
+
+            BaseForm.HelpRequested += (sender, e) => OnHelpRequested(e);
+            BaseForm.Disposed += (sender, e) => OnDisposed(e);
+        }
+
+        /// <summary>
         /// Occurs when the user clicks the Help button in the dialog box.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage(
@@ -47,14 +65,6 @@ namespace Maseya.Controls
         /// cref="Dispose()"/> method.
         /// </summary>
         public event EventHandler Disposed;
-
-        /// <summary>
-        /// Gets the <see cref="Form"/> to use for modal dialog operations.
-        /// </summary>
-        protected Form BaseForm
-        {
-            get;
-        }
 
         /// <summary>
         /// Gets or sets a value indicating whether the Help button is
@@ -123,21 +133,11 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DialogProxy"/> class.
+        /// Gets the <see cref="Form"/> to use for modal dialog operations.
         /// </summary>
-        /// <param name="baseForm">
-        /// The <see cref="Form"/> to use for modal dialog operations.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="baseForm"/> is <see langword="null"/>.
-        /// </exception>
-        protected DialogProxy(Form baseForm)
+        protected Form BaseForm
         {
-            BaseForm = baseForm ??
-                throw new ArgumentNullException(nameof(baseForm));
-
-            BaseForm.HelpRequested += (sender, e) => OnHelpRequested(e);
-            BaseForm.Disposed += (sender, e) => OnDisposed(e);
+            get;
         }
 
         /// <summary>
