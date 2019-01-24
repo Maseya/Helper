@@ -7,12 +7,13 @@
 namespace Maseya.Helper
 {
     using System;
+    using System.ComponentModel;
 
     /// <summary>
     /// Provides methods for showing and handling a caught <see cref="
     /// Exception"/> to the user.
     /// </summary>
-    public interface IExceptionHandler
+    public interface IExceptionHandler : IComponent
     {
         /// <summary>
         /// Show <see cref="Exception"/> info to the user.

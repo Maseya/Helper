@@ -7,39 +7,36 @@
 namespace Maseya.Controls
 {
     using System;
+    using System.ComponentModel;
     using System.Windows.Forms;
     using Maseya.Helper;
+    using static System.ComponentModel.DesignerSerializationVisibility;
 
     /// <summary>
     /// Displays message boxes for showing and handling a caught <see
     /// cref="Exception"/> to the user.
     /// </summary>
-    public class ExceptionMessageBox : IExceptionHandler
+    public class ExceptionMessageBox : ExceptionHandler
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="
-        /// ExceptionMessageBox"/> class with the specified window owner and
-        /// dialog caption.
+        /// ExceptionMessageBox"/> class.
         /// </summary>
-        /// <param name="owner">
-        /// An implementation of <see cref="IWin32Window"/> that will open the
-        /// modal dialog box.
-        /// </param>
-        /// <param name="caption">
-        /// The text to display in the title bar of the message box.
-        /// </param>
-        public ExceptionMessageBox(
-            IWin32Window owner = null,
-            string caption = "")
+        public ExceptionMessageBox()
         {
-            Owner = owner;
-            Caption = caption;
+        }
+
+        public ExceptionMessageBox(IContainer container)
+            : base(container)
+        {
         }
 
         /// <summary>
         /// Gets or sets an implementation of <see cref="IWin32Window"/> that
         /// will open the modal dialog box.
         /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(Hidden)]
         public IWin32Window Owner
         {
             get;
@@ -142,7 +139,7 @@ namespace Maseya.Controls
         /// <exception cref="ArgumentNullException">
         /// <paramref name="ex"/> is <see langword="null"/>.
         /// </exception>
-        public void ShowException(Exception ex)
+        public override void ShowException(Exception ex)
         {
             Show(ex, Owner, Caption);
         }
@@ -162,7 +159,7 @@ namespace Maseya.Controls
         /// <exception cref="ArgumentNullException">
         /// <paramref name="ex"/> is <see langword="null"/>.
         /// </exception>
-        public bool ShowExceptionAndRetry(Exception ex)
+        public override bool ShowExceptionAndRetry(Exception ex)
         {
             return ShowAndRetry(ex, Owner, Caption);
         }
