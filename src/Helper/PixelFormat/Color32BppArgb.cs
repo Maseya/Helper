@@ -495,12 +495,7 @@ namespace Maseya.Helper.PixelFormat
         /// </returns>
         public override bool Equals(object obj)
         {
-            if (obj is Color32BppArgb value)
-            {
-                return Equals(value);
-            }
-
-            return false;
+            return obj is Color32BppArgb value ? Equals(value) : false;
         }
 
         /// <summary>

@@ -65,6 +65,8 @@ namespace Maseya.Helper
         /// </summary>
         public static readonly ColorF Empty = default;
 
+        private const float GrayscaleWeight = 1f / NumberOfColorChannels;
+
         private static readonly IReadOnlyList
             <HueChromaConverterCallback> GetRgbFromInterval =
             new ReadOnlyCollection<HueChromaConverterCallback>(
@@ -313,12 +315,9 @@ namespace Maseya.Helper
             {
                 // Like hue, saturation should be NaN if chroma is zero, but we
                 // just say it's zero with no penalty.
-                if (Chroma == 0)
-                {
-                    return 0;
-                }
-
-                return Chroma / (1 - Abs((2 * Lightness) - 1));
+                return Chroma > 0
+                    ? Chroma / (1 - Abs((2 * Lightness) - 1))
+                    : 0;
             }
         }
 
@@ -1261,7 +1260,7 @@ namespace Maseya.Helper
         /// </returns>
         public static ColorF Grayscale(ColorF top, ColorF bottom)
         {
-            var gray = (1f / NumberOfColorChannels) * (
+            var gray = GrayscaleWeight * (
                 (top.Red * bottom.Red) +
                 (top.Green * bottom.Green) +
                 (top.Blue * bottom.Blue));
@@ -1280,12 +1279,7 @@ namespace Maseya.Helper
 
             float Mix(float x, float y)
             {
-                if (x == 0)
-                {
-                    return 1;
-                }
-
-                return y / x;
+                return x == 0 ? 1 : y / x;
             }
         }
 
@@ -1305,12 +1299,9 @@ namespace Maseya.Helper
 
             float Mix(float x, float y)
             {
-                if (y < 0.5f)
-                {
-                    return 2 * x * y;
-                }
-
-                return 1 - (2 * (1 - x) * (1 - y));
+                return y < 0.5f
+                    ? 2 * x * y
+                    : 1 - (2 * (1 - x) * (1 - y));
             }
         }
 
@@ -1320,12 +1311,9 @@ namespace Maseya.Helper
 
             float Mix(float x, float y)
             {
-                if (y > 0.5f)
-                {
-                    return 2 * x * y;
-                }
-
-                return 1 - (2 * (1 - x) * (1 - y));
+                return y > 0.5f
+                    ? 2 * x * y
+                    : 1 - (2 * (1 - x) * (1 - y));
             }
         }
 
@@ -1357,12 +1345,9 @@ namespace Maseya.Helper
 
             float Mix(float x, float y)
             {
-                if (x == 1)
-                {
-                    return 1;
-                }
-
-                return y / (1 - x);
+                return x == 1
+                    ? 1
+                    : y / (1 - x);
             }
         }
 
@@ -1377,12 +1362,9 @@ namespace Maseya.Helper
 
             float Mix(float x, float y)
             {
-                if (x == 0)
-                {
-                    return 0;
-                }
-
-                return 1 - ((1 - y) / x);
+                return x == 0
+                    ? 0
+                    : 1 - ((1 - y) / x);
             }
         }
 
@@ -1417,22 +1399,13 @@ namespace Maseya.Helper
 
             float Mix(float x, float y)
             {
-                if (x == 1)
-                {
-                    return 1;
-                }
-
-                if (x == 0)
-                {
-                    return 0;
-                }
-
-                if (x > 0.5f)
-                {
-                    return y / (1 - x);
-                }
-
-                return 1 - ((1 - x) / y);
+                return x == 1
+                    ? 1
+                    : x == 0
+                    ? 0
+                    : x > 0.5f
+                    ? y / (1 - x)
+                    : 1 - ((1 - x) / y);
             }
         }
 
@@ -1639,12 +1612,9 @@ namespace Maseya.Helper
         /// </returns>
         public override bool Equals(object obj)
         {
-            if (obj is ColorF value)
-            {
-                return value == this;
-            }
-
-            return false;
+            return obj is ColorF other
+                ? Equals(other)
+                : false;
         }
 
         /// <summary>
