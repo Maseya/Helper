@@ -19,7 +19,5 @@ namespace Maseya.Helper
     /// <returns>
     /// The return value of the method that this delegate encapsulates.
     /// </returns>
-    public delegate ColorF ColorBlendCallback(
-        ColorF top,
-        ColorF bottom);
+    public delegate ColorF ColorBlendCallback(ColorF top, ColorF bottom);
 }
