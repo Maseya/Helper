@@ -235,7 +235,7 @@ namespace Maseya.Controls
                 return new Rectangle[]
                 {
                     new Rectangle(Width, 0, Width, Height),
-                    new Rectangle(Height, 0, Width, Height),
+                    new Rectangle(0, Height, Width, Height),
                 };
             }
         }
