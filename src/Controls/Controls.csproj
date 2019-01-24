@@ -71,6 +71,13 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="DialogProxy.cs" />
+    <Compile Include="IIntegerComponent.cs" />
+    <Compile Include="IntegerTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="LinkedTrackBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="PreprocessMessageCallback.cs" />
     <Compile Include="RectangleEventArgs.cs" />
     <Compile Include="SafeNativeMethods.cs" />
