@@ -13,6 +13,8 @@ namespace Maseya.Controls
     {
         private IIntegerComponent _integerComponent;
 
+        public event EventHandler IntegerComponentChanged;
+
         public IIntegerComponent IntegerComponent
         {
             get
@@ -44,7 +46,14 @@ namespace Maseya.Controls
                     IntegerComponent.ValueChanged +=
                         IntegerComponent_ValueChanged;
                 }
+
+                OnIntegerComponentChanged(EventArgs.Empty);
             }
+        }
+
+        protected virtual void OnIntegerComponentChanged(EventArgs e)
+        {
+            IntegerComponentChanged?.Invoke(this, e);
         }
 
         protected override void OnValueChanged(EventArgs e)
