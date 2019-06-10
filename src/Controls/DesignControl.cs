@@ -70,8 +70,12 @@ namespace Maseya.Controls
         {
             // These are basically required for any desired drawing to take
             // place in a UserControl
-            DoubleBuffered = true;
-            ResizeRedraw = true;
+            var designFlags = ControlStyles.ResizeRedraw
+                | ControlStyles.OptimizedDoubleBuffer
+                | ControlStyles.AllPaintingInWmPaint
+                | ControlStyles.UserPaint;
+
+            SetStyle(designFlags, true);
 
             // This is simply a style choice.
             BorderStyle = BorderStyle.FixedSingle;
