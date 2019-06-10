@@ -10,7 +10,6 @@ namespace Maseya.Controls
     using System.ComponentModel;
     using System.Windows.Forms;
     using Maseya.Helper;
-    using static System.ComponentModel.DesignerSerializationVisibility;
 
     /// <summary>
     /// Displays message boxes for showing and handling a caught <see
@@ -18,6 +17,10 @@ namespace Maseya.Controls
     /// </summary>
     public class ExceptionMessageBox : ExceptionHandler
     {
+        private IWin32Window _owner;
+
+        private string _caption;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="
         /// ExceptionMessageBox"/> class.
@@ -31,16 +34,31 @@ namespace Maseya.Controls
         {
         }
 
+        public event EventHandler OwnerChanged;
+
+        public event EventHandler CaptionChanged;
+
         /// <summary>
         /// Gets or sets an implementation of <see cref="IWin32Window"/> that
         /// will open the modal dialog box.
         /// </summary>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(Hidden)]
         public IWin32Window Owner
         {
-            get;
-            set;
+            get
+            {
+                return _owner;
+            }
+
+            set
+            {
+                if (Owner == value)
+                {
+                    return;
+                }
+
+                _owner = value;
+                OnOwnerChanged(EventArgs.Empty);
+            }
         }
 
         /// <summary>
@@ -49,8 +67,21 @@ namespace Maseya.Controls
         /// </summary>
         public string Caption
         {
-            get;
-            set;
+            get
+            {
+                return _caption;
+            }
+
+            set
+            {
+                if (Caption == value)
+                {
+                    return;
+                }
+
+                _caption = value;
+                OnOwnerChanged(EventArgs.Empty);
+            }
         }
 
         /// <summary>
@@ -162,6 +193,16 @@ namespace Maseya.Controls
         public override bool ShowExceptionAndRetry(Exception ex)
         {
             return ShowAndRetry(ex, Owner, Caption);
+        }
+
+        protected virtual void OnOwnerChanged(EventArgs e)
+        {
+            OwnerChanged?.Invoke(this, e);
+        }
+
+        protected virtual void OnCaptionChanged(EventArgs e)
+        {
+            CaptionChanged?.Invoke(this, e);
         }
     }
 }
