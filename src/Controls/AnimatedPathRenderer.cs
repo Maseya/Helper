@@ -1,4 +1,4 @@
-﻿// <copyright file="AnimatedLineDrawer.cs" company="Public Domain">
+﻿// <copyright file="AnimatedPathRenderer.cs" company="Public Domain">
 //     Copyright (c) 2019 Nelson Garcia. All rights reserved. Licensed under
 //     GNU Affero General Public License. See LICENSE in project root for full
 //     license information, or visit https://www.gnu.org/licenses/#AGPL
@@ -17,7 +17,7 @@ namespace Maseya.Controls
     /// Implements methods and properties to draw an animated dashed line
     /// across a <see cref="GraphicsPath"/>.
     /// </summary>
-    public class AnimatedLineDrawer : Component
+    public class AnimatedPathRenderer : Component, IPathRenderer
     {
         /// <summary>
         /// The length of the first dashed line.
@@ -29,29 +29,45 @@ namespace Maseya.Controls
         /// </summary>
         private int _length2;
 
+        private Color _color1;
+
+        private Color _color2;
+
+        private int _interval;
+
         /// <summary>
-        /// Initializes a new instance of the <see cref=" AnimatedLineDrawer"/>
-        /// class.
+        /// Initializes a new instance of the <see cref="
+        /// AnimatedPathRenderer"/> class.
         /// </summary>
-        public AnimatedLineDrawer()
+        public AnimatedPathRenderer()
         {
-            Length1 = 1;
-            Length2 = 1;
-            Color1 = Color.Black;
-            Color2 = Color.White;
-            Interval = 1000;
-            Timer = new Timer();
+            _length1 = 1;
+            _length2 = 1;
+            _color1 = Color.Black;
+            _color2 = Color.White;
+            Timer = new Timer()
+            {
+                Interval = 1000,
+            };
+
+            Timer.Tick += Timer_Tick;
+
+            if (Site is null || !Site.DesignMode)
+            {
+                Timer.Start();
+            }
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref=" AnimatedLineDrawer"/>
-        /// class with the specified <see cref=" IContainer"/>.
+        /// Initializes a new instance of the <see cref="
+        /// AnimatedPathRenderer"/> class with the specified <see cref="
+        /// IContainer"/>.
         /// </summary>
         /// <param name="container">
         /// An <see cref="IContainer"/> that represents the container for this
-        /// <see cref="AnimatedLineDrawer"/>.
+        /// <see cref="AnimatedPathRenderer"/>.
         /// </param>
-        public AnimatedLineDrawer(IContainer container)
+        public AnimatedPathRenderer(IContainer container)
             : this()
         {
             if (container is null)
@@ -62,9 +78,21 @@ namespace Maseya.Controls
             container.Add(this);
         }
 
+        public event EventHandler Length1Changed;
+
+        public event EventHandler Length2Changed;
+
+        public event EventHandler Color1Changed;
+
+        public event EventHandler Color2Changed;
+
+        public event EventHandler IntervalChanged;
+
+        public event EventHandler Redraw;
+
         /// <summary>
         /// Occurs every <see cref="Interval"/> milliseconds when this <see
-        /// cref="AnimatedLineDrawer"/> is constructed.
+        /// cref="AnimatedPathRenderer"/> is constructed.
         /// </summary>
         [Category("Animator")]
         [Description("Occurs when the specified timer interval has elapsed.")]
@@ -88,9 +116,16 @@ namespace Maseya.Controls
 
             set
             {
+                if (Length1 == value)
+                {
+                    return;
+                }
+
                 _length1 = value > 0
                     ? value
                     : throw ValueNotGreaterThan(nameof(value), value);
+
+                OnLength1Changed(EventArgs.Empty);
             }
         }
 
@@ -112,9 +147,16 @@ namespace Maseya.Controls
 
             set
             {
+                if (Length2 == value)
+                {
+                    return;
+                }
+
                 _length2 = value > 0
                     ? value
                     : throw ValueNotGreaterThan(nameof(value), value);
+
+                OnLength2Changed(EventArgs.Empty);
             }
         }
 
@@ -126,8 +168,21 @@ namespace Maseya.Controls
         [Description("The color of the first dashed line.")]
         public Color Color1
         {
-            get;
-            set;
+            get
+            {
+                return _color1;
+            }
+
+            set
+            {
+                if (Color1 == value)
+                {
+                    return;
+                }
+
+                _color1 = value;
+                OnColor1Changed(EventArgs.Empty);
+            }
         }
 
         /// <summary>
@@ -138,8 +193,21 @@ namespace Maseya.Controls
         [Description("The color of the second dashed line.")]
         public Color Color2
         {
-            get;
-            set;
+            get
+            {
+                return _color2;
+            }
+
+            set
+            {
+                if (Color2 == value)
+                {
+                    return;
+                }
+
+                _color2 = value;
+                OnColor2Changed(EventArgs.Empty);
+            }
         }
 
         /// <summary>
@@ -154,12 +222,36 @@ namespace Maseya.Controls
         {
             get
             {
-                return Timer.Interval;
+                return _interval;
             }
 
             set
             {
-                Timer.Interval = value;
+                if (Interval == value)
+                {
+                    return;
+                }
+
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value));
+                }
+
+                _interval = value;
+                if (Interval == 0)
+                {
+                    Timer.Enabled = false;
+                }
+                else
+                {
+                    Timer.Interval = value;
+                    if (!Timer.Enabled && (Site is null || !Site.DesignMode))
+                    {
+                        Timer.Start();
+                    }
+                }
+
+                OnIntervalChanged(EventArgs.Empty);
             }
         }
 
@@ -208,7 +300,7 @@ namespace Maseya.Controls
         /// <summary>
         /// Draws a <see cref="GraphicsPath"/> to a <see cref=" Graphics"/>
         /// using an animated dashed line described by this <see
-        /// cref="AnimatedLineDrawer"/>.
+        /// cref="AnimatedPathRenderer"/>.
         /// </summary>
         /// <param name="graphics">
         /// The <see cref="Graphics"/> to draw to.
@@ -256,12 +348,49 @@ namespace Maseya.Controls
         /// </param>
         protected virtual void OnTick(EventArgs e)
         {
+            Offset++;
             Tick?.Invoke(this, e);
+            OnRedraw(EventArgs.Empty);
+        }
+
+        protected virtual void OnLength1Changed(EventArgs e)
+        {
+            Length1Changed?.Invoke(this, e);
+            OnRedraw(EventArgs.Empty);
+        }
+
+        protected virtual void OnLength2Changed(EventArgs e)
+        {
+            Length2Changed?.Invoke(this, e);
+            OnRedraw(EventArgs.Empty);
+        }
+
+        protected virtual void OnColor1Changed(EventArgs e)
+        {
+            Color1Changed?.Invoke(this, e);
+            OnRedraw(EventArgs.Empty);
+        }
+
+        protected virtual void OnColor2Changed(EventArgs e)
+        {
+            Color2Changed?.Invoke(this, e);
+            OnRedraw(EventArgs.Empty);
+        }
+
+        protected virtual void OnIntervalChanged(EventArgs e)
+        {
+            IntervalChanged?.Invoke(this, e);
+            OnRedraw(EventArgs.Empty);
+        }
+
+        protected virtual void OnRedraw(EventArgs e)
+        {
+            Redraw?.Invoke(this, e);
         }
 
         /// <summary>
         /// Releases the unmanaged resources used by the <see cref="
-        /// AnimatedLineDrawer"/> and optionally releases the managed
+        /// AnimatedPathRenderer"/> and optionally releases the managed
         /// resources.
         /// </summary>
         /// <param name="disposing">
@@ -293,6 +422,11 @@ namespace Maseya.Controls
                 pen.DashPattern = dashPattern;
                 graphics.DrawPath(pen, path);
             }
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            OnTick(e);
         }
     }
 }
