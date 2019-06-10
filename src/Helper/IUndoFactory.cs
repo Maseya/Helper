@@ -6,11 +6,19 @@
 
 namespace Maseya.Helper
 {
+    using System;
+
     /// <summary>
     /// Defines methods to support undo and redo.
     /// </summary>
     public interface IUndoFactory
     {
+        event EventHandler UndoComplete;
+
+        event EventHandler RedoComplete;
+
+        event EventHandler<UndoEventArgs> ActionAdded;
+
         /// <summary>
         /// Gets a value indicating whether this instance of <see
         /// cref="IUndoFactory"/> can invoke <see cref="Undo"/>.

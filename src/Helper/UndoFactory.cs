@@ -19,8 +19,14 @@ namespace Maseya.Helper
         /// </summary>
         public UndoFactory()
         {
-            History = new List<State>();
+            History = new List<(Action Undo, Action Redo)>();
         }
+
+        public event EventHandler UndoComplete;
+
+        public event EventHandler RedoComplete;
+
+        public event EventHandler<UndoEventArgs> ActionAdded;
 
         /// <summary>
         /// Gets the total number of undo actions in this <see cref="
@@ -73,11 +79,7 @@ namespace Maseya.Helper
             }
         }
 
-        /// <summary>
-        /// Gets a list of <see cref="State"/> values describing the instance
-        /// of this <see cref="UndoFactory"/>'s undo and redo actions.
-        /// </summary>
-        private List<State> History
+        private List<(Action Undo, Action Redo)> History
         {
             get;
         }
@@ -124,8 +126,9 @@ namespace Maseya.Helper
                 History.RemoveRange(Index, Count - Index);
             }
 
-            History.Add(new State(undo, redo));
+            History.Add((undo, redo));
             Index++;
+            OnActionAdded(new UndoEventArgs(undo, redo));
         }
 
         /// <summary>
@@ -140,6 +143,7 @@ namespace Maseya.Helper
             }
 
             History[--Index].Undo();
+            OnUndoComplete(EventArgs.Empty);
         }
 
         /// <summary>
@@ -154,53 +158,22 @@ namespace Maseya.Helper
             }
 
             History[Index++].Redo();
+            OnRedoComplete(EventArgs.Empty);
         }
 
-        /// <summary>
-        /// Represents a container for an undo and redo <see cref=" Action"/>.
-        /// </summary>
-        private struct State
+        protected virtual void OnUndoComplete(EventArgs e)
         {
-            /// <summary>
-            /// Initializes a new instance of the <see cref="State"/> struct
-            /// with given undo and redo <see cref="Action"/> s.
-            /// </summary>
-            /// <param name="undo">
-            /// The <see cref="Action"/> to invoke when undoing an operation.
-            /// </param>
-            /// <param name="redo">
-            /// The <see cref="Action"/> to invoke when redoing an operation.
-            /// </param>
-            /// <remarks>
-            /// <paramref name="redo"/> and <paramref name="undo"/> must be
-            /// invertible functions such that when one is applied after the
-            /// other, no change has been made. For example, if <paramref
-            /// name="undo"/> is <c>x++</c>, then <paramref name="redo"/> must
-            /// be <c>x--</c>.
-            /// </remarks>
-            public State(Action undo, Action redo)
-            {
-                Undo = undo;
-                Redo = redo;
-            }
+            UndoComplete?.Invoke(this, e);
+        }
 
-            /// <summary>
-            /// Gets the <see cref="Action"/> to invoke when undoing an
-            /// operation.
-            /// </summary>
-            public Action Undo
-            {
-                get;
-            }
+        protected virtual void OnRedoComplete(EventArgs e)
+        {
+            RedoComplete?.Invoke(this, e);
+        }
 
-            /// <summary>
-            /// Gets the <see cref="Action"/> to invoke when redoing an
-            /// operation.
-            /// </summary>
-            public Action Redo
-            {
-                get;
-            }
+        protected virtual void OnActionAdded(UndoEventArgs e)
+        {
+            ActionAdded?.Invoke(this, e);
         }
     }
 }
