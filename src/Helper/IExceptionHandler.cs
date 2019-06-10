@@ -22,7 +22,7 @@ namespace Maseya.Helper
         /// The <see cref="Exception"/> to show.
         /// </param>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="ex"/> is <see langword="null"/>
+        /// <paramref name="ex"/> is <see langword="null"/>.
         /// </exception>
         void ShowException(Exception ex);
 
@@ -38,7 +38,7 @@ namespace Maseya.Helper
         /// that threw the exception; otherwise <see langword="false"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="ex"/> is <see langword="null"/>
+        /// <paramref name="ex"/> is <see langword="null"/>.
         /// </exception>
         bool ShowExceptionAndRetry(Exception ex);
     }
