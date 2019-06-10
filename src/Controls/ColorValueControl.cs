@@ -29,7 +29,7 @@ namespace Maseya.Controls
         [Category("Editor")]
         [Description("Occurs when the selected color value of the " +
             "control changes.")]
-        public event EventHandler ColorValueChanged;
+        public event EventHandler SelectedColorChanged;
 
         /// <summary>
         /// Gets or sets the represented <see cref="Color"/> of this <see
@@ -53,7 +53,7 @@ namespace Maseya.Controls
                 }
 
                 _selectedColor = value;
-                OnColorValueChanged(EventArgs.Empty);
+                OnSelectedColorChanged(EventArgs.Empty);
             }
         }
 
@@ -90,16 +90,16 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Redraws the control and raises the <see cref=" ColorValueChanged"/>
-        /// event.
+        /// Redraws the control and raises the <see cref="
+        /// SelectedColorChanged"/> event.
         /// </summary>
         /// <param name="e">
         /// An <see cref="EventArgs"/> that contains the event data.
         /// </param>
-        protected virtual void OnColorValueChanged(EventArgs e)
+        protected virtual void OnSelectedColorChanged(EventArgs e)
         {
             Invalidate();
-            ColorValueChanged?.Invoke(this, e);
+            SelectedColorChanged?.Invoke(this, e);
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Fills this <see cref="ColorValueChanged"/> client area with the
+        /// Fills this <see cref="SelectedColorChanged"/> client area with the
         /// <see cref="Color"/> determined by <see cref=" SelectedColor"/>.
         /// </summary>
         /// <param name="graphics">
