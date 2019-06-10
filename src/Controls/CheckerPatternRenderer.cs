@@ -1,4 +1,4 @@
-﻿// <copyright file="CheckerPatternDrawer.cs" company="Public Domain">
+﻿// <copyright file="CheckerPatternRenderer.cs" company="Public Domain">
 //     Copyright (c) 2019 Nelson Garcia. All rights reserved. Licensed under
 //     GNU Affero General Public License. See LICENSE in project root for full
 //     license information, or visit https://www.gnu.org/licenses/#AGPL
@@ -16,80 +16,53 @@ namespace Maseya.Controls
     /// Implements methods and properties to draw a checkerboard pattern on a
     /// <see cref="Bitmap"/>.
     /// </summary>
-    public class CheckerPatternDrawer : Component
+    public class CheckerPatternRenderer : Component, IImageRenderer
     {
-        /// <summary>
-        /// The width of the checkerboard squares.
-        /// </summary>
-        private int _width;
+        private Color _color1;
 
-        /// <summary>
-        /// The height of the checkerboard squares.
-        /// </summary>
-        private int _height;
+        private Color _color2;
+
+        private Size _size;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="
-        /// CheckerPatternDrawer"/> class.
+        /// CheckerPatternRenderer"/> class.
         /// </summary>
-        public CheckerPatternDrawer()
-            : this(null)
+        public CheckerPatternRenderer()
         {
+            _color1 = Color.Black;
+            _color2 = Color.White;
+            _size = new Size(4, 4);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="
-        /// CheckerPatternDrawer"/> class with the specified <see cref="
+        /// CheckerPatternRenderer"/> class with the specified <see cref="
         /// IContainer"/>.
         /// </summary>
         /// <param name="container">
         /// An <see cref="IContainer"/> that represents the container for this
-        /// <see cref="CheckerPatternDrawer"/>.
+        /// <see cref="CheckerPatternRenderer"/>.
         /// </param>
-        public CheckerPatternDrawer(IContainer container)
-            : this(Color.Black, Color.White, 4, 4, container)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="
-        /// CheckerPatternDrawer"/> class with the specified colors, size, and
-        /// <see cref="IContainer"/>.
-        /// </summary>
-        /// <param name="color1">
-        /// The color of the first checkerboard square.
-        /// </param>
-        /// <param name="color2">
-        /// The color of the second checkerboard square.
-        /// </param>
-        /// <param name="width">
-        /// The width of the checkerboard squares.
-        /// </param>
-        /// <param name="height">
-        /// The height of the checkerboard squares.
-        /// </param>
-        /// <param name="container">
-        /// An <see cref="IContainer"/> that represents the container for this
-        /// <see cref="CheckerPatternDrawer"/>.
-        /// </param>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// <paramref name="width"/> or <paramref name="height"/> is less than
-        /// or equal to zero.
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="container"/> is <see langword="null"/>.
         /// </exception>
-        public CheckerPatternDrawer(
-            Color color1,
-            Color color2,
-            int width,
-            int height,
-            IContainer container = null)
+        public CheckerPatternRenderer(IContainer container)
+            : this()
         {
-            Width = width;
-            Height = height;
-            Color1 = color1;
-            Color2 = color2;
-
-            container?.Add(this);
+            if (container is null)
+            {
+                throw new ArgumentNullException(nameof(container));
+            }
         }
+
+        public event EventHandler Color1Changed;
+
+        public event EventHandler Color2Changed;
+
+        public event EventHandler SizeChanged;
+
+        public event EventHandler Redraw;
 
         /// <summary>
         /// Gets or sets the color of the first checkerboard square.
@@ -99,8 +72,21 @@ namespace Maseya.Controls
         [Description("The color of the first checkerboard square.")]
         public Color Color1
         {
-            get;
-            set;
+            get
+            {
+                return _color1;
+            }
+
+            set
+            {
+                if (Color1 == value)
+                {
+                    return;
+                }
+
+                _color1 = value;
+                OnColor1Changed(EventArgs.Empty);
+            }
         }
 
         /// <summary>
@@ -111,8 +97,21 @@ namespace Maseya.Controls
         [Description("The color of the second checkerboard square.")]
         public Color Color2
         {
-            get;
-            set;
+            get
+            {
+                return _color2;
+            }
+
+            set
+            {
+                if (Color2 == value)
+                {
+                    return;
+                }
+
+                _color2 = value;
+                OnColor2Changed(EventArgs.Empty);
+            }
         }
 
         /// <summary>
@@ -128,14 +127,21 @@ namespace Maseya.Controls
         {
             get
             {
-                return _width;
+                return Size.Width;
             }
 
             set
             {
-                _width = value > 0
+                if (Width == value)
+                {
+                    return;
+                }
+
+                _size.Width = value > 0
                     ? value
                     : throw ValueNotGreaterThan(nameof(value), value);
+
+                OnSizeChanged(EventArgs.Empty);
             }
         }
 
@@ -152,14 +158,21 @@ namespace Maseya.Controls
         {
             get
             {
-                return _height;
+                return Size.Height;
             }
 
             set
             {
-                _height = value > 0
+                if (Height == value)
+                {
+                    return;
+                }
+
+                _size.Height = value > 0
                     ? value
                     : throw ValueNotGreaterThan(nameof(value), value);
+
+                OnSizeChanged(EventArgs.Empty);
             }
         }
 
@@ -174,19 +187,24 @@ namespace Maseya.Controls
         {
             get
             {
-                return new Size(Width, Height);
+                return _size;
             }
 
             set
             {
-                Width = value.Width;
-                Height = value.Height;
+                if (Size == value)
+                {
+                    return;
+                }
+
+                _size = value;
+                OnSizeChanged(EventArgs.Empty);
             }
         }
 
         /// <summary>
         /// Gets the width, in pixels, of the resulting <see cref=" Bitmap"/>
-        /// created by <see cref="CreateCheckerImage"/>.
+        /// created by <see cref="RenderImage"/>.
         /// </summary>
         private int ImageWidth
         {
@@ -198,7 +216,7 @@ namespace Maseya.Controls
 
         /// <summary>
         /// Gets the height, in pixels, of the resulting <see cref=" Bitmap"/>
-        /// created by <see cref="CreateCheckerImage"/>.
+        /// created by <see cref="RenderImage"/>.
         /// </summary>
         private int ImageHeight
         {
@@ -249,7 +267,7 @@ namespace Maseya.Controls
         /// top-right and bottom-left squares are <see cref="Color2"/>. The
         /// size of each square is <see cref=" Size"/>.
         /// </returns>
-        public Bitmap CreateCheckerImage()
+        public Bitmap RenderImage()
         {
             // See MSDN rule "CA2000: Dispose objects before losing scope" for
             // an explanation on using variables `temp` and `result`.
@@ -279,6 +297,47 @@ namespace Maseya.Controls
                 // Ensure object is Disposed if an Exception was raised.
                 temp?.Dispose();
             }
+        }
+
+        Image IImageRenderer.RenderImage()
+        {
+            return RenderImage();
+        }
+
+        public void Draw(Graphics graphics)
+        {
+            if (graphics is null)
+            {
+                throw new ArgumentNullException(nameof(graphics));
+            }
+
+            using (var image = RenderImage())
+            {
+                graphics.DrawImageUnscaled(image, Point.Empty);
+            }
+        }
+
+        protected virtual void OnColor1Changed(EventArgs e)
+        {
+            Color1Changed?.Invoke(this, e);
+            OnRedraw(EventArgs.Empty);
+        }
+
+        protected virtual void OnColor2Changed(EventArgs e)
+        {
+            Color2Changed?.Invoke(this, e);
+            OnRedraw(EventArgs.Empty);
+        }
+
+        protected virtual void OnSizeChanged(EventArgs e)
+        {
+            SizeChanged?.Invoke(this, e);
+            OnRedraw(EventArgs.Empty);
+        }
+
+        protected virtual void OnRedraw(EventArgs e)
+        {
+            Redraw?.Invoke(this, e);
         }
 
         /// <summary>
