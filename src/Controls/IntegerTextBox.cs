@@ -10,6 +10,7 @@ namespace Maseya.Controls
     using System.ComponentModel;
     using System.Globalization;
     using System.Windows.Forms;
+    using static System.ComponentModel.DesignerSerializationVisibility;
     using static Maseya.Helper.StringHelper;
 
     [DefaultEvent("ValueChanged")]
@@ -38,6 +39,12 @@ namespace Maseya.Controls
             CharacterCasing = FallbackCharacterCasing;
         }
 
+        public event EventHandler AllowHexChanged;
+
+        public event EventHandler AllowNegativeChanged;
+
+        public event EventHandler NumberStyleChanged;
+
         public event EventHandler ValueChanged;
 
         public event EventHandler TextParseFailed;
@@ -57,8 +64,13 @@ namespace Maseya.Controls
 
             set
             {
+                if (AllowHex == value)
+                {
+                    return;
+                }
+
                 _allowHex = value;
-                SetValue(Value);
+                OnAllowHexChanged(EventArgs.Empty);
             }
         }
 
@@ -74,8 +86,13 @@ namespace Maseya.Controls
 
             set
             {
+                if (AllowNegative == value)
+                {
+                    return;
+                }
+
                 _allowNegative = value;
-                SetValue(Value);
+                OnAllowNegativeChanged(EventArgs.Empty);
             }
         }
 
@@ -84,14 +101,26 @@ namespace Maseya.Controls
         [Description("The value written to the text box.")]
         public int Value
         {
-            get { return _value; }
-            set { SetValue(value); }
+            get
+            {
+                return _value;
+            }
+
+            set
+            {
+                if (Value == value)
+                {
+                    return;
+                }
+
+                _value = AllowNegative ? value : Math.Abs(Value);
+                OnValueChanged(EventArgs.Empty);
+            }
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(
-            DesignerSerializationVisibility.Hidden)]
-        private NumberStyles NumberStyle
+        [DesignerSerializationVisibility(Hidden)]
+        public NumberStyles NumberStyle
         {
             get
             {
@@ -110,14 +139,43 @@ namespace Maseya.Controls
             }
         }
 
+        private bool ValueChangeInProgress
+        {
+            get;
+            set;
+        }
+
+        protected virtual void OnAllowHexChanged(EventArgs e)
+        {
+            AllowHexChanged?.Invoke(this, e);
+            OnNumberStyleChanged(EventArgs.Empty);
+        }
+
+        protected virtual void OnAllowNegativeChanged(EventArgs e)
+        {
+            AllowNegativeChanged?.Invoke(this, e);
+            OnNumberStyleChanged(EventArgs.Empty);
+        }
+
+        protected virtual void OnNumberStyleChanged(EventArgs e)
+        {
+            NumberStyleChanged?.Invoke(this, e);
+        }
+
         protected virtual void OnValueChanged(EventArgs e)
         {
+            ValueChangeInProgress = true;
+            WriteValue();
             ValueChanged?.Invoke(this, e);
+            ValueChangeInProgress = false;
         }
 
         protected override void OnTextChanged(EventArgs e)
         {
-            // Save original value.
+            if (ValueChangeInProgress)
+            {
+                return;
+            }
 
             // Parse new value.
             if (Int32.TryParse(
@@ -126,12 +184,7 @@ namespace Maseya.Controls
                 CultureInfo.CurrentUICulture,
                 out var textValue))
             {
-                // Only raise event if value changed.
-                if (Value != textValue)
-                {
-                    Value = textValue;
-                }
-
+                Value = textValue;
                 OnTextParseSucceeded(e);
             }
             else
@@ -152,20 +205,10 @@ namespace Maseya.Controls
             TextParseSucceeded?.Invoke(this, e);
         }
 
-        private void SetValue(int value)
+        private void WriteValue()
         {
-            // Make value positive if negative is not allowed.
-            if (!AllowNegative)
-            {
-                value = Math.Abs(value);
-            }
-
-            // Set the value.
-            _value = value;
-
             // Parse the value.
             Text = GetString(Value, AllowHex ? "X" : String.Empty);
-            OnValueChanged(EventArgs.Empty);
         }
     }
 }
