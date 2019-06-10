@@ -61,7 +61,7 @@ namespace Maseya.Controls
         [Description(
             "Preprocess the window size before applying it " +
             "during a resize operation.")]
-        public event EventHandler<RectangleEventArgs> AdjustWindowSize;
+        public event EventHandler<SizeEventArgs> AdjustWindowSize;
 
         /// <summary>
         /// Gets the vertical and horizontal thickness of the border around
@@ -430,9 +430,9 @@ namespace Maseya.Controls
         /// Raises the <see cref="AdjustWindowSize"/> event.
         /// </summary>
         /// <param name="e">
-        /// A <see cref="RectangleEventArgs"/> that contains the event data.
+        /// A <see cref="SizeEventArgs"/> that contains the event data.
         /// </param>
-        protected virtual void OnAdjustWindowSize(RectangleEventArgs e)
+        protected virtual void OnAdjustWindowSize(SizeEventArgs e)
         {
             AdjustWindowSize?.Invoke(this, e);
         }
@@ -494,7 +494,7 @@ namespace Maseya.Controls
                 WindowPadding);
 
             // Let the user modify the size in any ways they like.
-            var e = new RectangleEventArgs(size: windowSize);
+            var e = new SizeEventArgs(windowSize);
             OnAdjustWindowSize(e);
 
             // Get the client size from the window size.
