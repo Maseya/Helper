@@ -16,6 +16,7 @@ namespace Maseya.Helper.Collections.Generic
         ISelectionList,
         IList,
         IReadOnlyList<T>
+        where T : unmanaged
     {
         public UndoRedoList()
         {

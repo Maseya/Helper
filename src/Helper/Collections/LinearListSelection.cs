@@ -40,11 +40,6 @@ namespace Maseya.Helper.Collections
             }
         }
 
-        private int Index
-        {
-            get;
-        }
-
         public override int this[int index]
         {
             get

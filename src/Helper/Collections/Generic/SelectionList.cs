@@ -16,6 +16,7 @@ namespace Maseya.Helper.Collections.Generic
         ISelectionList,
         IList,
         IReadOnlyList<T>
+        where T : unmanaged
     {
         private const int DefaultCapacity = 4;
         private static readonly T[] EmptyArray = new T[0];
@@ -272,25 +273,12 @@ namespace Maseya.Helper.Collections.Generic
 
         public bool Contains(T item)
         {
-            if (item == null)
+            var comparer = EqualityComparer<T>.Default;
+            for (var i = 0; i < Count; i++)
             {
-                for (var i = 0; i < Count; i++)
+                if (comparer.Equals(Items[i], item))
                 {
-                    if (this[i] == null)
-                    {
-                        return true;
-                    }
-                }
-            }
-            else
-            {
-                var comparer = EqualityComparer<T>.Default;
-                for (var i = 0; i < Count; i++)
-                {
-                    if (comparer.Equals(Items[i], item))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 
@@ -728,7 +716,6 @@ namespace Maseya.Helper.Collections.Generic
                 return;
             }
 
-            var i = Count;
             Count -= count;
             if (index < Count)
             {
@@ -927,6 +914,34 @@ namespace Maseya.Helper.Collections.Generic
             }
         }
 
+        public void WriteArrayData(Action<T[]> arrayCallback)
+        {
+            if (arrayCallback is null)
+            {
+                throw new ArgumentNullException(nameof(arrayCallback));
+            }
+
+            arrayCallback(Items);
+            Version++;
+        }
+
+        public void WriteUnmanagedData(Action<IntPtr> arrayCallback)
+        {
+            if (arrayCallback is null)
+            {
+                throw new ArgumentNullException(nameof(arrayCallback));
+            }
+
+            unsafe
+            {
+                fixed (T* ptr = Items)
+                {
+                    arrayCallback((IntPtr)ptr);
+                    Version++;
+                }
+            }
+        }
+
         public void WriteSelection(IListSelectionData<T> values)
         {
             if (values is null)
@@ -981,7 +996,7 @@ namespace Maseya.Helper.Collections.Generic
 
         private static bool IsCompatibleObject(object value)
         {
-            return value is T || (value == null && default(T) == null);
+            return value is T;
         }
 
         private void EnsureCapacity(int capacity)
