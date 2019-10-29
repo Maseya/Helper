@@ -12,8 +12,7 @@ namespace Maseya.Helper
     {
         public PathEventArgs(string path)
         {
-            Path = path
-                ?? throw new ArgumentNullException(nameof(path));
+            Path = path;
         }
 
         public string Path
