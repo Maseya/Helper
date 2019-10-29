@@ -10,20 +10,12 @@ namespace Maseya.Helper
 
     public class UndoEventArgs : EventArgs
     {
-        public UndoEventArgs(Action undo, Action redo)
+        public UndoEventArgs(IUndoElement undoElement)
         {
-            Undo = undo ?? throw new ArgumentNullException(nameof(undo));
-            Redo = redo ?? throw new ArgumentNullException(nameof(redo));
+            UndoElement = undoElement
+                ?? throw new ArgumentNullException(nameof(undoElement));
         }
 
-        public Action Undo
-        {
-            get;
-        }
-
-        public Action Redo
-        {
-            get;
-        }
+        public IUndoElement UndoElement { get; }
     }
 }

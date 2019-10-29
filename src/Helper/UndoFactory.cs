@@ -19,14 +19,14 @@ namespace Maseya.Helper
         /// </summary>
         public UndoFactory()
         {
-            History = new List<(Action Undo, Action Redo)>();
+            History = new List<IUndoElement>();
         }
 
         public event EventHandler UndoComplete;
 
         public event EventHandler RedoComplete;
 
-        public event EventHandler<UndoEventArgs> ActionAdded;
+        public event EventHandler<UndoEventArgs> UndoElementAdded;
 
         /// <summary>
         /// Gets the total number of undo actions in this <see cref="
@@ -79,7 +79,7 @@ namespace Maseya.Helper
             }
         }
 
-        private List<(Action Undo, Action Redo)> History
+        private List<IUndoElement> History
         {
             get;
         }
@@ -121,14 +121,33 @@ namespace Maseya.Helper
                 throw new ArgumentNullException(nameof(redo));
             }
 
+            Add(new UndoElement(undo, redo));
+        }
+
+        /// <summary>
+        /// Adds a new undo and its redo to the history at the current state.
+        /// </summary>
+        /// <param name="undoElement">
+        /// The <see cref="IUndoElement"/> to add to the history.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="undoElement"/> is <see langword="null"/>.
+        /// </exception>
+        public void Add(IUndoElement undoElement)
+        {
+            if (undoElement is null)
+            {
+                throw new ArgumentNullException(nameof(undoElement));
+            }
+
             if (Index < Count)
             {
                 History.RemoveRange(Index, Count - Index);
             }
 
-            History.Add((undo, redo));
+            History.Add(undoElement);
             Index++;
-            OnActionAdded(new UndoEventArgs(undo, redo));
+            OnUndoElementAdded(new UndoEventArgs(undoElement));
         }
 
         /// <summary>
@@ -171,9 +190,9 @@ namespace Maseya.Helper
             RedoComplete?.Invoke(this, e);
         }
 
-        protected virtual void OnActionAdded(UndoEventArgs e)
+        protected virtual void OnUndoElementAdded(UndoEventArgs e)
         {
-            ActionAdded?.Invoke(this, e);
+            UndoElementAdded?.Invoke(this, e);
         }
     }
 }
