@@ -17,7 +17,7 @@ namespace Maseya.Helper
 
         event EventHandler RedoComplete;
 
-        event EventHandler<UndoEventArgs> ActionAdded;
+        event EventHandler<UndoEventArgs> UndoElementAdded;
 
         /// <summary>
         /// Gets a value indicating whether this instance of <see
