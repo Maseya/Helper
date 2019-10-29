@@ -327,15 +327,15 @@ namespace Maseya.Controls
             {
                 switch (BorderStyle)
                 {
-                case BorderStyle.FixedSingle:
-                    return SystemInformation.BorderSize;
+                    case BorderStyle.FixedSingle:
+                        return SystemInformation.BorderSize;
 
-                case BorderStyle.Fixed3D:
-                    return SystemInformation.Border3DSize;
+                    case BorderStyle.Fixed3D:
+                        return SystemInformation.Border3DSize;
 
-                case BorderStyle.None:
-                default:
-                    return Size.Empty;
+                    case BorderStyle.None:
+                    default:
+                        return Size.Empty;
                 }
             }
         }
@@ -360,12 +360,12 @@ namespace Maseya.Controls
         }
 
         /// <summary>
-        /// Gets a value indicating whether the mouse is currently hovering
-        /// over this <see cref="DesignControl"/>.
+        /// Gets a value indicating whether the mouse is currently idle over
+        /// this <see cref="DesignControl"/>.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(Hidden)]
-        public bool MouseHovering
+        public bool MouseIdle
         {
             get
             {
@@ -419,8 +419,6 @@ namespace Maseya.Controls
         [SecuritySafeCritical]
         protected override void DefWndProc(ref Message m)
         {
-            // Why have an ugly, large, O(n) switch tree to preprocess messages
-            // when you can do a pretty O(1) dictionary instead?
             if (TryGetPreprocessMessage(m, out var preprocessMessage))
             {
                 preprocessMessage(ref m);
