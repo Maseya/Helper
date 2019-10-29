@@ -8,9 +8,10 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Maseya.Controls</RootNamespace>
     <AssemblyName>Controls</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -61,9 +62,6 @@
     <Compile Include="CheckerPatternRenderer.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ColorValueControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="DesignControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -79,6 +77,9 @@
     </Compile>
     <Compile Include="IPathRenderer.cs" />
     <Compile Include="LinkedTrackBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MouseTracker.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="PreprocessMessageCallback.cs" />
