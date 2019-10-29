@@ -44,11 +44,6 @@ namespace Maseya.Helper.PixelFormat
         public const int BlueIndex = 0;
 
         /// <summary>
-        /// Represent a <see cref="Color24BppRgb"/> that is black.
-        /// </summary>
-        public static readonly Color24BppRgb Empty = default;
-
-        /// <summary>
         /// The number of bits that represent the intensity of the <see
         /// cref="Red"/> component.
         /// </summary>
@@ -88,6 +83,11 @@ namespace Maseya.Helper.PixelFormat
         /// component.
         /// </summary>
         private const int BlueShift = BitsPerBlue * BlueIndex;
+
+        /// <summary>
+        /// Represents a <see cref="Color24BppRgb"/> that is black.
+        /// </summary>
+        private static readonly Color24BppRgb _empty = default;
 
         /// <summary>
         /// The red intensity.
@@ -140,6 +140,17 @@ namespace Maseya.Helper.PixelFormat
             value >> GreenShift,
             value >> BlueShift)
         {
+        }
+
+        /// <summary>
+        /// Gets a <see cref="Color24BppRgb"/> that is black.
+        /// </summary>
+        public static ref readonly Color24BppRgb Empty
+        {
+            get
+            {
+                return ref _empty;
+            }
         }
 
         /// <summary>

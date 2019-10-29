@@ -51,12 +51,6 @@ namespace Maseya.Helper.PixelFormat
         private const int BitsPerByte = 8;
 
         /// <summary>
-        /// The total number of color channels (red, green, blue) that comprise
-        /// a <see cref="Color15BppBgr"/> color.
-        /// </summary>
-        private const int NumberOfChannels = 3;
-
-        /// <summary>
         /// The 5-bit index of the <see cref="Red"/> component.
         /// </summary>
         private const int RedIndex = 0;
