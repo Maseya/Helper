@@ -11,7 +11,6 @@ namespace Maseya.Helper
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Drawing;
-    using Maseya.Helper.PixelFormat;
     using static System.Diagnostics.Debug;
     using static System.Math;
     using static MathHelper;
@@ -66,19 +65,6 @@ namespace Maseya.Helper
         public static readonly ColorF Empty = default;
 
         private const float GrayscaleWeight = 1f / NumberOfColorChannels;
-
-        private static readonly IReadOnlyList
-            <HueChromaConverterCallback> GetRgbFromInterval =
-            new ReadOnlyCollection<HueChromaConverterCallback>(
-                new List<HueChromaConverterCallback>()
-                {
-                    (chroma, hue) => (chroma, chroma * hue, 0),
-                    (chroma, hue) => (chroma * (2 - hue), chroma, 0),
-                    (chroma, hue) => (0, chroma, chroma * (hue - 2)),
-                    (chroma, hue) => (0, chroma, chroma * (hue - 2)),
-                    (chroma, hue) => (chroma * (hue - 4), 0, chroma),
-                    (chroma, hue) => (chroma, 0, chroma * (6 - hue)),
-                });
 
         /// <summary>
         /// A dictionary of <see cref="ColorBlendCallback"/> delegate values
@@ -153,11 +139,6 @@ namespace Maseya.Helper
             Green = Clamp(green, 0, 1);
             Blue = Clamp(blue, 0, 1);
         }
-
-        private delegate (float red, float green, float blue)
-            HueChromaConverterCallback(
-            float hue,
-            float chroma);
 
         /// <summary>
         /// Gets the alpha intensity of this <see cref="ColorF"/> instance.
@@ -414,6 +395,27 @@ namespace Maseya.Helper
         }
 
         /// <summary>
+        /// Performs the <see cref="Add(ColorF, ColorF)"/> blend operation of
+        /// two <see cref="ColorF"/> values.
+        /// </summary>
+        /// <param name="left">
+        /// The top layer <see cref="ColorF"/>.
+        /// </param>
+        /// <param name="right">
+        /// The bottom layer <see cref="ColorF"/> to add to <paramref
+        /// name="left"/>.
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="ColorF"/> that is the result of the <see
+        /// cref="Add(ColorF, ColorF)"/> blend operation of <paramref
+        /// name="left"/> and <paramref name="right"/>.
+        /// </returns>
+        public static ColorF operator +(ColorF left, ColorF right)
+        {
+            return Add(left, right);
+        }
+
+        /// <summary>
         /// Performs the <see cref="Subtract(ColorF, ColorF)"/> blend operation
         /// of one <see cref="ColorF"/> from another.
         /// </summary>
@@ -537,27 +539,6 @@ namespace Maseya.Helper
         public static ColorF operator ~(ColorF color)
         {
             return Negate(color);
-        }
-
-        /// <summary>
-        /// Performs the <see cref="Add(ColorF, ColorF)"/> blend operation of
-        /// two <see cref="ColorF"/> values.
-        /// </summary>
-        /// <param name="left">
-        /// The top layer <see cref="ColorF"/>.
-        /// </param>
-        /// <param name="right">
-        /// The bottom layer <see cref="ColorF"/> to add to <paramref
-        /// name="left"/>.
-        /// </param>
-        /// <returns>
-        /// An instance of <see cref="ColorF"/> that is the result of the <see
-        /// cref="Add(ColorF, ColorF)"/> blend operation of <paramref
-        /// name="left"/> and <paramref name="right"/>.
-        /// </returns>
-        public static ColorF operator +(ColorF left, ColorF right)
-        {
-            return Add(left, right);
         }
 
         /// <summary>
@@ -1121,7 +1102,7 @@ namespace Maseya.Helper
 
             var chroma = (1 - Abs((2 * lightness) - 1)) * saturation;
             var (r, g, b) = GetBaseRgb(hue, chroma);
-            var match = lightness - (0.5f * chroma);
+            var match = lightness - (chroma / 2.0f);
 
             return new ColorF(alpha, r + match, g + match, b + match);
         }
@@ -1205,6 +1186,11 @@ namespace Maseya.Helper
             {
                 return ((x * t) + (y * u * (1 - t))) / a;
             }
+        }
+
+        public static ColorF AlphaBlend(ColorF top, ColorF bottom, float alpha)
+        {
+            return AlphaBlend(FromArgb(alpha, top), bottom);
         }
 
         /// <summary>
@@ -1475,7 +1461,7 @@ namespace Maseya.Helper
         /// </returns>
         public static ColorF HueBlend(ColorF top, ColorF bottom)
         {
-            var result = FromHcy(top.Alpha, top.Hue, bottom.Chroma, bottom.Luma);
+            var result = FromHcy(top.Alpha, bottom.Hue, top.Chroma, top.Luma);
             return AlphaBlend(result, bottom);
         }
 
@@ -1498,7 +1484,7 @@ namespace Maseya.Helper
         /// </returns>
         public static ColorF SaturationBlend(ColorF top, ColorF bottom)
         {
-            var result = FromHcy(top.Alpha, bottom.Hue, top.Chroma, bottom.Luma);
+            var result = FromHcy(top.Alpha, top.Hue, bottom.Chroma, top.Luma);
             return AlphaBlend(result, bottom);
         }
 
@@ -1521,7 +1507,7 @@ namespace Maseya.Helper
         /// </returns>
         public static ColorF LuminosityBlend(ColorF top, ColorF bottom)
         {
-            var result = FromHcy(top.Alpha, bottom.Hue, bottom.Chroma, top.Luma);
+            var result = FromHcy(top.Alpha, top.Hue, top.Chroma, bottom.Luma);
             return AlphaBlend(result, bottom);
         }
 
@@ -1556,11 +1542,8 @@ namespace Maseya.Helper
         public ColorF RotateHue(ColorF bottom)
         {
             var hue = Hue + bottom.Hue;
-            var result = FromHcy(Alpha, hue, bottom.Chroma, bottom.Luma);
-            throw new NotImplementedException(
-                "Should hue and chroma be this instance or bottom?");
-
-            // return AlphaBlend(result, bottom);
+            var result = FromHcy(Alpha, hue, Chroma, Luma);
+            return AlphaBlend(result, bottom);
         }
 
         /// <summary>
@@ -1625,8 +1608,7 @@ namespace Maseya.Helper
         /// </returns>
         public override int GetHashCode()
         {
-            var color = (Color32BppArgb)this;
-            return color.GetHashCode();
+            return ((Color)this).ToArgb().GetHashCode();
         }
 
         /// <summary>
@@ -1679,8 +1661,18 @@ namespace Maseya.Helper
             }
 
             hue *= 6;
-            var index = (int)hue;
-            return GetRgbFromInterval[index](hue, chroma);
+            var x = chroma * (1 - Abs((hue % 2) - 1));
+            return hue <= 1
+                ? ((float r, float g, float b))(chroma, x, 0)
+                : hue <= 2
+                ? ((float r, float g, float b))(x, chroma, 0)
+                : hue <= 3
+                ? ((float r, float g, float b))(0, chroma, x)
+                : hue <= 4
+                ? ((float r, float g, float b))(0, x, chroma)
+                : hue <= 5
+                ? ((float r, float g, float b))(x, 0, chroma)
+                : ((float r, float g, float b))(chroma, 0, x);
         }
     }
 }
