@@ -73,7 +73,6 @@ namespace Maseya.Helper
         /// equal to the length of the <paramref name="args"/> array.
         /// </exception>
         /// <seealso cref="String.Format(IFormatProvider, String, Object[])"/>
-        ///
         public static string GetString(string format, params object[] args)
         {
             return String.Format(CurrentCulture, format, args);
@@ -102,7 +101,6 @@ namespace Maseya.Helper
         /// specified format.
         /// </returns>
         /// <seealso cref="IFormattable.ToString(String, IFormatProvider)"/>
-        ///
         public static string GetString(
             IFormattable value,
             string format = null)
@@ -140,7 +138,6 @@ namespace Maseya.Helper
         /// equal to the length of the <paramref name="args"/> array.
         /// </exception>
         /// <seealso cref="String.Format(IFormatProvider, String, Object[])"/>
-        ///
         public static string GetUIString(string format, params object[] args)
         {
             return String.Format(CurrentUICulture, format, args);
@@ -169,7 +166,6 @@ namespace Maseya.Helper
         /// specified format.
         /// </returns>
         /// <seealso cref="IFormattable.ToString(String, IFormatProvider)"/>
-        ///
         public static string GetUIString(
             IFormattable value,
             string format = null)
