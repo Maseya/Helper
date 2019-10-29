@@ -56,52 +56,36 @@ namespace Maseya.Helper
                 return 0;
             }
 
-            if (x is null || y is null)
+            if (BaseComparer.Equals(x, y))
             {
-                return BaseComparer.Compare(x, y);
+                return 0;
             }
 
-            var modifiedX = StringFunc(x);
-            var modifiedY = StringFunc(y);
-
-            return BaseComparer.Compare(modifiedX, modifiedY);
+            var funcX = x != null ? StringFunc(x) : null;
+            var funcY = y != null ? StringFunc(y) : null;
+            return BaseComparer.Compare(funcX, funcY);
         }
 
         public sealed override bool Equals(string x, string y)
         {
+            if (ReferenceEquals(x, y))
+            {
+                return true;
+            }
+
             if (BaseComparer.Equals(x, y))
             {
                 return true;
             }
 
-            // If one of the strings cannot be transformed, then consider them
-            // not equal.
-            string funcX, funcY;
-            try
-            {
-                funcX = StringFunc(x);
-                funcY = StringFunc(y);
-            }
-            catch
-            {
-                return false;
-            }
-
+            var funcX = x != null ? StringFunc(x) : null;
+            var funcY = y != null ? StringFunc(y) : null;
             return BaseComparer.Equals(funcX, funcY);
         }
 
         public sealed override int GetHashCode(string obj)
         {
-            string funcObj;
-            try
-            {
-                funcObj = StringFunc(obj);
-            }
-            catch (ArgumentException ex)
-            {
-                throw new ArgumentException(null, nameof(obj), ex);
-            }
-
+            var funcObj = StringFunc(obj);
             return BaseComparer.GetHashCode(funcObj);
         }
     }
