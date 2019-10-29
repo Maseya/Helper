@@ -113,7 +113,7 @@ namespace Maseya.Controls
                     return;
                 }
 
-                _value = AllowNegative ? value : Math.Abs(Value);
+                _value = AllowNegative ? value : Math.Abs(value);
                 OnValueChanged(EventArgs.Empty);
             }
         }
