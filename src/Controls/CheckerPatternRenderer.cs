@@ -274,7 +274,7 @@ namespace Maseya.Controls
             // Basically, we ensure the object is still Disposed even if an
             // Exception occurs.
             Bitmap temp = null;
-            Bitmap result = null;
+            Bitmap result;
             try
             {
                 // Try to open the new `IDisposable` Bitmap object.
