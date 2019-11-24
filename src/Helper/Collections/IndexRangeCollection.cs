@@ -1,4 +1,4 @@
-﻿// <copyright file="LinearListSelection.cs" company="Public Domain">
+﻿// <copyright file="IndexRangeCollection.cs" company="Public Domain">
 //     Copyright (c) 2019 Nelson Garcia. All rights reserved. Licensed under
 //     GNU Affero General Public License. See LICENSE in project root for full
 //     license information, or visit https://www.gnu.org/licenses/#AGPL
@@ -9,13 +9,13 @@ namespace Maseya.Helper.Collections
     using System;
     using System.Collections.Generic;
 
-    public class LinearListSelection : ListSelection
+    public class IndexRangeCollection : IndexCollection
     {
-        public LinearListSelection(int index, int count)
+        public IndexRangeCollection(int index, int count)
         {
             if (count <= 0)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(count));
             }
 
             MinIndex = index;
@@ -46,21 +46,21 @@ namespace Maseya.Helper.Collections
             {
                 if (!ContainsIndex(index))
                 {
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(index));
                 }
 
                 return MinIndex + index;
             }
         }
 
-        public override ListSelection Move(int amount)
+        public override IndexCollection Move(int amount)
         {
-            return new LinearListSelection(MinIndex + amount, Count);
+            return new IndexRangeCollection(MinIndex + amount, Count);
         }
 
         public override bool ContainsIndex(int index)
         {
-            return (index >= MinIndex) && (index <= MaxIndex);
+            return (index >= 0) && (index <= Count);
         }
 
         public override IEnumerator<int> GetEnumerator()

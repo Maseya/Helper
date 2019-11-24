@@ -1,4 +1,4 @@
-﻿// <copyright file="SingleItemListSelection.cs" company="Public Domain">
+﻿// <copyright file="SingleIndexCollection.cs" company="Public Domain">
 //     Copyright (c) 2019 Nelson Garcia. All rights reserved. Licensed under
 //     GNU Affero General Public License. See LICENSE in project root for full
 //     license information, or visit https://www.gnu.org/licenses/#AGPL
@@ -9,9 +9,9 @@ namespace Maseya.Helper.Collections
     using System;
     using System.Collections.Generic;
 
-    public class SingleItemListSelection : ListSelection
+    public class SingleIndexCollection : IndexCollection
     {
-        public SingleItemListSelection(int value)
+        public SingleIndexCollection(int value)
         {
             Value = value;
         }
@@ -63,9 +63,9 @@ namespace Maseya.Helper.Collections
             return index == Value;
         }
 
-        public override ListSelection Move(int amount)
+        public override IndexCollection Move(int amount)
         {
-            return new SingleItemListSelection(Value + amount);
+            return new SingleIndexCollection(Value + amount);
         }
 
         public override IEnumerator<int> GetEnumerator()

@@ -1,4 +1,4 @@
-﻿// <copyright file="ListSelectionData.cs" company="Public Domain">
+﻿// <copyright file="IndexDictionary.cs" company="Public Domain">
 //     Copyright (c) 2019 Nelson Garcia. All rights reserved. Licensed under
 //     GNU Affero General Public License. See LICENSE in project root for full
 //     license information, or visit https://www.gnu.org/licenses/#AGPL
@@ -9,16 +9,22 @@ namespace Maseya.Helper.Collections.Generic
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using static ThrowHelper;
 
-    public class ListSelectionData<T> :
-        IListSelectionData,
-        IListSelectionData<T>,
+    public sealed class IndexDictionary<T> :
+        IIndexDictionary<T>,
         IReadOnlyDictionary<int, T>
+        where T : unmanaged
     {
-        public ListSelectionData(
-            IListSelection selection)
+        public IndexDictionary(
+            IIndexCollection selection)
         {
-            Selection = selection.CopySelection();
+            if (selection is null)
+            {
+                throw new ArgumentNullException(nameof(selection));
+            }
+
+            Selection = selection.Copy();
             BaseDictionary = new Dictionary<int, T>(Selection.Count);
             foreach (var index in Selection)
             {
@@ -26,11 +32,26 @@ namespace Maseya.Helper.Collections.Generic
             }
         }
 
-        public ListSelectionData(
-            IListSelection selection,
+        public IndexDictionary(
+            IIndexCollection selection,
             IReadOnlyList<T> data)
         {
-            Selection = selection.CopySelection();
+            if (selection is null)
+            {
+                throw new ArgumentNullException(nameof(selection));
+            }
+
+            if (data is null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
+            if (selection.MinIndex < 0 || selection.MaxIndex >= data.Count)
+            {
+                throw IndexBoundsArgumentException(nameof(selection));
+            }
+
+            Selection = selection.Copy();
             BaseDictionary = new Dictionary<int, T>(Selection.Count);
             foreach (var index in Selection)
             {
@@ -38,11 +59,53 @@ namespace Maseya.Helper.Collections.Generic
             }
         }
 
-        private ListSelectionData(
-            IListSelection selection,
+        public IndexDictionary(
+            IIndexCollection selection,
+            byte[] sourceArray,
+            IByteDataConverter<T> converter)
+        {
+            if (selection is null)
+            {
+                throw new ArgumentNullException(nameof(selection));
+            }
+
+            if (sourceArray is null)
+            {
+                throw new ArgumentNullException(nameof(sourceArray));
+            }
+
+            if (converter is null)
+            {
+                throw new ArgumentNullException(nameof(converter));
+            }
+
+            if (selection.MinIndex < 0)
+            {
+                throw IndexBoundsArgumentException(nameof(selection));
+            }
+
+            var sizeOfT = converter.SizeOfItem;
+            var lastByteIndex = selection.MaxIndex + sizeOfT - 1;
+            if (lastByteIndex >= sourceArray.Length)
+            {
+                throw IndexBoundsArgumentException(nameof(selection));
+            }
+
+            Selection = selection.Copy();
+            Converter = converter;
+            BaseDictionary = new Dictionary<int, T>(Selection.Count);
+            foreach (var index in Selection)
+            {
+                var item = converter.GetItem(sourceArray, index);
+                BaseDictionary.Add(index, item);
+            }
+        }
+
+        private IndexDictionary(
+            IIndexCollection selection,
             IDictionary<int, T> dictionary)
         {
-            Selection = selection.CopySelection();
+            Selection = selection.Copy();
             BaseDictionary = new Dictionary<int, T>(dictionary);
         }
 
@@ -54,7 +117,15 @@ namespace Maseya.Helper.Collections.Generic
             }
         }
 
-        public IListSelection Selection
+        public bool IsConvertedByteData
+        {
+            get
+            {
+                return Converter != null;
+            }
+        }
+
+        public IIndexCollection Selection
         {
             get;
         }
@@ -65,6 +136,11 @@ namespace Maseya.Helper.Collections.Generic
             {
                 return BaseDictionary.Values;
             }
+        }
+
+        public IByteDataConverter<T> Converter
+        {
+            get;
         }
 
         ICollection<int> IDictionary<int, T>.Keys
@@ -80,14 +156,6 @@ namespace Maseya.Helper.Collections.Generic
             get
             {
                 return Selection;
-            }
-        }
-
-        ICollection IDictionary.Keys
-        {
-            get
-            {
-                return new KeyCollection(Selection);
             }
         }
 
@@ -107,51 +175,11 @@ namespace Maseya.Helper.Collections.Generic
             }
         }
 
-        ICollection IDictionary.Values
-        {
-            get
-            {
-                return BaseDictionary.Values;
-            }
-        }
-
-        bool ICollection.IsSynchronized
-        {
-            get
-            {
-                return (BaseDictionary as ICollection).IsSynchronized;
-            }
-        }
-
         bool ICollection<KeyValuePair<int, T>>.IsReadOnly
         {
             get
             {
                 return false;
-            }
-        }
-
-        object ICollection.SyncRoot
-        {
-            get
-            {
-                return (BaseDictionary as ICollection).SyncRoot;
-            }
-        }
-
-        bool IDictionary.IsReadOnly
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        bool IDictionary.IsFixedSize
-        {
-            get
-            {
-                return true;
             }
         }
 
@@ -173,22 +201,9 @@ namespace Maseya.Helper.Collections.Generic
             }
         }
 
-        object IDictionary.this[object key]
+        public IndexDictionary<T> Copy()
         {
-            get
-            {
-                return this[(int)key];
-            }
-
-            set
-            {
-                this[(int)key] = (T)value;
-            }
-        }
-
-        public ListSelectionData<T> Copy()
-        {
-            return new ListSelectionData<T>(Selection, BaseDictionary);
+            return new IndexDictionary<T>(Selection, BaseDictionary);
         }
 
         public bool ContainsKey(int key)
@@ -211,12 +226,7 @@ namespace Maseya.Helper.Collections.Generic
             return BaseDictionary.TryGetValue(key, out value);
         }
 
-        IListSelectionData<T> IListSelectionData<T>.Copy()
-        {
-            return Copy();
-        }
-
-        IListSelectionData IListSelectionData.Copy()
+        IIndexDictionary<T> IIndexDictionary<T>.Copy()
         {
             return Copy();
         }
@@ -224,11 +234,6 @@ namespace Maseya.Helper.Collections.Generic
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
-        }
-
-        IDictionaryEnumerator IDictionary.GetEnumerator()
-        {
-            return new DictionaryEnumerator(GetEnumerator());
         }
 
         void IDictionary<int, T>.Add(int key, T value)
@@ -272,34 +277,51 @@ namespace Maseya.Helper.Collections.Generic
                 arrayIndex);
         }
 
-        void IDictionary.Add(object key, object value)
+        public void WriteToBytes(byte[] destinationArray)
         {
-            throw new NotSupportedException();
+            WriteToBytes(destinationArray, 0);
         }
 
-        void IDictionary.Clear()
+        public void WriteToBytes(byte[] destinationArray, int startOffset)
         {
-            throw new NotSupportedException();
-        }
+            if (!IsConvertedByteData)
+            {
+                throw new InvalidOperationException();
+            }
 
-        bool IDictionary.Contains(object key)
-        {
-            return (BaseDictionary as IDictionary).Contains(key);
-        }
+            if (destinationArray is null)
+            {
+                throw new ArgumentNullException(nameof(destinationArray));
+            }
 
-        void ICollection.CopyTo(Array array, int index)
-        {
-            (BaseDictionary as ICollection).CopyTo(array, index);
-        }
+            if (startOffset + Selection.MinIndex < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(startOffset));
+            }
 
-        void IDictionary.Remove(object key)
-        {
-            throw new NotSupportedException();
+            var sizeOfT = Converter.SizeOfItem;
+            var lastOffset = Selection.MaxIndex + sizeOfT - 1;
+            if (lastOffset + startOffset >= destinationArray.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(startOffset));
+            }
+
+            foreach (var kvp in this)
+            {
+                var index = kvp.Key;
+                var bytes = Converter.GetBytes(kvp.Value);
+                Array.Copy(
+                    bytes,
+                    0,
+                    destinationArray,
+                    index,
+                    sizeOfT);
+            }
         }
 
         private class KeyCollection : ICollection<int>, ICollection
         {
-            public KeyCollection(IListSelection selection)
+            public KeyCollection(IIndexCollection selection)
             {
                 Selection = selection;
             }
@@ -333,7 +355,7 @@ namespace Maseya.Helper.Collections.Generic
                 get;
             }
 
-            private IListSelection Selection
+            private IIndexCollection Selection
             {
                 get;
             }
@@ -382,90 +404,6 @@ namespace Maseya.Helper.Collections.Generic
             bool ICollection<int>.Remove(int item)
             {
                 throw new NotSupportedException();
-            }
-        }
-
-        private class DictionaryEnumerator : IDictionaryEnumerator
-        {
-            public DictionaryEnumerator(
-                IEnumerator<KeyValuePair<int, T>> baseEnumerator)
-            {
-                BaseEnumerator = baseEnumerator
-                    ?? throw new ArgumentNullException(nameof(baseEnumerator));
-            }
-
-            public KeyValuePair<int, T> Current
-            {
-                get;
-                private set;
-            }
-
-            public int Key
-            {
-                get
-                {
-                    return Current.Key;
-                }
-            }
-
-            public T Value
-            {
-                get
-                {
-                    return Current.Value;
-                }
-            }
-
-            object IEnumerator.Current
-            {
-                get
-                {
-                    return Current;
-                }
-            }
-
-            DictionaryEntry IDictionaryEnumerator.Entry
-            {
-                get
-                {
-                    return new DictionaryEntry(Key, Value);
-                }
-            }
-
-            object IDictionaryEnumerator.Key
-            {
-                get
-                {
-                    return Key;
-                }
-            }
-
-            object IDictionaryEnumerator.Value
-            {
-                get
-                {
-                    return Current.Value;
-                }
-            }
-
-            private IEnumerator<KeyValuePair<int, T>> BaseEnumerator
-            {
-                get;
-            }
-
-            public void Reset()
-            {
-                BaseEnumerator.Reset();
-            }
-
-            public bool MoveNext()
-            {
-                return BaseEnumerator.MoveNext();
-            }
-
-            public void Dispose()
-            {
-                BaseEnumerator.Dispose();
             }
         }
     }

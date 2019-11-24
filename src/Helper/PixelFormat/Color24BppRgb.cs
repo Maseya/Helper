@@ -16,9 +16,9 @@ namespace Maseya.Helper.PixelFormat
     /// Represents a 24-bit pixel in RGB 8 bit per channel format.
     /// </summary>
     /// <remarks>
-    /// The purpose of this data type is to ease the process of bitmap drawing.
-    /// For 24-bit RGB bitmaps, its pixel buffer pointer can be cast to type
-    /// <see cref="Color24BppRgb"/>* for simplified color operations.
+    /// The purpose of this data type is to ease the process of bitmap
+    /// drawing. For 24-bit RGB bitmaps, its pixel buffer pointer can be cast
+    /// to type <see cref="Color24BppRgb"/>* for simplified color operations.
     /// </remarks>
     [StructLayout(LayoutKind.Explicit, Size = 3)]
     public struct Color24BppRgb : IEquatable<Color24BppRgb>
@@ -62,7 +62,8 @@ namespace Maseya.Helper.PixelFormat
         internal const int BitsPerBlue = BitsPerChannel;
 
         /// <summary>
-        /// The number of bits that represent the intensity of the any channel.
+        /// The number of bits that represent the intensity of the any
+        /// channel.
         /// </summary>
         private const int BitsPerChannel = 8;
 
@@ -87,7 +88,7 @@ namespace Maseya.Helper.PixelFormat
         /// <summary>
         /// Represents a <see cref="Color24BppRgb"/> that is black.
         /// </summary>
-        private static readonly Color24BppRgb _empty = default;
+        private static Color24BppRgb _empty = default;
 
         /// <summary>
         /// The red intensity.
@@ -230,8 +231,8 @@ namespace Maseya.Helper.PixelFormat
         /// cref="Color24BppRgb"/> instance.
         /// </param>
         /// <returns>
-        /// A <see cref="Color24BppRgb"/> structure with a <see cref=" Value"/>
-        /// equal to <paramref name="value"/>.
+        /// A <see cref="Color24BppRgb"/> structure with a <see cref="
+        /// Value"/> equal to <paramref name="value"/>.
         /// </returns>
         public static explicit operator Color24BppRgb(int value)
         {
@@ -283,7 +284,8 @@ namespace Maseya.Helper.PixelFormat
         /// and <see cref="Color32BppArgb.Blue"/> properties are equal to a
         /// <see cref="Color24BppRgb"/>'s <see cref="Red"/>, <see
         /// cref="Green"/>, and <see cref=" Blue"/> properties, respectively.
-        /// The <see cref="Color32BppArgb.Alpha"/> is set to its default value.
+        /// The <see cref="Color32BppArgb.Alpha"/> is set to its default
+        /// value.
         /// </summary>
         /// <param name="color24">
         /// The <see cref="Color24BppRgb"/> to convert.
@@ -293,9 +295,9 @@ namespace Maseya.Helper.PixelFormat
         /// cref="Color32BppArgb.Red"/>, <see cref="Color32BppArgb.Green "/>,
         /// and <see cref="Color32BppArgb.Blue"/> properties are equal to a
         /// <see cref="Color24BppRgb"/>'s <see cref="Red"/>, <see
-        /// cref="Green"/>, and <see cref=" Blue"/> properties, respectively of
-        /// <paramref name="color24"/>. The <see cref=" Color32BppArgb.Alpha"/>
-        /// is set to its default value.
+        /// cref="Green"/>, and <see cref=" Blue"/> properties, respectively
+        /// of <paramref name="color24"/>. The <see cref="
+        /// Color32BppArgb.Alpha"/> is set to its default value.
         /// </returns>
         public static implicit operator Color32BppArgb(
             Color24BppRgb color24)
@@ -341,11 +343,11 @@ namespace Maseya.Helper.PixelFormat
         /// </param>
         /// <returns>
         /// A <see cref="Color"/> whose <see cref="Color.R"/>, <see
-        /// cref="Color.G"/>, and <see cref="Color.B"/> properties are equal to
-        /// a <see cref="Color24BppRgb"/>'s <see cref=" Red"/>, <see
+        /// cref="Color.G"/>, and <see cref="Color.B"/> properties are equal
+        /// to a <see cref="Color24BppRgb"/>'s <see cref=" Red"/>, <see
         /// cref="Green"/>, and <see cref="Blue"/> properties, respectively of
-        /// <paramref name="color24"/>. The <see cref="Color.A"/> is set to its
-        /// default value.
+        /// <paramref name="color24"/>. The <see cref="Color.A"/> is set to
+        /// its default value.
         /// </returns>
         public static implicit operator Color(Color24BppRgb color24)
         {
@@ -381,8 +383,8 @@ namespace Maseya.Helper.PixelFormat
         /// Creates a <see cref="ColorF"/> structure whose <see cref="
         /// ColorF.Red"/>, <see cref="ColorF.Green"/>, and <see cref="
         /// ColorF.Blue"/> properties are equal to a <see cref="
-        /// Color24BppRgb"/>'s <see cref="Red"/>, <see cref="Green"/>, and <see
-        /// cref="Blue"/> properties, respectively. The <see
+        /// Color24BppRgb"/>'s <see cref="Red"/>, <see cref="Green"/>, and
+        /// <see cref="Blue"/> properties, respectively. The <see
         /// cref="ColorF.Alpha"/> is set to its default value.
         /// </summary>
         /// <param name="color24">
@@ -454,6 +456,46 @@ namespace Maseya.Helper.PixelFormat
             return !(left == right);
         }
 
+        public static Color24BppRgb FromInt32(int value)
+        {
+            return (Color24BppRgb)value;
+        }
+
+        public static int ToInt32(Color24BppRgb color24)
+        {
+            return color24;
+        }
+
+        public static Color24BppRgb FromColor32BppArgb(Color32BppArgb color32)
+        {
+            return (Color24BppRgb)color32;
+        }
+
+        public static Color32BppArgb ToColor32BppArgb(Color24BppRgb color24)
+        {
+            return color24;
+        }
+
+        public static Color24BppRgb FromColor(Color color)
+        {
+            return (Color24BppRgb)color;
+        }
+
+        public static Color ToColor(Color24BppRgb color24)
+        {
+            return color24;
+        }
+
+        public static Color24BppRgb FromColorF(ColorF colorF)
+        {
+            return (Color24BppRgb)colorF;
+        }
+
+        public static ColorF ToColorF(Color24BppRgb color24)
+        {
+            return color24;
+        }
+
         /// <summary>
         /// Returns a value indicating whether this instance is equal to a
         /// specified <see cref="Color24BppRgb"/> value.
@@ -462,8 +504,8 @@ namespace Maseya.Helper.PixelFormat
         /// A <see cref="Color24BppRgb"/> value to compare to this instance.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if <paramref name="obj"/> has the same value
-        /// as this instance; otherwise, <see langword=" false"/>.
+        /// <see langword="true"/> if <paramref name="obj"/> has the same
+        /// value as this instance; otherwise, <see langword=" false"/>.
         /// </returns>
         public bool Equals(Color24BppRgb obj)
         {

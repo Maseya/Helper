@@ -1,4 +1,4 @@
-﻿// <copyright file="IListSelectionData.cs" company="Public Domain">
+﻿// <copyright file="IIndexDictionary.cs" company="Public Domain">
 //     Copyright (c) 2019 Nelson Garcia. All rights reserved. Licensed under
 //     GNU Affero General Public License. See LICENSE in project root for full
 //     license information, or visit https://www.gnu.org/licenses/#AGPL
@@ -6,12 +6,17 @@
 
 namespace Maseya.Helper.Collections.Generic
 {
+    using System.Collections;
     using System.Collections.Generic;
 
-    public interface IListSelectionData<T> : IDictionary<int, T>
+    public interface IIndexDictionary<T> :
+        IDictionary<int, T>
+        where T : unmanaged
     {
-        IListSelection Selection { get; }
+        IIndexCollection Selection { get; }
 
-        IListSelectionData<T> Copy();
+        IIndexDictionary<T> Copy();
+
+        void WriteToBytes(byte[] destinationArray);
     }
 }

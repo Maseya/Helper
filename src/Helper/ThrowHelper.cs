@@ -12,8 +12,8 @@ namespace Maseya.Helper
 
     /// <summary>
     /// Provides static methods for creating instances of classes derived from
-    /// <see cref="Exception"/> with culture-formatted messages regarding given
-    /// exceptional circumstances.
+    /// <see cref="Exception"/> with culture-formatted messages regarding
+    /// given exceptional circumstances.
     /// </summary>
     public static class ThrowHelper
     {
@@ -96,8 +96,8 @@ namespace Maseya.Helper
 
         /// <summary>
         /// Create an instance of <see cref=" ArgumentOutOfRangeException"/>
-        /// with a message specifying that the argument value must be less than
-        /// some given value.
+        /// with a message specifying that the argument value must be less
+        /// than some given value.
         /// </summary>
         /// <param name="paramName">
         /// The name of the parameter that caused the exception.
@@ -106,8 +106,8 @@ namespace Maseya.Helper
         /// The value of the argument that causes this exception.
         /// </param>
         /// <param name="valid">
-        /// The value that <paramref name="actualValue"/> must be less than for
-        /// it to not throw <see cref=" ArgumentOutOfRangeException"/>.
+        /// The value that <paramref name="actualValue"/> must be less than
+        /// for it to not throw <see cref=" ArgumentOutOfRangeException"/>.
         /// </param>
         /// <returns>
         /// The result of <see cref="ArgumentOutOfRangeException(String,
@@ -134,8 +134,8 @@ namespace Maseya.Helper
 
         /// <summary>
         /// Create an instance of <see cref=" ArgumentOutOfRangeException"/>
-        /// with a message specifying that the argument value must be less than
-        /// or equal to some given value.
+        /// with a message specifying that the argument value must be less
+        /// than or equal to some given value.
         /// </summary>
         /// <param name="paramName">
         /// The name of the parameter that caused the exception.
@@ -152,11 +152,10 @@ namespace Maseya.Helper
         /// The result of <see cref="ArgumentOutOfRangeException(String,
         /// Object, String)"/> where its <c>message</c> parameter is
         /// culture-aware and specifies that <paramref name="paramName"/> has
-        /// value <paramref name="actualValue"/> but must be less than or equal
-        /// to <paramref name="valid"/>.
+        /// value <paramref name="actualValue"/> but must be less than or
+        /// equal to <paramref name="valid"/>.
         /// </returns>
-        public static ArgumentOutOfRangeException
-            ValueNotLessThanEqualTo(
+        public static ArgumentOutOfRangeException ValueNotLessThanEqualTo(
             string paramName,
             object actualValue,
             object valid = default)
@@ -194,8 +193,7 @@ namespace Maseya.Helper
         /// value <paramref name="actualValue"/> but must be greater than or
         /// equal to zero and less than <paramref name="arraySize"/>.
         /// </returns>
-        public static ArgumentOutOfRangeException
-            ValueNotInArrayBounds(
+        public static ArgumentOutOfRangeException ValueNotInArrayBounds(
             string paramName,
             int actualValue,
             int arraySize)
@@ -220,11 +218,12 @@ namespace Maseya.Helper
         /// The name of the parameter that caused the exception.
         /// </param>
         /// <returns>
-        /// The result of <see cref="ArgumentException(String, String)"/> where
-        /// its <c>message</c> parameter is culture-aware and specifies that
-        /// <paramref name="paramName"/> is NaN where it should not be.
+        /// The result of <see cref="ArgumentException(String, String)"/>
+        /// where its <c>message</c> parameter is culture-aware and specifies
+        /// that <paramref name="paramName"/> is NaN where it should not be.
         /// </returns>
-        public static ArgumentException ValueIsNaN(string paramName)
+        public static ArgumentException UnexpectedNaNArgumentExeption(
+            string paramName)
         {
             var message = ErrorValueIsNaN(paramName);
             return new ArgumentException(message, paramName);
@@ -232,18 +231,20 @@ namespace Maseya.Helper
 
         /// <summary>
         /// Create an instance of <see cref="ArgumentException"/> with a
-        /// message specifying that the argument value is infinity where it was
-        /// not expected.
+        /// message specifying that the argument value is infinity where it
+        /// was not expected.
         /// </summary>
         /// <param name="paramName">
         /// The name of the parameter that caused the exception.
         /// </param>
         /// <returns>
-        /// The result of <see cref="ArgumentException(String, String)"/> where
-        /// its <c>message</c> parameter is culture-aware and specifies that
-        /// <paramref name="paramName"/> is infinity where it should not be.
+        /// The result of <see cref="ArgumentException(String, String)"/>
+        /// where its <c>message</c> parameter is culture-aware and specifies
+        /// that <paramref name="paramName"/> is infinity where it should not
+        /// be.
         /// </returns>
-        public static ArgumentException ValueIsInfinity(string paramName)
+        public static ArgumentException UnexpectedInfinityArgumentException(
+            string paramName)
         {
             var message = ErrorValueIsInfinity(paramName);
             return new ArgumentException(message, paramName);
@@ -251,8 +252,8 @@ namespace Maseya.Helper
 
         /// <summary>
         /// Create an instance of <see cref="ArgumentException"/> with a
-        /// message specifying that the argument value cannot be less than zero
-        /// unless it is equal to some special value.
+        /// message specifying that the argument value cannot be less than
+        /// zero unless it is equal to some special value.
         /// </summary>
         /// <param name="paramName">
         /// The name of the parameter that caused the exception.
@@ -265,13 +266,12 @@ namespace Maseya.Helper
         /// <paramref name="paramName"/> even if it is less than zero.
         /// </param>
         /// <returns>
-        /// The result of <see cref="ArgumentException(String, String)"/> where
-        /// its <c>message</c> parameter is culture-aware and specifies that
-        /// <paramref name="paramName"/> is less than zero, which is not
+        /// The result of <see cref="ArgumentException(String, String)"/>
+        /// where its <c>message</c> parameter is culture-aware and specifies
+        /// that <paramref name="paramName"/> is less than zero, which is not
         /// allowed unless it is equal to <paramref name="specialValue"/>.
         /// </returns>
-        public static ArgumentException
-            InvalidSubstringInfoParameter(
+        public static ArgumentException InvalidSubstringInfoParameter(
             string paramName,
             object actualValue,
             object specialValue)
@@ -282,6 +282,33 @@ namespace Maseya.Helper
                 specialValue);
 
             return new ArgumentException(message, paramName);
+        }
+
+        public static ArgumentException EmptyCollectionArgumentException(
+            string paramName)
+        {
+            var message = ErrorEmptyColletion();
+            return new ArgumentException(message, paramName);
+        }
+
+        public static ArgumentException IndexBoundsArgumentException(
+            string paramName)
+        {
+            var message = ErrorIndexBounds();
+            return new ArgumentException(message, paramName);
+        }
+
+        public static ArgumentException CollectionBoundsArgumentException(
+            string paramName)
+        {
+            var message = ErrorCollectionBounds();
+            return new ArgumentException(message, paramName);
+        }
+
+        public static ArgumentException InvalidOffsetArgumentException()
+        {
+            var message = ErrorOffsetBounds();
+            return new ArgumentException(message);
         }
 
         /// <summary>
@@ -357,8 +384,8 @@ namespace Maseya.Helper
         /// The value of the argument that causes this error.
         /// </param>
         /// <param name="valid">
-        /// The value that <paramref name="actualValue"/> must be less than for
-        /// it to not cause an error.
+        /// The value that <paramref name="actualValue"/> must be less than
+        /// for it to not cause an error.
         /// </param>
         /// <returns>
         /// A culture-aware message specifying that <paramref
@@ -473,8 +500,8 @@ namespace Maseya.Helper
         }
 
         /// <summary>
-        /// Formats an error message stating that a parameter's value cannot be
-        /// less than zero unless it is equal to some special value.
+        /// Formats an error message stating that a parameter's value cannot
+        /// be less than zero unless it is equal to some special value.
         /// </summary>
         /// <param name="paramName">
         /// The name of the parameter that caused this error.
@@ -501,6 +528,26 @@ namespace Maseya.Helper
                 paramName,
                 actualValue,
                 specialValue);
+        }
+
+        private static string ErrorEmptyColletion()
+        {
+            return GetString(Resources.ErrorEmptyCollection);
+        }
+
+        private static string ErrorIndexBounds()
+        {
+            return GetString(Resources.ErrorIndexBounds);
+        }
+
+        private static string ErrorCollectionBounds()
+        {
+            return GetString(Resources.ErrorCollectionBounds);
+        }
+
+        private static string ErrorOffsetBounds()
+        {
+            return GetString(Resources.ErrorOffsetBounds);
         }
     }
 }

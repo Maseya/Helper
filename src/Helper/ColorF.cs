@@ -35,6 +35,8 @@ namespace Maseya.Helper
         /// </summary>
         public const float LumaRedWeight = 0.299f;
 
+        public const float LumaWeight = LumaRedWeight + LumaGreenWeight + LumaBlueWeight;
+
         /// <summary>
         /// The influence of <see cref="Green"/> intensity when calculating
         /// <see cref="Luma"/> intensity.
@@ -42,20 +44,20 @@ namespace Maseya.Helper
         public const float LumaGreenWeight = 0.587f;
 
         /// <summary>
-        /// The influence of <see cref="Blue"/> intensity when calculating <see
-        /// cref="Luma"/> intensity.
+        /// The influence of <see cref="Blue"/> intensity when calculating
+        /// <see cref="Luma"/> intensity.
         /// </summary>
         public const float LumaBlueWeight = 0.114f;
 
         /// <summary>
-        /// The total number of channels (alpha, red, green blue) that comprise
-        /// a <see cref="ColorF"/> color.
+        /// The total number of channels (alpha, red, green blue) that
+        /// comprise a <see cref="ColorF"/> color.
         /// </summary>
         public const int NumberOfChannels = 4;
 
         /// <summary>
-        /// The total number of color channels (red, green, blue) that comprise
-        /// a <see cref="ColorF"/> color.
+        /// The total number of color channels (red, green, blue) that
+        /// comprise a <see cref="ColorF"/> color.
         /// </summary>
         public const int NumberOfColorChannels = NumberOfChannels - 1;
 
@@ -242,20 +244,24 @@ namespace Maseya.Helper
             {
                 // When chroma is zero, there is no hue, as the color is not
                 // any more red, green, or blue. Technically, NaN should be
-                // returned, but this causes a lot of exceptional circumstances
-                // that need to be checked, especially in blending. So we just
-                // say the hue is vacuously zero. This doesn't hurt the
-                // structure in any way and lets us make assumptions during
-                // other calculations.
+                // returned, but this causes a lot of exceptional
+                // circumstances that need to be checked, especially in
+                // blending. So we just say the hue is vacuously zero. This
+                // doesn't hurt the structure in any way and lets us make
+                // assumptions during other calculations.
                 if (Chroma == 0)
                 {
                     return 0;
                 }
 
-                var hue = 0f;
+                float hue;
                 if (Max == Red)
                 {
                     hue = (Green - Blue) / Chroma;
+                    if (hue < 0)
+                    {
+                        hue += 6;
+                    }
                 }
                 else if (Max == Green)
                 {
@@ -265,13 +271,12 @@ namespace Maseya.Helper
                 {
                     hue = ((Red - Green) / Chroma) + 4;
                 }
-
-                if (hue < 0)
+                else
                 {
-                    hue += 6;
+                    throw new InvalidOperationException();
                 }
 
-                return hue / 6;
+                return hue / 6.0f;
             }
         }
 
@@ -294,10 +299,10 @@ namespace Maseya.Helper
         {
             get
             {
-                // Like hue, saturation should be NaN if chroma is zero, but we
-                // just say it's zero with no penalty.
-                return Chroma > 0
-                    ? Chroma / (1 - Abs((2 * Lightness) - 1))
+                // Like hue, saturation should be NaN if chroma is zero, but
+                // we just say it's zero with no penalty.
+                return Lightness != 1 && Lightness != 0
+                    ? Clamp(Chroma / (1 - Abs((2 * Lightness) - 1)), 0, 1)
                     : 0;
             }
         }
@@ -339,11 +344,12 @@ namespace Maseya.Helper
         }
 
         /// <summary>
-        /// Creates a <see cref="ColorF"/> structure whose <see cref="Alpha"/>,
-        /// <see cref="Red"/>, <see cref="Green"/>, and <see cref="Blue"/>
-        /// properties are equal to a <see cref=" Color"/>'s <see
-        /// cref="Color.A"/>, <see cref="Color.R"/>, <see cref="Color.G"/>, and
-        /// <see cref="Color.B"/> properties, respectively.
+        /// Creates a <see cref="ColorF"/> structure whose <see
+        /// cref="Alpha"/>, <see cref="Red"/>, <see cref="Green"/>, and <see
+        /// cref="Blue"/> properties are equal to a <see cref=" Color"/>'s
+        /// <see cref="Color.A"/>, <see cref="Color.R"/>, <see
+        /// cref="Color.G"/>, and <see cref="Color.B"/> properties,
+        /// respectively.
         /// </summary>
         /// <param name="color">
         /// The <see cref="Color"/> to convert.
@@ -352,8 +358,8 @@ namespace Maseya.Helper
         /// A <see cref="ColorF"/> whose <see cref="Alpha"/>, <see
         /// cref="Red"/>, <see cref="Green"/>, and <see cref="Blue"/>
         /// properties are equal to a <see cref=" Color"/>'s <see
-        /// cref="Color.A"/>, <see cref="Color.R"/>, <see cref="Color.G"/>, and
-        /// <see cref="Color.B"/> properties, respectively of <paramref
+        /// cref="Color.A"/>, <see cref="Color.R"/>, <see cref="Color.G"/>,
+        /// and <see cref="Color.B"/> properties, respectively of <paramref
         /// name="color"/>.
         /// </returns>
         public static explicit operator ColorF(Color color)
@@ -416,8 +422,8 @@ namespace Maseya.Helper
         }
 
         /// <summary>
-        /// Performs the <see cref="Subtract(ColorF, ColorF)"/> blend operation
-        /// of one <see cref="ColorF"/> from another.
+        /// Performs the <see cref="Subtract(ColorF, ColorF)"/> blend
+        /// operation of one <see cref="ColorF"/> from another.
         /// </summary>
         /// <param name="left">
         /// The top layer <see cref="ColorF"/>.
@@ -437,8 +443,8 @@ namespace Maseya.Helper
         }
 
         /// <summary>
-        /// Performs the <see cref="Multiply(ColorF, ColorF)"/> blend operation
-        /// of two <see cref="ColorF"/> values.
+        /// Performs the <see cref="Multiply(ColorF, ColorF)"/> blend
+        /// operation of two <see cref="ColorF"/> values.
         /// </summary>
         /// <param name="left">
         /// The top layer <see cref="ColorF"/>.
@@ -492,9 +498,9 @@ namespace Maseya.Helper
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the <see cref="Alpha"/>, <see
-        /// cref="Red"/>, <see cref="Green"/>, and <see cref="Blue"/> values of
-        /// <paramref name="left"/> and <paramref name=" right"/> are equal;
-        /// otherwise, <see langword="false"/>.
+        /// cref="Red"/>, <see cref="Green"/>, and <see cref="Blue"/> values
+        /// of <paramref name="left"/> and <paramref name=" right"/> are
+        /// equal; otherwise, <see langword="false"/>.
         /// </returns>
         public static bool operator ==(ColorF left, ColorF right)
         {
@@ -515,9 +521,9 @@ namespace Maseya.Helper
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the <see cref="Alpha"/>, <see
-        /// cref="Red"/>, <see cref="Green"/>, and <see cref="Blue"/> values of
-        /// <paramref name="left"/> or <paramref name=" right"/> are unequal;
-        /// otherwise, <see langword="false"/>.
+        /// cref="Red"/>, <see cref="Green"/>, and <see cref="Blue"/> values
+        /// of <paramref name="left"/> or <paramref name=" right"/> are
+        /// unequal; otherwise, <see langword="false"/>.
         /// </returns>
         public static bool operator !=(ColorF left, ColorF right)
         {
@@ -536,9 +542,19 @@ namespace Maseya.Helper
         /// cref="Negate(ColorF)"/> blend operation on <paramref
         /// name="color"/>.
         /// </returns>
-        public static ColorF operator ~(ColorF color)
+        public static ColorF operator -(ColorF color)
         {
             return Negate(color);
+        }
+
+        public static ColorF FromColor(Color color)
+        {
+            return (ColorF)color;
+        }
+
+        public static Color ToColor(ColorF color)
+        {
+            return (Color)color;
         }
 
         /// <summary>
@@ -569,9 +585,9 @@ namespace Maseya.Helper
         /// A <see cref="ColorF"/> instance whose <see cref="Red"/>, <see
         /// cref="Green"/>, and <see cref="Blue"/> properties are the
         /// restricted sums of the respective components of <paramref
-        /// name="left"/> and <paramref name="right"/>. The <see cref="Alpha"/>
-        /// is a standard alpha blend of <paramref name="left"/> and <paramref
-        /// name="right"/>.
+        /// name="left"/> and <paramref name="right"/>. The <see
+        /// cref="Alpha"/> is a standard alpha blend of <paramref
+        /// name="left"/> and <paramref name="right"/>.
         /// </returns>
         public static ColorF Add(ColorF left, ColorF right)
         {
@@ -593,8 +609,8 @@ namespace Maseya.Helper
         /// cref="Green"/>, and <see cref="Blue"/> properties are the
         /// restricted differences of the respective components of <paramref
         /// name="right"/> from <paramref name="left"/>. The <see
-        /// cref="Alpha"/> is a standard alpha blend of <paramref name="left"/>
-        /// and <paramref name="right"/>.
+        /// cref="Alpha"/> is a standard alpha blend of <paramref
+        /// name="left"/> and <paramref name="right"/>.
         /// </returns>
         public static ColorF Subtract(ColorF left, ColorF right)
         {
@@ -602,8 +618,8 @@ namespace Maseya.Helper
         }
 
         /// <summary>
-        /// Returns an instance of <see cref="ColorF"/> defined by an RGB color
-        /// space and is fully opaque.
+        /// Returns an instance of <see cref="ColorF"/> defined by an RGB
+        /// color space and is fully opaque.
         /// </summary>
         /// <param name="red">
         /// The red intensity.
@@ -692,22 +708,22 @@ namespace Maseya.Helper
         {
             if (Single.IsNaN(alpha))
             {
-                throw ValueIsNaN(nameof(alpha));
+                throw UnexpectedNaNArgumentExeption(nameof(alpha));
             }
 
             if (Single.IsNaN(red))
             {
-                throw ValueIsNaN(nameof(red));
+                throw UnexpectedNaNArgumentExeption(nameof(red));
             }
 
             if (Single.IsNaN(green))
             {
-                throw ValueIsNaN(nameof(green));
+                throw UnexpectedNaNArgumentExeption(nameof(green));
             }
 
             if (Single.IsNaN(blue))
             {
-                throw ValueIsNaN(nameof(blue));
+                throw UnexpectedNaNArgumentExeption(nameof(blue));
             }
 
             return new ColorF(alpha, red, green, blue);
@@ -728,9 +744,9 @@ namespace Maseya.Helper
         /// </param>
         /// <returns>
         /// An instance of <see cref="ColorF"/> whose <see cref="Cyan"/>, <see
-        /// cref="Magenta"/>, and <see cref="Yellow"/> properties are <paramref
-        /// name=" cyan"/>, <paramref name="magenta"/>, and <paramref
-        /// name="yellow"/>, respectively and that is fully opaque.
+        /// cref="Magenta"/>, and <see cref="Yellow"/> properties are
+        /// <paramref name=" cyan"/>, <paramref name="magenta"/>, and
+        /// <paramref name="yellow"/>, respectively and that is fully opaque.
         /// </returns>
         /// <exception cref="ArgumentException">
         /// <paramref name="cyan"/>, <paramref name="magenta"/>, or <paramref
@@ -762,10 +778,10 @@ namespace Maseya.Helper
         /// </param>
         /// <returns>
         /// An instance of <see cref="ColorF"/> whose <see cref=" Alpha"/>,
-        /// <see cref="Cyan"/>, <see cref="Magenta"/>, and <see cref="Yellow"/>
-        /// properties are <paramref name="alpha"/>, <paramref name="cyan"/>,
-        /// <paramref name="magenta"/>, and <paramref name="yellow"/>,
-        /// respectively.
+        /// <see cref="Cyan"/>, <see cref="Magenta"/>, and <see
+        /// cref="Yellow"/> properties are <paramref name="alpha"/>, <paramref
+        /// name="cyan"/>, <paramref name="magenta"/>, and <paramref
+        /// name="yellow"/>, respectively.
         /// </returns>
         /// <exception cref="ArgumentException">
         /// <paramref name="alpha"/>, <paramref name="cyan"/>, <paramref
@@ -780,22 +796,22 @@ namespace Maseya.Helper
         {
             if (Single.IsNaN(alpha))
             {
-                throw ValueIsNaN(nameof(alpha));
+                throw UnexpectedNaNArgumentExeption(nameof(alpha));
             }
 
             if (Single.IsNaN(cyan))
             {
-                throw ValueIsNaN(nameof(cyan));
+                throw UnexpectedNaNArgumentExeption(nameof(cyan));
             }
 
             if (Single.IsNaN(magenta))
             {
-                throw ValueIsNaN(nameof(magenta));
+                throw UnexpectedNaNArgumentExeption(nameof(magenta));
             }
 
             if (Single.IsNaN(yellow))
             {
-                throw ValueIsNaN(nameof(yellow));
+                throw UnexpectedNaNArgumentExeption(nameof(yellow));
             }
 
             var red = 1 - cyan;
@@ -806,8 +822,8 @@ namespace Maseya.Helper
         }
 
         /// <summary>
-        /// Returns an instance of <see cref="ColorF"/> defined by a CMYK color
-        /// space and is fully opaque.
+        /// Returns an instance of <see cref="ColorF"/> defined by a CMYK
+        /// color space and is fully opaque.
         /// </summary>
         /// <param name="cyan">
         /// The cyan intensity.
@@ -823,8 +839,8 @@ namespace Maseya.Helper
         /// </param>
         /// <returns>
         /// An instance of <see cref="ColorF"/> whose <see cref="Cyan"/>, <see
-        /// cref="Magenta"/>, and <see cref="Yellow"/> properties are <paramref
-        /// name="cyan"/>, <paramref name="magenta"/>, and <paramref
+        /// cref="Magenta"/>, and <see cref="Yellow"/> properties are
+        /// <paramref name="cyan"/>, <paramref name="magenta"/>, and <paramref
         /// name="yellow"/>, respectively scaled by amount <paramref
         /// name="black"/> and that is fully opaque.
         /// </returns>
@@ -863,8 +879,8 @@ namespace Maseya.Helper
         /// </param>
         /// <returns>
         /// An instance of <see cref="ColorF"/> whose <see cref="Cyan"/>, <see
-        /// cref="Magenta"/>, and <see cref="Yellow"/> properties are <paramref
-        /// name="cyan"/>, <paramref name="magenta"/>, and <paramref
+        /// cref="Magenta"/>, and <see cref="Yellow"/> properties are
+        /// <paramref name="cyan"/>, <paramref name="magenta"/>, and <paramref
         /// name="yellow"/>, respectively scaled by amount <paramref
         /// name="black"/> and that is fully opaque. The <see cref="Alpha"/>
         /// component is equal to <paramref name="alpha"/>.
@@ -883,27 +899,27 @@ namespace Maseya.Helper
         {
             if (Single.IsNaN(alpha))
             {
-                throw ValueIsNaN(nameof(alpha));
+                throw UnexpectedNaNArgumentExeption(nameof(alpha));
             }
 
             if (Single.IsNaN(cyan))
             {
-                throw ValueIsNaN(nameof(cyan));
+                throw UnexpectedNaNArgumentExeption(nameof(cyan));
             }
 
             if (Single.IsNaN(magenta))
             {
-                throw ValueIsNaN(nameof(magenta));
+                throw UnexpectedNaNArgumentExeption(nameof(magenta));
             }
 
             if (Single.IsNaN(yellow))
             {
-                throw ValueIsNaN(nameof(yellow));
+                throw UnexpectedNaNArgumentExeption(nameof(yellow));
             }
 
             if (Single.IsNaN(black))
             {
-                throw ValueIsNaN(nameof(black));
+                throw UnexpectedNaNArgumentExeption(nameof(black));
             }
 
             var white = 1 - black;
@@ -915,8 +931,8 @@ namespace Maseya.Helper
         }
 
         /// <summary>
-        /// Returns an instance of <see cref="ColorF"/> defined by an HCY color
-        /// space and is fully opaque.
+        /// Returns an instance of <see cref="ColorF"/> defined by an HCY
+        /// color space and is fully opaque.
         /// </summary>
         /// <param name="hue">
         /// The <see cref="ColorF"/>'s hue.
@@ -981,22 +997,22 @@ namespace Maseya.Helper
         {
             if (Single.IsNaN(alpha))
             {
-                throw ValueIsNaN(nameof(alpha));
+                throw UnexpectedNaNArgumentExeption(nameof(alpha));
             }
 
             if (Single.IsNaN(hue))
             {
-                throw ValueIsNaN(nameof(hue));
+                throw UnexpectedNaNArgumentExeption(nameof(hue));
             }
 
             if (Single.IsNaN(chroma))
             {
-                throw ValueIsNaN(nameof(chroma));
+                throw UnexpectedNaNArgumentExeption(nameof(chroma));
             }
 
             if (Single.IsNaN(luma))
             {
-                throw ValueIsNaN(nameof(luma));
+                throw UnexpectedNaNArgumentExeption(nameof(luma));
             }
 
             chroma = Clamp(chroma, 0, 1);
@@ -1006,14 +1022,14 @@ namespace Maseya.Helper
             var lumaR = r * LumaRedWeight;
             var lumaG = g * LumaGreenWeight;
             var lumaB = b * LumaBlueWeight;
-            var match = luma - (lumaR + lumaG + lumaB);
-
-            return new ColorF(alpha, match + r, match + g, match + b);
+            var baseLuma = lumaR + lumaG + lumaB;
+            var min = Clamp(luma - baseLuma, 0, 1);
+            return new ColorF(alpha, min + r, min + g, min + b);
         }
 
         /// <summary>
-        /// Returns an instance of <see cref="ColorF"/> defined by an HSL color
-        /// space and is fully opaque.
+        /// Returns an instance of <see cref="ColorF"/> defined by an HSL
+        /// color space and is fully opaque.
         /// </summary>
         /// <param name="hue">
         /// The <see cref="ColorF"/>'s hue.
@@ -1032,8 +1048,9 @@ namespace Maseya.Helper
         /// opaque.
         /// </returns>
         /// <exception cref="ArgumentException">
-        /// <paramref name="hue"/>, <paramref name="saturation"/>, or <paramref
-        /// name="lightness"/> is equal to <see cref="Single. NaN"/>.
+        /// <paramref name="hue"/>, <paramref name="saturation"/>, or
+        /// <paramref name="lightness"/> is equal to <see cref="Single.
+        /// NaN"/>.
         /// </exception>
         public static ColorF FromHsl(
             float hue,
@@ -1079,22 +1096,22 @@ namespace Maseya.Helper
         {
             if (Single.IsNaN(alpha))
             {
-                throw ValueIsNaN(nameof(alpha));
+                throw UnexpectedNaNArgumentExeption(nameof(alpha));
             }
 
             if (Single.IsNaN(hue))
             {
-                throw ValueIsNaN(nameof(hue));
+                throw UnexpectedNaNArgumentExeption(nameof(hue));
             }
 
             if (Single.IsNaN(saturation))
             {
-                throw ValueIsNaN(nameof(saturation));
+                throw UnexpectedNaNArgumentExeption(nameof(saturation));
             }
 
             if (Single.IsNaN(lightness))
             {
-                throw ValueIsNaN(nameof(lightness));
+                throw UnexpectedNaNArgumentExeption(nameof(lightness));
             }
 
             saturation = Clamp(saturation, 0, 1);
@@ -1263,7 +1280,7 @@ namespace Maseya.Helper
         {
             return Blend(top, bottom, Mix);
 
-            float Mix(float x, float y)
+            static float Mix(float x, float y)
             {
                 return x == 0 ? 1 : y / x;
             }
@@ -1273,7 +1290,7 @@ namespace Maseya.Helper
         {
             return Blend(top, bottom, Mix);
 
-            float Mix(float x, float y)
+            static float Mix(float x, float y)
             {
                 return 1 - ((1 - x) * (1 - y));
             }
@@ -1283,7 +1300,7 @@ namespace Maseya.Helper
         {
             return Blend(top, bottom, Mix);
 
-            float Mix(float x, float y)
+            static float Mix(float x, float y)
             {
                 return y < 0.5f
                     ? 2 * x * y
@@ -1295,7 +1312,7 @@ namespace Maseya.Helper
         {
             return Blend(top, bottom, Mix);
 
-            float Mix(float x, float y)
+            static float Mix(float x, float y)
             {
                 return y > 0.5f
                     ? 2 * x * y
@@ -1307,7 +1324,7 @@ namespace Maseya.Helper
         {
             return Blend(top, bottom, Mix);
 
-            float Mix(float x, float y)
+            static float Mix(float x, float y)
             {
                 var result = 2 * y;
                 if (y < 0.5f)
@@ -1329,7 +1346,7 @@ namespace Maseya.Helper
         {
             return Blend(top, bottom, Mix);
 
-            float Mix(float x, float y)
+            static float Mix(float x, float y)
             {
                 return x == 1
                     ? 1
@@ -1346,7 +1363,7 @@ namespace Maseya.Helper
         {
             return Blend(top, bottom, Mix);
 
-            float Mix(float x, float y)
+            static float Mix(float x, float y)
             {
                 return x == 0
                     ? 0
@@ -1363,7 +1380,7 @@ namespace Maseya.Helper
         {
             return Blend(top, bottom, Mix);
 
-            float Mix(float x, float y)
+            static float Mix(float x, float y)
             {
                 return x > y ? (x - y) : (y - x);
             }
@@ -1383,7 +1400,7 @@ namespace Maseya.Helper
         {
             return Blend(top, bottom, Mix);
 
-            float Mix(float x, float y)
+            static float Mix(float x, float y)
             {
                 return x == 1
                     ? 1
@@ -1412,8 +1429,8 @@ namespace Maseya.Helper
         /// </param>
         /// <returns>
         /// If the <see cref="Luma"/> of <paramref name="top"/> is less than
-        /// that of <paramref name="bottom"/>'s, then <paramref name="top"/> is
-        /// returned; otherwise, <paramref name="bottom"/>.
+        /// that of <paramref name="bottom"/>'s, then <paramref name="top"/>
+        /// is returned; otherwise, <paramref name="bottom"/>.
         /// </returns>
         public static ColorF DarkerColor(ColorF top, ColorF bottom)
         {
@@ -1432,9 +1449,9 @@ namespace Maseya.Helper
         /// The bottom layer <see cref="ColorF"/> value.
         /// </param>
         /// <returns>
-        /// If the <see cref="Luma"/> of <paramref name="top"/> is greater than
-        /// that of <paramref name="bottom"/>'s, then <paramref name="top"/> is
-        /// returned; otherwise, <paramref name="bottom"/>.
+        /// If the <see cref="Luma"/> of <paramref name="top"/> is greater
+        /// than that of <paramref name="bottom"/>'s, then <paramref
+        /// name="top"/> is returned; otherwise, <paramref name="bottom"/>.
         /// </returns>
         public static ColorF LighterColor(ColorF top, ColorF bottom)
         {
@@ -1512,8 +1529,8 @@ namespace Maseya.Helper
         }
 
         /// <summary>
-        /// Create an instance of <see cref="ColorF"/> similar to this instance
-        /// but with its chroma set to zero.
+        /// Create an instance of <see cref="ColorF"/> similar to this
+        /// instance but with its chroma set to zero.
         /// </summary>
         /// <returns>
         /// An instance of <see cref="ColorF"/> with the same <see
@@ -1526,18 +1543,19 @@ namespace Maseya.Helper
         }
 
         /// <summary>
-        /// Create an instance of <see cref="ColorF"/> similar to this instance
-        /// but with its chroma offset by a given amount.
+        /// Create an instance of <see cref="ColorF"/> similar to this
+        /// instance but with its chroma offset by a given amount.
         /// </summary>
         /// <param name="bottom">
         /// The bottom layer.
         /// </param>
         /// <returns>
-        /// An instance of <see cref="ColorF"/> whose <see cref=" Chroma"/> and
-        /// <see cref="Luma"/> properties are that of <paramref name="bottom"/>
-        /// and whose <see cref="Hue"/> is equal to this instance's offset by
-        /// the <see cref="Hue"/> of <paramref name="bottom"/>. The <see
-        /// cref="Alpha"/> property is the same as this instance's.
+        /// An instance of <see cref="ColorF"/> whose <see cref=" Chroma"/>
+        /// and <see cref="Luma"/> properties are that of <paramref
+        /// name="bottom"/> and whose <see cref="Hue"/> is equal to this
+        /// instance's offset by the <see cref="Hue"/> of <paramref
+        /// name="bottom"/>. The <see cref="Alpha"/> property is the same as
+        /// this instance's.
         /// </returns>
         public ColorF RotateHue(ColorF bottom)
         {
@@ -1569,8 +1587,8 @@ namespace Maseya.Helper
         /// A <see cref="ColorF"/> value to compare to this instance.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if <paramref name="obj"/> has the same value
-        /// as this instance; otherwise, <see langword=" false"/>.
+        /// <see langword="true"/> if <paramref name="obj"/> has the same
+        /// value as this instance; otherwise, <see langword=" false"/>.
         /// </returns>
         public bool Equals(ColorF obj)
         {
@@ -1629,8 +1647,8 @@ namespace Maseya.Helper
         }
 
         /// <summary>
-        /// Gets the base RGB values from a hue and chroma before applying luma
-        /// correction.
+        /// Gets the base RGB values from a hue and chroma before applying
+        /// luma correction.
         /// </summary>
         /// <param name="hue">
         /// The hue of the color definition.

@@ -15,8 +15,31 @@ namespace Maseya.Helper
             get;
         }
 
-        T GetItem(IEnumerable<byte> bytes);
+        int GetOffset(int startOffset, int index);
 
-        IEnumerable<byte> GetBytes(T item);
+        T GetItem(byte[] sourceArray);
+
+        T GetItem(byte[] sourceArray, int startOffset);
+
+        T[] GetItems(byte[] sourceArray);
+
+        T[] GetItems(
+            byte[] sourceArray,
+            int startOffset,
+            int size);
+
+        byte[] GetBytes(T item);
+
+        byte[] GetBytes(IReadOnlyList<T> items);
+
+        void GetBytes(
+            T item,
+            byte[] destinationArray,
+            int startOffset);
+
+        void GetBytes(
+            IReadOnlyList<T> items,
+            byte[] destinationArray,
+            int startOffset);
     }
 }

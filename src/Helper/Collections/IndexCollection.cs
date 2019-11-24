@@ -1,4 +1,4 @@
-﻿// <copyright file="ListSelection.cs" company="Public Domain">
+﻿// <copyright file="IndexCollection.cs" company="Public Domain">
 //     Copyright (c) 2019 Nelson Garcia. All rights reserved. Licensed under
 //     GNU Affero General Public License. See LICENSE in project root for full
 //     license information, or visit https://www.gnu.org/licenses/#AGPL
@@ -9,9 +9,10 @@ namespace Maseya.Helper.Collections
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
 
-    public abstract class ListSelection :
-        IListSelection
+    public abstract class IndexCollection :
+        IIndexCollection
     {
         public abstract int MinIndex
         {
@@ -33,9 +34,9 @@ namespace Maseya.Helper.Collections
             get;
         }
 
-        public abstract ListSelection Move(int offset);
+        public abstract IndexCollection Move(int offset);
 
-        public ListSelection Copy()
+        public IndexCollection Copy()
         {
             return Move(0);
         }
@@ -79,6 +80,17 @@ namespace Maseya.Helper.Collections
             }
         }
 
+        public int[] ToArray()
+        {
+            var result = new int[Count];
+            for (var i = 0; i < result.Length; i++)
+            {
+                result[i] = this[i];
+            }
+
+            return result;
+        }
+
         public Dictionary<int, T> GetValueDictionary<T>(IReadOnlyList<T> list)
         {
             if (list is null)
@@ -97,12 +109,12 @@ namespace Maseya.Helper.Collections
 
         public abstract IEnumerator<int> GetEnumerator();
 
-        IListSelection IListSelection.MoveSelection(int offset)
+        IIndexCollection IIndexCollection.Move(int offset)
         {
             return Move(offset);
         }
 
-        IListSelection IListSelection.CopySelection()
+        IIndexCollection IIndexCollection.Copy()
         {
             return Copy();
         }
@@ -110,6 +122,32 @@ namespace Maseya.Helper.Collections
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        IIndexCollection IIndexCollection.ToByteSelection<T>(
+            int startOffset,
+            IByteDataConverter<T> converter)
+        {
+            return ToByteSelection(startOffset, converter);
+        }
+
+        public HashListIndexCollection ToByteSelection<T>(
+            int startOffset,
+            IByteDataConverter<T> converter)
+        {
+            if (converter is null)
+            {
+                throw new ArgumentNullException(nameof(converter));
+            }
+
+            var sizeOfT = converter.SizeOfItem;
+            return new HashListIndexCollection(
+                Enumerable.Select(this, GetOffset));
+
+            int GetOffset(int index)
+            {
+                return converter.GetOffset(startOffset, index);
+            }
         }
     }
 }

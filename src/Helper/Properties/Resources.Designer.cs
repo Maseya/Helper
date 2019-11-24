@@ -19,7 +19,7 @@ namespace Maseya.Helper.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -57,6 +57,42 @@ namespace Maseya.Helper.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size of collection exceeds capacity of target..
+        /// </summary>
+        internal static string ErrorCollectionBounds {
+            get {
+                return ResourceManager.GetString("ErrorCollectionBounds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot have an empty collection..
+        /// </summary>
+        internal static string ErrorEmptyCollection {
+            get {
+                return ResourceManager.GetString("ErrorEmptyCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum and maximum index fall outside bounds of array..
+        /// </summary>
+        internal static string ErrorIndexBounds {
+            get {
+                return ResourceManager.GetString("ErrorIndexBounds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start index and size exceed size of collection..
+        /// </summary>
+        internal static string ErrorOffsetBounds {
+            get {
+                return ResourceManager.GetString("ErrorOffsetBounds", resourceCulture);
             }
         }
         

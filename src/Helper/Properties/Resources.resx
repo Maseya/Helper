@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ErrorCollectionBounds" xml:space="preserve">
+    <value>Size of collection exceeds capacity of target.</value>
+  </data>
+  <data name="ErrorEmptyCollection" xml:space="preserve">
+    <value>Cannot have an empty collection.</value>
+  </data>
+  <data name="ErrorIndexBounds" xml:space="preserve">
+    <value>Minimum and maximum index fall outside bounds of array.</value>
+  </data>
+  <data name="ErrorOffsetBounds" xml:space="preserve">
+    <value>Start index and size exceed size of collection.</value>
+  </data>
   <data name="ErrorSubstringInfoParameter" xml:space="preserve">
     <value>Value of '{1}' is not valid for '{0}'. '{0}' cannot be less than zero unless it is equal to {2}.</value>
     <comment>0 - paramName; 1 - actualValue; 2 - specialValue</comment>

@@ -16,9 +16,9 @@ namespace Maseya.Helper.PixelFormat
     /// Represents a 32-bit pixel in ARGB 8 bit per channel format.
     /// </summary>
     /// <remarks>
-    /// The purpose of this data type is to ease the process of bitmap drawing.
-    /// For 32-bit ARGB bitmaps, its pixel buffer pointer can be cast to type
-    /// <see cref="Color32BppArgb"/>* for simplified color operations.
+    /// The purpose of this data type is to ease the process of bitmap
+    /// drawing. For 32-bit ARGB bitmaps, its pixel buffer pointer can be cast
+    /// to type <see cref="Color32BppArgb"/>* for simplified color operations.
     /// </remarks>
     [StructLayout(LayoutKind.Explicit)]
     public struct Color32BppArgb :
@@ -50,11 +50,6 @@ namespace Maseya.Helper.PixelFormat
         public const int BlueIndex = 0;
 
         /// <summary>
-        /// Represent a <see cref="Color32BppArgb"/> that is black.
-        /// </summary>
-        public static readonly Color32BppArgb Empty = default;
-
-        /// <summary>
         /// The number of bits that represent the intensity of the <see
         /// cref="Alpha"/> component.
         /// </summary>
@@ -79,7 +74,8 @@ namespace Maseya.Helper.PixelFormat
         internal const int BitsPerBlue = BitsPerChannel;
 
         /// <summary>
-        /// The number of bits that represent the intensity of the any channel.
+        /// The number of bits that represent the intensity of the any
+        /// channel.
         /// </summary>
         private const int BitsPerChannel = 8;
 
@@ -106,6 +102,11 @@ namespace Maseya.Helper.PixelFormat
         /// component.
         /// </summary>
         private const int BlueShift = BitsPerBlue * BlueIndex;
+
+        /// <summary>
+        /// Represent a <see cref="Color32BppArgb"/> that is black.
+        /// </summary>
+        private static readonly Color32BppArgb _empty = default;
 
         /// <summary>
         /// The alpha intensity.
@@ -188,6 +189,14 @@ namespace Maseya.Helper.PixelFormat
             value >> GreenShift,
             value >> BlueShift)
         {
+        }
+
+        public static ref readonly Color32BppArgb Empty
+        {
+            get
+            {
+                return ref _empty;
+            }
         }
 
         /// <summary>
@@ -311,9 +320,10 @@ namespace Maseya.Helper.PixelFormat
         /// <summary>
         /// Creates a <see cref="Color32BppArgb"/> structure whose <see
         /// cref="Alpha"/>, <see cref="Red"/>, <see cref="Green"/>, and <see
-        /// cref="Blue"/> properties are equal to a <see cref=" Color"/>'s <see
-        /// cref="Color.A"/>, <see cref="Color.R"/>, <see cref="Color.G"/>, and
-        /// <see cref="Color.B"/> properties, respectively.
+        /// cref="Blue"/> properties are equal to a <see cref=" Color"/>'s
+        /// <see cref="Color.A"/>, <see cref="Color.R"/>, <see
+        /// cref="Color.G"/>, and <see cref="Color.B"/> properties,
+        /// respectively.
         /// </summary>
         /// <param name="color">
         /// The <see cref="Color"/> to convert.
@@ -322,8 +332,8 @@ namespace Maseya.Helper.PixelFormat
         /// A <see cref="Color32BppArgb"/> whose <see cref="Alpha"/>, <see
         /// cref="Red"/>, <see cref="Green"/>, and <see cref="Blue"/>
         /// properties are equal to a <see cref=" Color"/>'s <see
-        /// cref="Color.A"/>, <see cref="Color.R"/>, <see cref="Color.G"/>, and
-        /// <see cref="Color.B"/> properties, respectively of <paramref
+        /// cref="Color.A"/>, <see cref="Color.R"/>, <see cref="Color.G"/>,
+        /// and <see cref="Color.B"/> properties, respectively of <paramref
         /// name="color"/>.
         /// </returns>
         public static explicit operator Color32BppArgb(Color color)
@@ -390,9 +400,9 @@ namespace Maseya.Helper.PixelFormat
         /// <summary>
         /// Creates a <see cref="ColorF"/> structure whose <see cref="
         /// ColorF.Alpha"/>, <see cref="ColorF.Red"/>, <see cref="
-        /// ColorF.Green"/>, and <see cref="ColorF.Blue"/> properties are equal
-        /// to a <see cref="Color32BppArgb"/>'s <see cref=" Alpha"/>, <see
-        /// cref="Red"/>, <see cref="Green"/>, and <see cref="Blue"/>
+        /// ColorF.Green"/>, and <see cref="ColorF.Blue"/> properties are
+        /// equal to a <see cref="Color32BppArgb"/>'s <see cref=" Alpha"/>,
+        /// <see cref="Red"/>, <see cref="Green"/>, and <see cref="Blue"/>
         /// properties, respectively.
         /// </summary>
         /// <param name="color32">
@@ -429,9 +439,9 @@ namespace Maseya.Helper.PixelFormat
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the <see cref="Alpha"/>, <see
-        /// cref="Red"/>, <see cref="Green"/>, and <see cref="Blue"/> values of
-        /// <paramref name="left"/> and <paramref name=" right"/> are equal;
-        /// otherwise, <see langword="false"/>.
+        /// cref="Red"/>, <see cref="Green"/>, and <see cref="Blue"/> values
+        /// of <paramref name="left"/> and <paramref name=" right"/> are
+        /// equal; otherwise, <see langword="false"/>.
         /// </returns>
         public static bool operator ==(
             Color32BppArgb left,
@@ -454,15 +464,45 @@ namespace Maseya.Helper.PixelFormat
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the <see cref="Alpha"/>, <see
-        /// cref="Red"/>, <see cref="Green"/>, and <see cref="Blue"/> values of
-        /// <paramref name="left"/> or <paramref name=" right"/> are unequal;
-        /// otherwise, <see langword="false"/>.
+        /// cref="Red"/>, <see cref="Green"/>, and <see cref="Blue"/> values
+        /// of <paramref name="left"/> or <paramref name=" right"/> are
+        /// unequal; otherwise, <see langword="false"/>.
         /// </returns>
         public static bool operator !=(
             Color32BppArgb left,
             Color32BppArgb right)
         {
             return !(left == right);
+        }
+
+        public static Color32BppArgb FromInt32(int value)
+        {
+            return (Color32BppArgb)value;
+        }
+
+        public static int ToInt32(Color32BppArgb color32)
+        {
+            return color32;
+        }
+
+        public static Color32BppArgb FromColor(Color color)
+        {
+            return (Color32BppArgb)color;
+        }
+
+        public static Color ToColor(Color32BppArgb color32)
+        {
+            return color32;
+        }
+
+        public static Color32BppArgb FromColorF(ColorF colorF)
+        {
+            return (Color32BppArgb)colorF;
+        }
+
+        public static ColorF ToColorF(Color32BppArgb color32)
+        {
+            return color32;
         }
 
         /// <summary>
@@ -473,8 +513,8 @@ namespace Maseya.Helper.PixelFormat
         /// A <see cref="Color32BppArgb"/> value to compare to this instance.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if <paramref name="obj"/> has the same value
-        /// as this instance; otherwise, <see langword=" false"/>.
+        /// <see langword="true"/> if <paramref name="obj"/> has the same
+        /// value as this instance; otherwise, <see langword=" false"/>.
         /// </returns>
         public bool Equals(Color32BppArgb obj)
         {
@@ -490,8 +530,8 @@ namespace Maseya.Helper.PixelFormat
         /// </param>
         /// <returns>
         /// <see langword="true"/> if <paramref name="obj"/> is an instance of
-        /// <see cref="Color32BppArgb"/> and equals the value of this instance;
-        /// otherwise <see langword="false"/>.
+        /// <see cref="Color32BppArgb"/> and equals the value of this
+        /// instance; otherwise <see langword="false"/>.
         /// </returns>
         public override bool Equals(object obj)
         {

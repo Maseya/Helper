@@ -1,4 +1,4 @@
-﻿// <copyright file="SelectionList.cs" company="Public Domain">
+﻿// <copyright file="UnamangedCollection.cs" company="Public Domain">
 //     Copyright (c) 2019 Nelson Garcia. All rights reserved. Licensed under
 //     GNU Affero General Public License. See LICENSE in project root for full
 //     license information, or visit https://www.gnu.org/licenses/#AGPL
@@ -10,24 +10,23 @@ namespace Maseya.Helper.Collections.Generic
     using System.Collections;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using static ThrowHelper;
 
-    public class SelectionList<T> :
-        ISelectionList<T>,
-        ISelectionList,
-        IList,
+    public sealed class UnamangedCollection<T> :
+        IUnmanagedCollection<T>,
         IReadOnlyList<T>
         where T : unmanaged
     {
         private const int DefaultCapacity = 4;
-        private static readonly T[] EmptyArray = new T[0];
+        private static readonly T[] EmptyArray = Array.Empty<T>();
         private int _version;
 
-        public SelectionList()
+        public UnamangedCollection()
         {
             Items = EmptyArray;
         }
 
-        public SelectionList(int capacity)
+        public UnamangedCollection(int capacity)
         {
             Items = capacity < 0
                 ? throw new ArgumentOutOfRangeException(nameof(capacity))
@@ -36,7 +35,7 @@ namespace Maseya.Helper.Collections.Generic
                 : new T[capacity];
         }
 
-        public SelectionList(IEnumerable<T> collection)
+        public UnamangedCollection(IEnumerable<T> collection)
         {
             if (collection is null)
             {
@@ -114,41 +113,12 @@ namespace Maseya.Helper.Collections.Generic
             private set;
         }
 
-        bool IList.IsFixedSize
-        {
-            get
-            {
-                return false;
-            }
-        }
-
         bool ICollection<T>.IsReadOnly
         {
             get
             {
                 return false;
             }
-        }
-
-        bool IList.IsReadOnly
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        bool ICollection.IsSynchronized
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        object ICollection.SyncRoot
-        {
-            get;
         }
 
         private int Version
@@ -195,26 +165,6 @@ namespace Maseya.Helper.Collections.Generic
             }
         }
 
-        object IList.this[int index]
-        {
-            get
-            {
-                return this[index];
-            }
-
-            set
-            {
-                try
-                {
-                    this[index] = (T)value;
-                }
-                catch (InvalidCastException)
-                {
-                    throw new ArgumentException();
-                }
-            }
-        }
-
         public void Add(T item)
         {
             if (Count == Capacity)
@@ -226,28 +176,9 @@ namespace Maseya.Helper.Collections.Generic
             Version++;
         }
 
-        int IList.Add(object value)
-        {
-            try
-            {
-                Add((T)value);
-            }
-            catch (InvalidCastException)
-            {
-                throw new ArgumentException();
-            }
-
-            return Count - 1;
-        }
-
         public void AddRange(IEnumerable<T> collection)
         {
             InsertRange(Count, collection);
-        }
-
-        void ISelectionList.AddRange(IEnumerable collection)
-        {
-            (this as ISelectionList).InsertRange(Count, collection);
         }
 
         public ReadOnlyCollection<T> AsReadOnly()
@@ -266,7 +197,7 @@ namespace Maseya.Helper.Collections.Generic
             Version++;
         }
 
-        public void ClearSelection(IListSelection selection)
+        public void ClearSelection(IIndexCollection selection)
         {
             TransformSelection(selection, item => default);
         }
@@ -285,36 +216,9 @@ namespace Maseya.Helper.Collections.Generic
             return false;
         }
 
-        bool IList.Contains(object value)
-        {
-            return IsCompatibleObject(value) ? Contains((T)value) : false;
-        }
-
         public void CopyTo(T[] array)
         {
             CopyTo(array, 0);
-        }
-
-        void ICollection.CopyTo(Array array, int index)
-        {
-            if (array != null && array.Rank != 1)
-            {
-                throw new ArgumentException();
-            }
-
-            try
-            {
-                Array.Copy(
-                    sourceArray: Items,
-                    sourceIndex: 0,
-                    destinationArray: array,
-                    destinationIndex: index,
-                    length: Count);
-            }
-            catch (ArrayTypeMismatchException)
-            {
-                throw new ArgumentException();
-            }
         }
 
         public void CopyTo(T[] array, int arrayIndex)
@@ -378,11 +282,6 @@ namespace Maseya.Helper.Collections.Generic
             return Array.IndexOf(Items, item, 0, Count);
         }
 
-        int IList.IndexOf(object value)
-        {
-            return IsCompatibleObject(value) ? IndexOf((T)value) : -1;
-        }
-
         public int IndexOf(T item, int index)
         {
             if (index > Count)
@@ -395,7 +294,7 @@ namespace Maseya.Helper.Collections.Generic
 
         public int IndexOf(T item, int index, int count)
         {
-            if (index > Count)
+            if ((uint)index > (uint)Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(index));
             }
@@ -433,18 +332,6 @@ namespace Maseya.Helper.Collections.Generic
             Items[index] = item;
             Count++;
             Version++;
-        }
-
-        void IList.Insert(int index, object value)
-        {
-            try
-            {
-                Insert(index, (T)value);
-            }
-            catch (InvalidCastException)
-            {
-                throw new ArgumentException();
-            }
         }
 
         public void InsertRange(int index, IEnumerable<T> collection)
@@ -514,83 +401,17 @@ namespace Maseya.Helper.Collections.Generic
             Version++;
         }
 
-        void ISelectionList.InsertRange(int index, IEnumerable collection)
-        {
-            if (collection is null)
-            {
-                throw new ArgumentNullException(nameof(collection));
-            }
-
-            if ((uint)index > (uint)Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index));
-            }
-
-            if (collection is ICollection c)
-            {
-                var count = c.Count;
-                if (count == 0)
-                {
-                    return;
-                }
-
-                EnsureCapacity(Count + count);
-                if (index < Count)
-                {
-                    Array.Copy(
-                        sourceArray: Items,
-                        sourceIndex: index,
-                        destinationArray: Items,
-                        destinationIndex: index + count,
-                        length: Count - index);
-                }
-
-                if (this == c)
-                {
-                    Array.Copy(
-                        sourceArray: Items,
-                        sourceIndex: 0,
-                        destinationArray: Items,
-                        destinationIndex: index,
-                        length: index);
-
-                    Array.Copy(
-                        sourceArray: Items,
-                        sourceIndex: index + count,
-                        destinationArray: Items,
-                        destinationIndex: index + index,
-                        length: Count - index);
-                }
-                else
-                {
-                    var itemsToInsert = new T[count];
-                    c.CopyTo(itemsToInsert, 0);
-                    itemsToInsert.CopyTo(Items, index);
-                }
-
-                Count += count;
-            }
-            else
-            {
-                foreach (var item in collection)
-                {
-                    (this as IList).Insert(index++, item);
-                }
-            }
-
-            Version++;
-        }
-
-        public void InsertSelection(IListSelectionData<T> values)
+        public void InsertSelection(IIndexDictionary<T> values)
         {
             if (values is null)
             {
                 throw new ArgumentNullException(nameof(values));
             }
 
-            if (values.Selection.MaxIndex >= Count)
+            var selection = values.Selection;
+            if (selection.MinIndex < 0 || selection.MaxIndex >= Count)
             {
-                throw new ArgumentException();
+                throw IndexBoundsArgumentException(nameof(values));
             }
 
             if (Count + values.Count > Capacity)
@@ -613,45 +434,6 @@ namespace Maseya.Helper.Collections.Generic
             Version++;
         }
 
-        void ISelectionList.InsertSelection(IListSelectionData values)
-        {
-            if (values is null)
-            {
-                throw new ArgumentNullException(nameof(values));
-            }
-
-            if (values.Selection.MaxIndex >= Count)
-            {
-                throw new ArgumentException();
-            }
-
-            if (Count + values.Count > Capacity)
-            {
-                EnsureCapacity(Count + values.Count);
-            }
-
-            var current = Count;
-            for (var i = values.Count; --i >= 0;)
-            {
-                var freeIndex = values.Selection[i];
-                while (--current != freeIndex)
-                {
-                    Items[current] = Items[current - (i + 1)];
-                }
-
-                try
-                {
-                    Items[current] = (T)values[freeIndex];
-                }
-                catch (InvalidCastException)
-                {
-                    throw new ArgumentException();
-                }
-            }
-
-            Version++;
-        }
-
         public bool Remove(T item)
         {
             var index = IndexOf(item);
@@ -662,14 +444,6 @@ namespace Maseya.Helper.Collections.Generic
             }
 
             return false;
-        }
-
-        void IList.Remove(object value)
-        {
-            if (IsCompatibleObject(value))
-            {
-                Remove((T)value);
-            }
         }
 
         public void RemoveAt(int index)
@@ -708,7 +482,7 @@ namespace Maseya.Helper.Collections.Generic
 
             if (index + count > Count)
             {
-                throw new ArgumentException();
+                throw InvalidOffsetArgumentException();
             }
 
             if (count == 0)
@@ -730,16 +504,16 @@ namespace Maseya.Helper.Collections.Generic
             Version++;
         }
 
-        public void RemoveSelection(IListSelection selection)
+        public void RemoveSelection(IIndexCollection selection)
         {
             if (selection is null)
             {
                 throw new ArgumentNullException(nameof(selection));
             }
 
-            if (selection.MaxIndex >= Count)
+            if (selection.MinIndex < 0 || selection.MaxIndex >= Count)
             {
-                throw new ArgumentException();
+                throw IndexBoundsArgumentException(nameof(selection));
             }
 
             var freeIndex = selection.MinIndex;
@@ -768,74 +542,32 @@ namespace Maseya.Helper.Collections.Generic
                 throw new ArgumentNullException(nameof(collection));
             }
 
+            if (index < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
             if (collection is ICollection<T> c)
             {
                 if (index + c.Count > Count)
                 {
-                    throw new ArgumentException();
+                    throw CollectionBoundsArgumentException(
+                        nameof(collection));
                 }
 
                 c.CopyTo(Items, index);
             }
             else
             {
-                if (index < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index));
-                }
-
                 foreach (var item in collection)
                 {
                     if (index == Count)
                     {
-                        throw new ArgumentException();
+                        throw CollectionBoundsArgumentException(
+                            nameof(collection));
                     }
 
                     Items[index++] = item;
-                }
-            }
-
-            Version++;
-        }
-
-        void ISelectionList.SetRange(int index, IEnumerable collection)
-        {
-            if (collection is null)
-            {
-                throw new ArgumentNullException(nameof(collection));
-            }
-
-            if (collection is ICollection c)
-            {
-                if (index + c.Count > Count)
-                {
-                    throw new ArgumentException();
-                }
-
-                c.CopyTo(Items, index);
-            }
-            else
-            {
-                if (index < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index));
-                }
-
-                foreach (var item in collection)
-                {
-                    if (index == Count)
-                    {
-                        throw new ArgumentException();
-                    }
-
-                    try
-                    {
-                        Items[index++] = (T)item;
-                    }
-                    catch (InvalidCastException)
-                    {
-                        throw new ArgumentException();
-                    }
                 }
             }
 
@@ -873,7 +605,7 @@ namespace Maseya.Helper.Collections.Generic
         }
 
         public void TransformSelection(
-            IListSelection selection,
+            IIndexCollection selection,
             Func<T, T> transformItem)
         {
             if (selection is null)
@@ -886,32 +618,13 @@ namespace Maseya.Helper.Collections.Generic
                 throw new ArgumentNullException(nameof(transformItem));
             }
 
-            var values = new ListSelectionData<T>(selection);
+            var values = new IndexDictionary<T>(selection);
             foreach (var index in selection)
             {
                 values[index] = transformItem(this[index]);
             }
 
             WriteSelection(values);
-        }
-
-        void ISelectionList.TransformSelection(
-            IListSelection selection,
-            Func<object, object> transformItem)
-        {
-            TransformSelection(selection, TryTransformItem);
-
-            T TryTransformItem(T item)
-            {
-                try
-                {
-                    return (T)transformItem(item);
-                }
-                catch (InvalidCastException)
-                {
-                    throw new ArgumentException();
-                }
-            }
         }
 
         public void WriteArrayData(Action<T[]> arrayCallback)
@@ -925,33 +638,35 @@ namespace Maseya.Helper.Collections.Generic
             Version++;
         }
 
-        public void WriteUnmanagedData(Action<IntPtr> arrayCallback)
+        public void WriteUnmanagedData(IntPtrCallback intPtrCallback)
         {
-            if (arrayCallback is null)
+            if (intPtrCallback is null)
             {
-                throw new ArgumentNullException(nameof(arrayCallback));
+                throw new ArgumentNullException(nameof(intPtrCallback));
             }
 
             unsafe
             {
                 fixed (T* ptr = Items)
                 {
-                    arrayCallback((IntPtr)ptr);
-                    Version++;
+                    intPtrCallback((IntPtr)ptr, Count);
                 }
             }
+
+            Version++;
         }
 
-        public void WriteSelection(IListSelectionData<T> values)
+        public void WriteSelection(IIndexDictionary<T> values)
         {
             if (values is null)
             {
                 throw new ArgumentNullException(nameof(values));
             }
 
-            if (values.Selection.MaxIndex >= Count)
+            var selection = values.Selection;
+            if (selection.MinIndex < 0 || selection.MaxIndex >= Count)
             {
-                throw new ArgumentException();
+                throw IndexBoundsArgumentException(nameof(values));
             }
 
             foreach (var kvp in values)
@@ -962,41 +677,9 @@ namespace Maseya.Helper.Collections.Generic
             Version++;
         }
 
-        void ISelectionList.WriteSelection(IListSelectionData values)
-        {
-            if (values is null)
-            {
-                throw new ArgumentNullException(nameof(values));
-            }
-
-            if (values.Selection.MaxIndex >= Count)
-            {
-                throw new ArgumentException();
-            }
-
-            foreach (var index in values.Selection)
-            {
-                try
-                {
-                    Items[index] = (T)values[index];
-                }
-                catch (InvalidCastException)
-                {
-                    throw new ArgumentException();
-                }
-            }
-
-            Version++;
-        }
-
-        protected virtual void OnContentsModified(EventArgs e)
+        private void OnContentsModified(EventArgs e)
         {
             ContentsModified?.Invoke(this, e);
-        }
-
-        private static bool IsCompatibleObject(object value)
-        {
-            return value is T;
         }
 
         private void EnsureCapacity(int capacity)

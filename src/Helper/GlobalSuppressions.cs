@@ -44,3 +44,7 @@
     "StyleCop.CSharp.NamingRules",
     "SA1309:Field names must not begin with underscore",
     Justification = "Using SX1309")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(
+    "Code Quality",
+    "IDE0064:Make readonly fields writable",
+    Justification = "This rule has no documentation.")]
